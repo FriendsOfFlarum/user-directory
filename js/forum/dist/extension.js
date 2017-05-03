@@ -1,9 +1,259 @@
 'use strict';
 
-System.register('flagrow/user-directory/components/UserDirectoryPage', ['flarum/extend', 'flarum/components/Page', 'flarum/utils/ItemList', 'flarum/helpers/listItems', 'flarum/helpers/icon', 'flagrow/user-directory/components/UserDirectoryList', 'flarum/components/WelcomeHero', 'flarum/components/DiscussionComposer', 'flarum/components/LogInModal', 'flarum/components/Select', 'flarum/components/Button', 'flarum/components/LinkButton', 'flarum/components/SelectDropdown'], function (_export, _context) {
+System.register('flagrow/user-directory/components/UserDirectoryList', ['flarum/Component', 'flagrow/user-directory/components/UserDirectoryListItem', 'flarum/components/Button', 'flarum/components/LoadingIndicator', 'flarum/components/Placeholder'], function (_export, _context) {
+  "use strict";
+
+  var Component, UserDirectoryListItem, Button, LoadingIndicator, Placeholder, UserDirectoryList;
+  return {
+    setters: [function (_flarumComponent) {
+      Component = _flarumComponent.default;
+    }, function (_flagrowUserDirectoryComponentsUserDirectoryListItem) {
+      UserDirectoryListItem = _flagrowUserDirectoryComponentsUserDirectoryListItem.default;
+    }, function (_flarumComponentsButton) {
+      Button = _flarumComponentsButton.default;
+    }, function (_flarumComponentsLoadingIndicator) {
+      LoadingIndicator = _flarumComponentsLoadingIndicator.default;
+    }, function (_flarumComponentsPlaceholder) {
+      Placeholder = _flarumComponentsPlaceholder.default;
+    }],
+    execute: function () {
+      UserDirectoryList = function (_Component) {
+        babelHelpers.inherits(UserDirectoryList, _Component);
+
+        function UserDirectoryList() {
+          babelHelpers.classCallCheck(this, UserDirectoryList);
+          return babelHelpers.possibleConstructorReturn(this, (UserDirectoryList.__proto__ || Object.getPrototypeOf(UserDirectoryList)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(UserDirectoryList, [{
+          key: 'init',
+          value: function init() {
+            /**
+             * Whether or not discussion results are loading.
+             *
+             * @type {Boolean}
+             */
+            this.loading = true;
+
+            /**
+             * Whether or not there are more results that can be loaded.
+             *
+             * @type {Boolean}
+             */
+            this.moreResults = false;
+
+            /**
+             * The users in the user directory list.
+             *
+             * @type {User[]}
+             */
+            this.users = [];
+
+            this.refresh();
+          }
+        }, {
+          key: 'view',
+          value: function view() {
+            var params = this.props.params;
+            var loading = void 0;
+
+            if (this.loading) {
+              loading = LoadingIndicator.component();
+            } else if (this.moreResults) {
+              loading = Button.component({
+                children: app.translator.trans('core.forum.discussion_list.load_more_button'),
+                className: 'Button',
+                onclick: this.loadMore.bind(this)
+              });
+            }
+
+            if (this.users.length === 0 && !this.loading) {
+              var text = app.translator.trans('core.forum.discussion_list.empty_text');
+              return m(
+                'div',
+                { className: 'DiscussionList' },
+                Placeholder.component({ text: text })
+              );
+            }
+
+            return m(
+              'div',
+              { className: 'UserDirectoryList' },
+              this.users.map(function (user) {
+                return m(
+                  'div',
+                  { key: user.username(), 'data-id': user.username() },
+                  UserDirectoryListItem.component({ user: user, params: params })
+                );
+              }),
+              m(
+                'div',
+                { className: 'UserDirectoryList-loadMore' },
+                loading
+              )
+            );
+          }
+        }, {
+          key: 'requestParams',
+          value: function requestParams() {
+            var params = { include: [], filter: {} };
+
+            params.sort = this.sortMap()[this.props.params.sort];
+
+            if (this.props.params.q) {
+              params.filter.q = this.props.params.q;
+            }
+
+            return params;
+          }
+        }, {
+          key: 'sortMap',
+          value: function sortMap() {
+            var map = {};
+
+            if (this.props.params.q) {
+              map.relevance = '';
+            }
+            map.username_az = 'username';
+            map.username_za = '-username';
+            map.newest = '-joinTime';
+            map.oldest = 'joinTime';
+            map.seen_recent = '-lastSeenTime';
+            map.seen_oldest = 'lastSeenTime';
+            // map.most_posts = '-commentsCount';
+            // map.least_posts = 'commentsCount';
+            map.most_discussions = '-discussionsCount';
+            map.least_discussions = 'discussionsCount';
+
+            return map;
+          }
+        }, {
+          key: 'refresh',
+          value: function refresh() {
+            var _this2 = this;
+
+            var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+            if (clear) {
+              this.loading = true;
+              this.users = [];
+            }
+
+            return this.loadResults(0).then(function (results) {
+              _this2.users = [];
+              _this2.parseResults(results);
+            }, function () {
+              _this2.loading = false;
+              m.redraw();
+            });
+          }
+        }, {
+          key: 'loadResults',
+          value: function loadResults(offset) {
+            var preloadedUsers = app.preloadedDocument();
+
+            if (preloadedUsers) {
+              return m.deferred().resolve(preloadedUsers).promise;
+            }
+
+            var params = this.requestParams();
+            params.page = { offset: offset };
+            params.include = params.include.join(',');
+
+            return app.store.find('users', params);
+          }
+        }, {
+          key: 'loadMore',
+          value: function loadMore() {
+            this.loading = true;
+
+            this.loadResults(this.users.length).then(this.parseResults.bind(this));
+          }
+        }, {
+          key: 'parseResults',
+          value: function parseResults(results) {
+            [].push.apply(this.users, results);
+
+            this.loading = false;
+            this.moreResults = !!results.payload.links.next;
+
+            m.lazyRedraw();
+
+            return results;
+          }
+        }, {
+          key: 'removeUser',
+          value: function removeUser(user) {
+            var index = this.users.indexOf(user);
+
+            if (index !== -1) {
+              this.users.splice(index, 1);
+            }
+          }
+        }, {
+          key: 'addUser',
+          value: function addUser(user) {
+            this.users.unshift(user);
+          }
+        }]);
+        return UserDirectoryList;
+      }(Component);
+
+      _export('default', UserDirectoryList);
+    }
+  };
+});;
+'use strict';
+
+System.register('flagrow/user-directory/components/UserDirectoryListItem', ['flarum/Component', 'flarum/components/UserCard'], function (_export, _context) {
     "use strict";
 
-    var extend, Page, ItemList, listItems, icon, UserDirectoryList, WelcomeHero, DiscussionComposer, LogInModal, Select, Button, LinkButton, SelectDropdown, UserDirectoryPage;
+    var Component, UserCard, UserDirectoryListItem;
+    return {
+        setters: [function (_flarumComponent) {
+            Component = _flarumComponent.default;
+        }, function (_flarumComponentsUserCard) {
+            UserCard = _flarumComponentsUserCard.default;
+        }],
+        execute: function () {
+            UserDirectoryListItem = function (_Component) {
+                babelHelpers.inherits(UserDirectoryListItem, _Component);
+
+                function UserDirectoryListItem() {
+                    babelHelpers.classCallCheck(this, UserDirectoryListItem);
+                    return babelHelpers.possibleConstructorReturn(this, (UserDirectoryListItem.__proto__ || Object.getPrototypeOf(UserDirectoryListItem)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(UserDirectoryListItem, [{
+                    key: 'view',
+                    value: function view() {
+                        var user = this.props.user;
+                        var card = UserCard.component({
+                            user: user,
+                            className: 'UserCard--directory',
+                            controlsButtonClassName: 'Button Button--icon Button--flat'
+                        });
+
+                        return m(
+                            'div',
+                            { className: 'User' },
+                            card
+                        );
+                    }
+                }]);
+                return UserDirectoryListItem;
+            }(Component);
+
+            _export('default', UserDirectoryListItem);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/user-directory/components/UserDirectoryPage', ['flarum/extend', 'flarum/components/Page', 'flarum/utils/ItemList', 'flarum/helpers/listItems', 'flagrow/user-directory/components/UserDirectoryList', 'flarum/components/DiscussionComposer', 'flarum/components/LogInModal', 'flarum/components/Select', 'flarum/components/Button', 'flarum/components/LinkButton', 'flarum/components/SelectDropdown'], function (_export, _context) {
+    "use strict";
+
+    var extend, Page, ItemList, listItems, UserDirectoryList, DiscussionComposer, LogInModal, Select, Button, LinkButton, SelectDropdown, UserDirectoryPage;
     return {
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
@@ -13,12 +263,8 @@ System.register('flagrow/user-directory/components/UserDirectoryPage', ['flarum/
             ItemList = _flarumUtilsItemList.default;
         }, function (_flarumHelpersListItems) {
             listItems = _flarumHelpersListItems.default;
-        }, function (_flarumHelpersIcon) {
-            icon = _flarumHelpersIcon.default;
         }, function (_flagrowUserDirectoryComponentsUserDirectoryList) {
             UserDirectoryList = _flagrowUserDirectoryComponentsUserDirectoryList.default;
-        }, function (_flarumComponentsWelcomeHero) {
-            WelcomeHero = _flarumComponentsWelcomeHero.default;
         }, function (_flarumComponentsDiscussionComposer) {
             DiscussionComposer = _flarumComponentsDiscussionComposer.default;
         }, function (_flarumComponentsLogInModal) {
@@ -153,11 +399,6 @@ System.register('flagrow/user-directory/components/UserDirectoryPage', ['flarum/
                         setTimeout(scroll, 1);
                     }
                 }, {
-                    key: 'hero',
-                    value: function hero() {
-                        return WelcomeHero.component();
-                    }
-                }, {
                     key: 'sidebarItems',
                     value: function sidebarItems() {
                         var items = new ItemList();
@@ -202,7 +443,7 @@ System.register('flagrow/user-directory/components/UserDirectoryPage', ['flarum/
 
                         var sortOptions = {};
                         for (var i in sortMap) {
-                            sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
+                            sortOptions[i] = app.translator.trans('flagrow-user-directory.forum.page.sort.' + i);
                         }
 
                         items.add('sort', Select.component({
@@ -326,343 +567,6 @@ System.register('flagrow/user-directory/main', ['flagrow/user-directory/componen
             app.initializers.add('flagrow-user-directory', function (app) {
                 app.routes.user_directory = { path: '/user-directory', component: UserDirectoryPage.component() };
             });
-        }
-    };
-});;
-'use strict';
-
-System.register('flagrow/user-directory/components/UserDirectoryList', ['flarum/Component', 'flagrow/user-directory/components/UserDirectoryListItem', 'flarum/components/Button', 'flarum/components/LoadingIndicator', 'flarum/components/Placeholder'], function (_export, _context) {
-  "use strict";
-
-  var Component, UserDirectoryListItem, Button, LoadingIndicator, Placeholder, UserDirectoryList;
-  return {
-    setters: [function (_flarumComponent) {
-      Component = _flarumComponent.default;
-    }, function (_flagrowUserDirectoryComponentsUserDirectoryListItem) {
-      UserDirectoryListItem = _flagrowUserDirectoryComponentsUserDirectoryListItem.default;
-    }, function (_flarumComponentsButton) {
-      Button = _flarumComponentsButton.default;
-    }, function (_flarumComponentsLoadingIndicator) {
-      LoadingIndicator = _flarumComponentsLoadingIndicator.default;
-    }, function (_flarumComponentsPlaceholder) {
-      Placeholder = _flarumComponentsPlaceholder.default;
-    }],
-    execute: function () {
-      UserDirectoryList = function (_Component) {
-        babelHelpers.inherits(UserDirectoryList, _Component);
-
-        function UserDirectoryList() {
-          babelHelpers.classCallCheck(this, UserDirectoryList);
-          return babelHelpers.possibleConstructorReturn(this, (UserDirectoryList.__proto__ || Object.getPrototypeOf(UserDirectoryList)).apply(this, arguments));
-        }
-
-        babelHelpers.createClass(UserDirectoryList, [{
-          key: 'init',
-          value: function init() {
-            /**
-             * Whether or not discussion results are loading.
-             *
-             * @type {Boolean}
-             */
-            this.loading = true;
-
-            /**
-             * Whether or not there are more results that can be loaded.
-             *
-             * @type {Boolean}
-             */
-            this.moreResults = false;
-
-            /**
-             * The users in the user directory list.
-             *
-             * @type {User[]}
-             */
-            this.users = [];
-
-            this.refresh();
-          }
-        }, {
-          key: 'view',
-          value: function view() {
-            var params = this.props.params;
-            var loading = void 0;
-
-            if (this.loading) {
-              loading = LoadingIndicator.component();
-            } else if (this.moreResults) {
-              loading = Button.component({
-                children: app.translator.trans('core.forum.discussion_list.load_more_button'),
-                className: 'Button',
-                onclick: this.loadMore.bind(this)
-              });
-            }
-
-            if (this.users.length === 0 && !this.loading) {
-              var text = app.translator.trans('core.forum.discussion_list.empty_text');
-              return m(
-                'div',
-                { className: 'DiscussionList' },
-                Placeholder.component({ text: text })
-              );
-            }
-
-            return m(
-              'div',
-              { className: 'DiscussionList' },
-              m(
-                'ul',
-                { className: 'DiscussionList-discussions' },
-                this.users.map(function (user) {
-                  return m(
-                    'li',
-                    { key: user.id(), 'data-id': user.id() },
-                    UserDirectoryListItem.component({ user: user, params: params })
-                  );
-                })
-              ),
-              m(
-                'div',
-                { className: 'DiscussionList-loadMore' },
-                loading
-              )
-            );
-          }
-        }, {
-          key: 'requestParams',
-          value: function requestParams() {
-            var params = { include: [], filter: {} };
-
-            params.sort = this.sortMap()[this.props.params.sort];
-
-            if (this.props.params.q) {
-              params.filter.q = this.props.params.q;
-            }
-
-            return params;
-          }
-        }, {
-          key: 'sortMap',
-          value: function sortMap() {
-            var map = {};
-
-            if (this.props.params.q) {
-              map.relevance = '';
-            }
-            map.latest = '-lastTime';
-            map.top = '-commentsCount';
-            map.newest = '-startTime';
-            map.oldest = 'startTime';
-
-            return map;
-          }
-        }, {
-          key: 'refresh',
-          value: function refresh() {
-            var _this2 = this;
-
-            var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
-            if (clear) {
-              this.loading = true;
-              this.users = [];
-            }
-
-            return this.loadResults().then(function (results) {
-              _this2.users = [];
-              _this2.parseResults(results);
-            }, function () {
-              _this2.loading = false;
-              m.redraw();
-            });
-          }
-        }, {
-          key: 'loadResults',
-          value: function loadResults(offset) {
-            var preloadedDiscussions = app.preloadedDocument();
-
-            if (preloadedDiscussions) {
-              return m.deferred().resolve(preloadedDiscussions).promise;
-            }
-
-            var params = this.requestParams();
-            params.page = { offset: offset };
-            params.include = params.include.join(',');
-
-            return app.store.find('users', params);
-          }
-        }, {
-          key: 'loadMore',
-          value: function loadMore() {
-            this.loading = true;
-
-            this.loadResults(this.users.length).then(this.parseResults.bind(this));
-          }
-        }, {
-          key: 'parseResults',
-          value: function parseResults(results) {
-            [].push.apply(this.users, results);
-
-            this.loading = false;
-            this.moreResults = !!results.payload.links.next;
-
-            m.lazyRedraw();
-
-            return results;
-          }
-        }, {
-          key: 'removeUser',
-          value: function removeUser(user) {
-            var index = this.users.indexOf(user);
-
-            if (index !== -1) {
-              this.users.splice(index, 1);
-            }
-          }
-        }, {
-          key: 'addUser',
-          value: function addUser(user) {
-            this.users.unshift(user);
-          }
-        }]);
-        return UserDirectoryList;
-      }(Component);
-
-      _export('default', UserDirectoryList);
-    }
-  };
-});;
-'use strict';
-
-System.register('flagrow/user-directory/components/UserDirectoryListItem', ['flarum/Component', 'flarum/helpers/avatar', 'flarum/components/UserCard', 'flarum/helpers/username', 'flarum/helpers/userOnline', 'flarum/helpers/listItems', 'flarum/helpers/highlight', 'flarum/helpers/icon', 'flarum/utils/humanTime', 'flarum/utils/ItemList', 'flarum/utils/abbreviateNumber', 'flarum/components/Dropdown', 'flarum/components/TerminalPost', 'flarum/components/PostPreview', 'flarum/components/PostUser', 'flarum/utils/slidable', 'flarum/utils/extractText', 'flarum/utils/classList'], function (_export, _context) {
-    "use strict";
-
-    var Component, avatar, UserCard, username, userOnline, listItems, highlight, icon, humanTime, ItemList, abbreviateNumber, Dropdown, TerminalPost, PostPreview, PostUser, slidable, extractText, classList, UserDirectoryListItem;
-    return {
-        setters: [function (_flarumComponent) {
-            Component = _flarumComponent.default;
-        }, function (_flarumHelpersAvatar) {
-            avatar = _flarumHelpersAvatar.default;
-        }, function (_flarumComponentsUserCard) {
-            UserCard = _flarumComponentsUserCard.default;
-        }, function (_flarumHelpersUsername) {
-            username = _flarumHelpersUsername.default;
-        }, function (_flarumHelpersUserOnline) {
-            userOnline = _flarumHelpersUserOnline.default;
-        }, function (_flarumHelpersListItems) {
-            listItems = _flarumHelpersListItems.default;
-        }, function (_flarumHelpersHighlight) {
-            highlight = _flarumHelpersHighlight.default;
-        }, function (_flarumHelpersIcon) {
-            icon = _flarumHelpersIcon.default;
-        }, function (_flarumUtilsHumanTime) {
-            humanTime = _flarumUtilsHumanTime.default;
-        }, function (_flarumUtilsItemList) {
-            ItemList = _flarumUtilsItemList.default;
-        }, function (_flarumUtilsAbbreviateNumber) {
-            abbreviateNumber = _flarumUtilsAbbreviateNumber.default;
-        }, function (_flarumComponentsDropdown) {
-            Dropdown = _flarumComponentsDropdown.default;
-        }, function (_flarumComponentsTerminalPost) {
-            TerminalPost = _flarumComponentsTerminalPost.default;
-        }, function (_flarumComponentsPostPreview) {
-            PostPreview = _flarumComponentsPostPreview.default;
-        }, function (_flarumComponentsPostUser) {
-            PostUser = _flarumComponentsPostUser.default;
-        }, function (_flarumUtilsSlidable) {
-            slidable = _flarumUtilsSlidable.default;
-        }, function (_flarumUtilsExtractText) {
-            extractText = _flarumUtilsExtractText.default;
-        }, function (_flarumUtilsClassList) {
-            classList = _flarumUtilsClassList.default;
-        }],
-        execute: function () {
-            UserDirectoryListItem = function (_Component) {
-                babelHelpers.inherits(UserDirectoryListItem, _Component);
-
-                function UserDirectoryListItem() {
-                    babelHelpers.classCallCheck(this, UserDirectoryListItem);
-                    return babelHelpers.possibleConstructorReturn(this, (UserDirectoryListItem.__proto__ || Object.getPrototypeOf(UserDirectoryListItem)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(UserDirectoryListItem, [{
-                    key: 'config',
-                    value: function config(isInitialized) {
-                        var _this2 = this;
-
-                        if (isInitialized) return;
-
-                        var timeout = void 0;
-
-                        this.$().on('mouseover', 'h3 a, .UserCard', function () {
-                            clearTimeout(timeout);
-                            timeout = setTimeout(_this2.showCard.bind(_this2), 500);
-                        }).on('mouseout', 'h3 a, .UserCard', function () {
-                            clearTimeout(timeout);
-                            timeout = setTimeout(_this2.hideCard.bind(_this2), 250);
-                        });
-                    }
-                }, {
-                    key: 'view',
-                    value: function view() {
-                        var user = this.props.user;
-                        var card = UserCard.component({
-                            user: user,
-                            className: 'UserCard--popover',
-                            controlsButtonClassName: 'Button Button--icon Button--flat'
-                        });
-
-                        return m(
-                            'div',
-                            { className: 'PostUser' },
-                            userOnline(user),
-                            m(
-                                'h3',
-                                null,
-                                m(
-                                    'a',
-                                    { href: app.route.user(user), config: m.route },
-                                    avatar(user, { className: 'PostUser-avatar' }),
-                                    ' ',
-                                    username(user)
-                                )
-                            ),
-                            m(
-                                'ul',
-                                { className: 'PostUser-badges badges' },
-                                listItems(user.badges().toArray())
-                            ),
-                            card
-                        );
-                    }
-                }, {
-                    key: 'showCard',
-                    value: function showCard() {
-                        var _this3 = this;
-
-                        this.cardVisible = true;
-
-                        m.redraw();
-
-                        setTimeout(function () {
-                            return _this3.$('.UserCard').addClass('in');
-                        });
-                    }
-                }, {
-                    key: 'hideCard',
-                    value: function hideCard() {
-                        var _this4 = this;
-
-                        this.$('.UserCard').removeClass('in').one('transitionend webkitTransitionEnd oTransitionEnd', function () {
-                            _this4.cardVisible = false;
-                            m.redraw();
-                        });
-                    }
-                }]);
-                return UserDirectoryListItem;
-            }(Component);
-
-            _export('default', UserDirectoryListItem);
         }
     };
 });

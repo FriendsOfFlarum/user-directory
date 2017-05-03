@@ -4,6 +4,7 @@ namespace Flagrow\UserDirectory\Http\Controllers;
 
 use Flarum\Api\Controller\ListUsersController;
 use Flarum\Forum\Controller\WebAppController;
+use Flarum\Http\Exception\RouteNotFoundException;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Flarum\Api\Client as ApiClient;
 use Flarum\Core\User;
@@ -23,10 +24,16 @@ class UserDirectoryController extends WebAppController
      * @var array
      */
     private $sortMap = [
-        'latest' => '-lastTime',
-        'top' => '-commentsCount',
-        'newest' => '-startTime',
-        'oldest' => 'startTime'
+        'username_az' => 'username',
+        'username_za' => '-username',
+        'newest' => '-joinTime',
+        'oldest' => 'joinTime',
+        'seen_recent' => '-lastSeenTime',
+        'seen_oldest' => 'lastSeenTime',
+//        'most_posts' => '-commentsCount',
+//        'least_posts' => 'commentsCount',
+        'most_discussions' => '-discussionsCount',
+        'least_discussions' => 'discussionsCount'
     ];
 
     /**
@@ -61,9 +68,7 @@ class UserDirectoryController extends WebAppController
 
         $document = $this->getDocument($request->getAttribute('actor'), $params);
 
-        $view->document = $document;
-
-        $view->content = app('view')->make('flagrow.user-directory::index', compact('document', 'page', 'forum'));
+        $view->setContent(app('view')->make('flagrow.user-directory::index', compact('document', 'page', 'forum')));
 
         return $view;
     }
@@ -74,9 +79,14 @@ class UserDirectoryController extends WebAppController
      * @param User $actor
      * @param array $params
      * @return object
+     * @throws RouteNotFoundException
      */
     private function getDocument(User $actor, array $params)
     {
+        if ($actor->cannot('flagrow.user-directory.view')) {
+            throw new RouteNotFoundException();
+        }
+
         return json_decode($this->api->send(ListUsersController::class, $actor, $params)->getBody());
     }
 }

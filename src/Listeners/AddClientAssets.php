@@ -12,7 +12,7 @@ class AddClientAssets
     public function subscribe(Dispatcher $events)
     {
         $events->listen(ConfigureWebApp::class, [$this, 'addAssets']);
-//        $events->listen(ConfigureLocales::class, [$this, 'addLocales']);
+        $events->listen(ConfigureLocales::class, [$this, 'addLocales']);
     }
 
     /**
@@ -23,16 +23,16 @@ class AddClientAssets
         if ($app->isForum()) {
             $app->addAssets([
                 __DIR__.'/../../js/forum/dist/extension.js',
-//                __DIR__.'/../../less/forum/extension.less'
+                __DIR__.'/../../assets/less/user-card.less'
             ]);
             $app->addBootstrapper('flagrow/user-directory/main');
         }
 
         if ($app->isAdmin()) {
-//            $app->addAssets([
-//                __DIR__ . '/../../js/admin/dist/extension.js'
-//            ]);
-//            $app->addBootstrapper('flagrow/byobu/main');
+            $app->addAssets([
+                __DIR__ . '/../../js/admin/dist/extension.js'
+            ]);
+            $app->addBootstrapper('flagrow/user-directory/main');
         }
     }
 
@@ -43,7 +43,7 @@ class AddClientAssets
      */
     public function addLocales(ConfigureLocales $event)
     {
-        foreach (new DirectoryIterator(__DIR__ . '/../../locale') as $file) {
+        foreach (new DirectoryIterator(__DIR__ . '/../../assets/locale') as $file) {
             if ($file->isFile() && in_array($file->getExtension(), ['yml', 'yaml'])) {
                 $event->locales->addTranslations($file->getBasename('.' . $file->getExtension()), $file->getPathname());
             }

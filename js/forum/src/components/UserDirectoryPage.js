@@ -2,9 +2,7 @@ import { extend } from 'flarum/extend';
 import Page from 'flarum/components/Page';
 import ItemList from 'flarum/utils/ItemList';
 import listItems from 'flarum/helpers/listItems';
-import icon from 'flarum/helpers/icon';
 import UserDirectoryList from 'flagrow/user-directory/components/UserDirectoryList';
-import WelcomeHero from 'flarum/components/WelcomeHero';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 import LogInModal from 'flarum/components/LogInModal';
 import Select from 'flarum/components/Select';
@@ -102,15 +100,6 @@ export default class UserDirectoryPage extends Page {
     }
 
     /**
-     * Get the component to display as the hero.
-     *
-     * @return {MithrilComponent}
-     */
-    hero() {
-        return WelcomeHero.component();
-    }
-
-    /**
      * Build an item list for the sidebar of the index page. By default this is a
      * "New Discussion" button, and then a DropdownSelect component containing a
      * list of navigation items.
@@ -178,7 +167,7 @@ export default class UserDirectoryPage extends Page {
 
         const sortOptions = {};
         for (const i in sortMap) {
-            sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
+            sortOptions[i] = app.translator.trans('flagrow-user-directory.forum.page.sort.' + i);
         }
 
         items.add('sort',

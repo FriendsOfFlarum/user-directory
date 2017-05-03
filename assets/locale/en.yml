@@ -1,0 +1,17 @@
+flagrow-user-directory:
+    forum:
+        page:
+            sort:
+                username_az: Username (a-z)
+                username_za: Username (z-a)
+                newest: Newest
+                oldest: Oldest
+                seen_recent: Recently online
+                seen_oldest: Longest away
+                most_posts: Most posts
+                least_posts: Least posts
+                most_discussions: Most discussions
+                least_discussions: Least discussions
+    admin:
+        permissions:
+            view_user_directory: View user directory

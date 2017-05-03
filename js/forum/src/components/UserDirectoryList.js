@@ -62,17 +62,15 @@ export default class UserDirectoryList extends Component {
     }
 
     return (
-      <div className="DiscussionList">
-        <ul className="DiscussionList-discussions">
+      <div className="UserDirectoryList">
           {this.users.map(user => {
             return (
-              <li key={user.id()} data-id={user.id()}>
+              <div key={user.username()} data-id={user.username()}>
                 {UserDirectoryListItem.component({user, params})}
-              </li>
+              </div>
             );
           })}
-        </ul>
-        <div className="DiscussionList-loadMore">
+        <div className="UserDirectoryList-loadMore">
           {loading}
         </div>
       </div>
@@ -110,10 +108,16 @@ export default class UserDirectoryList extends Component {
     if (this.props.params.q) {
       map.relevance = '';
     }
-    map.latest = '-lastTime';
-    map.top = '-commentsCount';
-    map.newest = '-startTime';
-    map.oldest = 'startTime';
+    map.username_az = 'username';
+    map.username_za = '-username';
+    map.newest = '-joinTime';
+    map.oldest = 'joinTime';
+    map.seen_recent = '-lastSeenTime';
+    map.seen_oldest = 'lastSeenTime';
+    // map.most_posts = '-commentsCount';
+    // map.least_posts = 'commentsCount';
+    map.most_discussions = '-discussionsCount';
+    map.least_discussions = 'discussionsCount';
 
     return map;
   }
@@ -129,7 +133,7 @@ export default class UserDirectoryList extends Component {
       this.users = [];
     }
 
-    return this.loadResults().then(
+    return this.loadResults(0).then(
       results => {
         this.users = [];
         this.parseResults(results);
@@ -148,10 +152,10 @@ export default class UserDirectoryList extends Component {
    * @return {Promise}
    */
   loadResults(offset) {
-    const preloadedDiscussions = app.preloadedDocument();
+    const preloadedUsers = app.preloadedDocument();
 
-    if (preloadedDiscussions) {
-      return m.deferred().resolve(preloadedDiscussions).promise;
+    if (preloadedUsers) {
+      return m.deferred().resolve(preloadedUsers).promise;
     }
 
     const params = this.requestParams();
