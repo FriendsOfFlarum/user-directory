@@ -1,0 +1,39 @@
+{
+    "name": "flagrow/user-directory",
+    "description": "The permission based public user directory extension for your Flarum forum.",
+    "keywords": [
+        "extension",
+        "flarum",
+        "flagrow",
+        "user list",
+        "member list",
+        "user directory"
+    ],
+    "type": "flarum-extension",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Daniël Klabbers",
+            "email": "daniel+flarum@klabbers.email",
+            "homepage": "http://github.com/luceos"
+        }
+    ],
+    "require": {
+        "flarum/core": "^0.1.0-beta.6"
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Flagrow User Directory",
+            "icon": {
+                "name": "address-book-o",
+                "backgroundColor": "#000",
+                "color": "#87d37c"
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Flagrow\\UserDirectory\\": "src/"
+        }
+    }
+}
