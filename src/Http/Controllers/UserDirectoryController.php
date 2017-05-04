@@ -67,8 +67,15 @@ class UserDirectoryController extends WebAppController
         ];
 
         $document = $this->getDocument($request->getAttribute('actor'), $params);
+        $content = app('view')->make('flagrow.user-directory::index', compact('document', 'page', 'forum'));
 
-        $view->setContent(app('view')->make('flagrow.user-directory::index', compact('document', 'page', 'forum')));
+        // flarum/core dev-master (0.1.0-beta.7)
+        // @todo use the method after b7 was released
+        if (method_exists($view, 'setContent')) {
+            $view->setContent($content);
+        } else {
+            $view->content = $content;
+        }
 
         return $view;
     }
