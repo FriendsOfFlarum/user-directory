@@ -113,6 +113,8 @@ System.register('flagrow/user-directory/components/UserDirectoryList', ['flarum/
 
             if (this.props.params.q) {
               map.relevance = '';
+            } else {
+              map.default = '';
             }
             map.username_az = 'username';
             map.username_za = '-username';
@@ -554,18 +556,41 @@ System.register('flagrow/user-directory/components/UserDirectoryPage', ['flarum/
 });;
 'use strict';
 
-System.register('flagrow/user-directory/main', ['flagrow/user-directory/components/UserDirectoryPage'], function (_export, _context) {
+System.register('flagrow/user-directory/main', ['flarum/extend', 'flagrow/user-directory/components/UserDirectoryPage', 'flarum/components/UsersSearchSource', 'flarum/components/LinkButton'], function (_export, _context) {
     "use strict";
 
-    var UserDirectoryPage;
+    var extend, UserDirectoryPage, UsersSearchSource, LinkButton;
     return {
-        setters: [function (_flagrowUserDirectoryComponentsUserDirectoryPage) {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flagrowUserDirectoryComponentsUserDirectoryPage) {
             UserDirectoryPage = _flagrowUserDirectoryComponentsUserDirectoryPage.default;
+        }, function (_flarumComponentsUsersSearchSource) {
+            UsersSearchSource = _flarumComponentsUsersSearchSource.default;
+        }, function (_flarumComponentsLinkButton) {
+            LinkButton = _flarumComponentsLinkButton.default;
         }],
         execute: function () {
 
             app.initializers.add('flagrow-user-directory', function (app) {
-                app.routes.user_directory = { path: '/user-directory', component: UserDirectoryPage.component() };
+                app.routes.flagrow_user_directory = { path: '/users', component: UserDirectoryPage.component() };
+
+                extend(UsersSearchSource.prototype, 'view', function (view, query) {
+                    query = query.toLowerCase();
+                    var searchUserOnPage = m(
+                        'li',
+                        null,
+                        LinkButton.component({
+                            icon: 'search',
+                            children: app.translator.trans('flagrow-user-directory.forum.search.users_heading', { query: query }),
+                            href: app.route('flagrow_user_directory', { q: query })
+                        })
+                    );
+
+                    if (view) {
+                        view.splice(1, 0, searchUserOnPage);
+                    }
+                });
             });
         }
     };

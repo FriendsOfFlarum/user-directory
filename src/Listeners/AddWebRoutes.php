@@ -22,8 +22,8 @@ class AddWebRoutes
     public function addDirectoryPage(ConfigureForumRoutes $event)
     {
         $event->get(
-            '/user-directory',
-            'user-directory',
+            '/users',
+            'flagrow_user_directory',
             UserDirectoryController::class
         );
     }

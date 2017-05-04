@@ -107,6 +107,8 @@ export default class UserDirectoryList extends Component {
 
     if (this.props.params.q) {
       map.relevance = '';
+    } else {
+        map.default = '';
     }
     map.username_az = 'username';
     map.username_za = '-username';

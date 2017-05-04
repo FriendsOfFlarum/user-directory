@@ -1,0 +1,21 @@
+flagrow-user-directory:
+    forum:
+        search:
+            users_heading: 'Zoek alle gebruikers op "{query}"'
+        page:
+            sort:
+                relevance: Relevantie
+                default: Standaard
+                username_az: Gebruikersnaam (a-z)
+                username_za: Gebruikersnaam (z-a)
+                newest: Nieuwste
+                oldest: Oudste
+                seen_recent: Recentst online
+                seen_oldest: Langst niet online
+                most_posts: Meeste berichte
+                least_posts: Minste berichten
+                most_discussions: Meeste discussies
+                least_discussions: Minste discussies
+    admin:
+        permissions:
+            view_user_directory: Gebruikerslijst inzien

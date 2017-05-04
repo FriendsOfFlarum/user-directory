@@ -1,7 +1,11 @@
 flagrow-user-directory:
     forum:
+        search:
+            users_heading: 'Search all users for "{query}"'
         page:
             sort:
+                relevance: Relevance
+                default: Default
                 username_az: Username (a-z)
                 username_za: Username (z-a)
                 newest: Newest
