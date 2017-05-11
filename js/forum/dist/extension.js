@@ -435,6 +435,12 @@ System.register('flagrow/user-directory/components/UserDirectoryPage', ['flarum/
                             icon: 'comments-o'
                         }), 100);
 
+                        items.add('userDirectory', LinkButton.component({
+                            href: app.route('flagrow_user_directory', params),
+                            children: app.translator.trans('flagrow-user-directory.forum.page.nav'),
+                            icon: 'address-book-o'
+                        }), 85);
+
                         return items;
                     }
                 }, {
