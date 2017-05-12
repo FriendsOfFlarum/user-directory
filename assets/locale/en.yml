@@ -3,6 +3,7 @@ flagrow-user-directory:
         search:
             users_heading: 'Search all users for "{query}"'
         page:
+            nav: User Directory
             sort:
                 relevance: Relevance
                 default: Default
