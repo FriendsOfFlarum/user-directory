@@ -1,7 +1,7 @@
 flagrow-user-directory:
     forum:
         search:
-            users_heading: "Buscar '{query}' en todos la lista de usuarios"
+            users_heading: "Buscar '{query}' en la lista de usuarios"
         page:
             nav: Lista de Usuarios
             sort:
