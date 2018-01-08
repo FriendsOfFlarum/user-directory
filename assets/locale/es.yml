@@ -1,0 +1,22 @@
+flagrow-user-directory:
+    forum:
+        search:
+            users_heading: "Buscar '{query}' en la lista de usuarios"
+        page:
+            nav: Lista de Usuarios
+            sort:
+                relevance: Relevancia
+                default: Por defecto
+                username_az: Nombre de usuario (a-z)
+                username_za: Nombre de usuario (z-a)
+                newest: Nuevos
+                oldest: Antiguos
+                seen_recent: Vistos hace poco
+                seen_oldest: Vistos hace mucho
+                most_posts: Con más publicaciones
+                least_posts: Con menos publicaciones
+                most_discussions: Con más discusiones
+                least_discussions: Con menos discusiones
+    admin:
+        permissions:
+            view_user_directory: Ver la lista de usuarios
