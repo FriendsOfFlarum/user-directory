@@ -10,7 +10,7 @@
         "user directory"
     ],
     "type": "flarum-extension",
-    "license": "mit",
+    "license": "MIT",
     "authors": [
         {
             "name": "Daniël Klabbers",
