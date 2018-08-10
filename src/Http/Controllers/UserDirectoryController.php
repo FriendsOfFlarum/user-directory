@@ -3,20 +3,28 @@
 namespace Flagrow\UserDirectory\Http\Controllers;
 
 use Flarum\Api\Controller\ListUsersController;
-use Flarum\Forum\Controller\WebAppController;
+use Flarum\Frontend\Content\ContentInterface;
+use Flarum\Frontend\HtmlDocument;
+use Flarum\Http\Controller\AbstractHtmlController;
 use Flarum\Http\Exception\RouteNotFoundException;
+use Illuminate\Contracts\Support\Renderable;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Flarum\Api\Client as ApiClient;
-use Flarum\Core\User;
-use Flarum\Forum\WebApp;
-use Illuminate\Contracts\Events\Dispatcher;
+use Flarum\User\User;
+use Illuminate\Contracts\View\Factory;
 
-class UserDirectoryController extends WebAppController
+
+class UserDirectoryController implements ContentInterface
 {
     /**
      * @var ApiClient
      */
     protected $api;
+
+    /**
+     * @var Factory
+     */
+    private $view;
 
     /**
      * A map of sort query param values to their API sort param.
@@ -36,24 +44,37 @@ class UserDirectoryController extends WebAppController
         'least_discussions' => 'discussionsCount'
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(WebApp $webApp, Dispatcher $events, ApiClient $api)
+    public function __construct(Factory $view, ApiClient $api)
     {
-        parent::__construct($webApp, $events);
-
+        $this->view = $view;
         $this->api = $api;
     }
 
     /**
-     * @param Request $request
-     * @return \Flarum\Http\WebApp\WebAppView
+     * Get the result of an API request to list discussions.
+     *
+     * @param User $actor
+     * @param array $params
+     * @return object
+     * @throws \Exception
      */
-    protected function getView(Request $request)
+    private function getDocument(User $actor, array $params)
     {
-        $view = parent::getView($request);
+        if ($actor->cannot('flagrow.user-directory.view')) {
+            throw new RouteNotFoundException();
+        }
 
+        return json_decode($this->api->send(ListUsersController::class, $actor, $params)->getBody());
+    }
+
+    /**
+     * @param HtmlDocument $document
+     * @param Request $request
+     * @return HtmlDocument
+     * @throws \Exception
+     */
+    public function populate(HtmlDocument $document, Request $request)
+    {
         $queryParams = $request->getQueryParams();
 
         $sort = array_pull($queryParams, 'sort');
@@ -66,34 +87,15 @@ class UserDirectoryController extends WebAppController
             'page' => ['offset' => ($page - 1) * 20, 'limit' => 20]
         ];
 
-        $document = $this->getDocument($request->getAttribute('actor'), $params);
-        $content = app('view')->make('flagrow.user-directory::index', compact('document', 'page', 'forum'));
+        $apiDocument = $this->getDocument($request->getAttribute('actor'), $params);
 
-        // flarum/core dev-master (0.1.0-beta.7)
-        // @todo use the method after b7 was released
-        if (method_exists($view, 'setContent')) {
-            $view->setContent($content);
-        } else {
-            $view->content = $content;
-        }
+        $document->content = $this->view->make(
+            'flagrow.user-directory::index',
+            compact('page', 'forum')
+        )->with('document', $apiDocument);
 
-        return $view;
-    }
+        $document->payload['apiDocument'] = $apiDocument;
 
-    /**
-     * Get the result of an API request to list discussions.
-     *
-     * @param User $actor
-     * @param array $params
-     * @return object
-     * @throws RouteNotFoundException
-     */
-    private function getDocument(User $actor, array $params)
-    {
-        if ($actor->cannot('flagrow.user-directory.view')) {
-            throw new RouteNotFoundException();
-        }
-
-        return json_decode($this->api->send(ListUsersController::class, $actor, $params)->getBody());
+        return $document;
     }
 }

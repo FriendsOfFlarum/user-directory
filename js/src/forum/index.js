@@ -1,7 +1,7 @@
 import {extend} from 'flarum/extend';
-import UserDirectoryPage from 'flagrow/user-directory/components/UserDirectoryPage';
 import UsersSearchSource from 'flarum/components/UsersSearchSource';
 import LinkButton from 'flarum/components/LinkButton';
+import UserDirectoryPage from './components/UserDirectoryPage';
 
 app.initializers.add('flagrow-user-directory', function(app) {
     app.routes.flagrow_user_directory = {path: '/users', component: UserDirectoryPage.component()};
@@ -11,7 +11,7 @@ app.initializers.add('flagrow-user-directory', function(app) {
         let searchUserOnPage = (
             <li>
                 {LinkButton.component({
-                    icon: 'search',
+                    icon: 'fas fa-search',
                     children: app.translator.trans('flagrow-user-directory.forum.search.users_heading', {query}),
                     href: app.route('flagrow_user_directory', {q: query})
                 })}

@@ -2,13 +2,14 @@ import { extend } from 'flarum/extend';
 import Page from 'flarum/components/Page';
 import ItemList from 'flarum/utils/ItemList';
 import listItems from 'flarum/helpers/listItems';
-import UserDirectoryList from 'flagrow/user-directory/components/UserDirectoryList';
+import IndexPage from 'flarum/components/IndexPage';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 import LogInModal from 'flarum/components/LogInModal';
 import Select from 'flarum/components/Select';
 import Button from 'flarum/components/Button';
 import LinkButton from 'flarum/components/LinkButton';
 import SelectDropdown from 'flarum/components/SelectDropdown';
+import UserDirectoryList from './UserDirectoryList';
 
 /**
  * The `IndexPage` component displays the index page, including the welcome
@@ -58,16 +59,19 @@ export default class UserDirectoryPage extends Page {
     view() {
         return (
             <div className="IndexPage">
+                {IndexPage.prototype.hero()}
                 <div className="container">
-                    <nav className="IndexPage-nav sideNav">
-                        <ul>{listItems(this.sidebarItems().toArray())}</ul>
-                    </nav>
-                    <div className="IndexPage-results sideNavOffset">
-                        <div className="IndexPage-toolbar">
-                            <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
-                            <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
+                    <div className="sideNavContainer">
+                        <nav className="IndexPage-nav sideNav">
+                            <ul>{listItems(this.sidebarItems().toArray())}</ul>
+                        </nav>
+                        <div className="IndexPage-results sideNavOffset">
+                            <div className="IndexPage-toolbar">
+                                <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
+                                <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
+                            </div>
+                            {app.cache.userDirectoryList.render()}
                         </div>
-                        {app.cache.userDirectoryList.render()}
                     </div>
                 </div>
             </div>
@@ -107,21 +111,9 @@ export default class UserDirectoryPage extends Page {
      * @return {ItemList}
      */
     sidebarItems() {
-        const items = new ItemList();
-        const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
+        const items = IndexPage.prototype.sidebarItems();
 
-        items.add('newDiscussion',
-            Button.component({
-                children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
-                icon: 'edit',
-                className: 'Button Button--primary IndexPage-newDiscussion',
-                itemClassName: 'App-primaryControl',
-                onclick: this.newDiscussion.bind(this),
-                disabled: !canStartDiscussion
-            })
-        );
-
-        items.add('nav',
+        items.replace('nav',
             SelectDropdown.component({
                 children: this.navItems(this).toArray(),
                 buttonClassName: 'Button',
@@ -139,23 +131,14 @@ export default class UserDirectoryPage extends Page {
      * @return {ItemList}
      */
     navItems() {
-        const items = new ItemList();
+        const items = IndexPage.prototype.navItems();
         const params = this.stickyParams();
 
-        items.add('allDiscussions',
-            LinkButton.component({
-                href: app.route('index', params),
-                children: app.translator.trans('core.forum.index.all_discussions_link'),
-                icon: 'comments-o'
-            }),
-            100
-        );
-      
        items.add('userDirectory',
             LinkButton.component({
                 href: app.route('flagrow_user_directory', params),
                 children: app.translator.trans('flagrow-user-directory.forum.page.nav'),
-                icon: 'address-book-o'
+                icon: 'far fa-address-book'
             }),
             85
         );
@@ -202,7 +185,7 @@ export default class UserDirectoryPage extends Page {
         items.add('refresh',
             Button.component({
                 title: app.translator.trans('core.forum.index.refresh_tooltip'),
-                icon: 'refresh',
+                icon: 'fas fa-sync',
                 className: 'Button Button--icon',
                 onclick: () => {
                     app.cache.discussionList.refresh();
