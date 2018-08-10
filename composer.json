@@ -25,7 +25,7 @@
         "flarum-extension": {
             "title": "Flagrow User Directory",
             "icon": {
-                "name": "address-book-o",
+                "name": "far fa-address-book",
                 "backgroundColor": "#f4f4f4",
                 "color": "#5f4bb6"
             }
