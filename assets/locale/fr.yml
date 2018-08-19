@@ -1,0 +1,22 @@
+flagrow-user-directory:
+    forum:
+        search:
+            users_heading: 'Rechercher tous les utilisateurs pour "{query}"'
+        page:
+            nav: Répertoire utilisateurs
+            sort:
+                relevance: Pertinence
+                default: Par défaut
+                username_az: Utilisateur (a-z)
+                username_za: Utilisateur (z-a)
+                newest: Le plus récent
+                oldest: Le plus ancien
+                seen_recent: Connexion récente
+                seen_oldest: Déconnexion ancienne
+                most_posts: Le plus de messages
+                least_posts: Le moins de messages
+                most_discussions: Le plus de discussions
+                least_discussions: Le moins de discussions
+    admin:
+        permissions:
+            view_user_directory: Voir le répertoire utilisateurs
