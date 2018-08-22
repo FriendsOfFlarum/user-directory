@@ -1,0 +1,22 @@
+flagrow-user-directory:
+    forum:
+        search:
+            users_heading: 'Tüm kullanıcıları "{query}" ile ara'
+        page:
+            nav: Kullanıcı Listesi
+            sort:
+                relevance: Benzerlik
+                default: Varsayılan
+                username_az: Kullanıcı adı (a-z)
+                username_za: Kullanıcı adı (z-a)
+                newest: En yeni
+                oldest: En eski
+                seen_recent: Son zamanda çevrimiçi
+                seen_oldest: En uzun süre çevrimdışı
+                most_posts: En çok yazı
+                least_posts: En az yazı
+                most_discussions: En çok başlık
+                least_discussions: En az başlık
+    admin:
+        permissions:
+view_user_directory: Kullanıcı listesini göster
