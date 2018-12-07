@@ -1,5 +1,5 @@
 import {extend} from 'flarum/extend';
-import UserDirectoryPage from 'flagrow/user-directory/components/UserDirectoryPage';
+import UserDirectoryPage from './components/UserDirectoryPage';
 import UsersSearchSource from 'flarum/components/UsersSearchSource';
 import LinkButton from 'flarum/components/LinkButton';
 

@@ -1,5 +1,5 @@
 import Component from 'flarum/Component';
-import UserDirectoryListItem from 'flagrow/user-directory/components/UserDirectoryListItem';
+import UserDirectoryListItem from './UserDirectoryListItem';
 import Button from 'flarum/components/Button';
 import LoadingIndicator from 'flarum/components/LoadingIndicator';
 import Placeholder from 'flarum/components/Placeholder';

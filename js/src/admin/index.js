@@ -1,6 +1,7 @@
 import {extend} from "flarum/extend";
 import app from "flarum/app";
 import PermissionGrid from "flarum/components/PermissionGrid";
+import addUsersListPane from "./addUsersListPane";
 
 app.initializers.add('flagrow-user-directory', app => {
     // add the permission option to the relative pane
@@ -12,4 +13,8 @@ app.initializers.add('flagrow-user-directory', app => {
             allowGuest: true
         });
     });
+
+    app.extensionSettings['flagrow-user-directory'] = () => m.route(app.route('usersList'));
+
+    addUsersListPane();
 });

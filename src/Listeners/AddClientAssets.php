@@ -23,7 +23,7 @@ class AddClientAssets
         if ($app->isForum()) {
             $app->addAssets([
                 __DIR__.'/../../js/forum/dist/extension.js',
-                __DIR__.'/../../assets/less/user-card.less'
+                __DIR__ . '/../../assets/less/forum.less'
             ]);
             $app->addBootstrapper('flagrow/user-directory/main');
         }

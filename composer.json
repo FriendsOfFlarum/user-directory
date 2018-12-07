@@ -19,11 +19,11 @@
         }
     ],
     "require": {
-        "flarum/core": "^0.1.0-beta.6"
+        "flarum/core": "^0.1.0-beta.8"
     },
     "extra": {
         "flarum-extension": {
-            "title": "Flagrow User Directory",
+            "title": "User Directory",
             "icon": {
                 "name": "address-book-o",
                 "backgroundColor": "#f4f4f4",
@@ -31,7 +31,7 @@
             }
         },
         "flagrow": {
-            "discuss": "https://discuss.flarum.org/d/5682-flagrow-user-directory-permission-based-public-member-list"
+            "discuss": "https://discuss.flarum.org/d/5682"
         }
     },
     "autoload": {

@@ -2,7 +2,7 @@ import { extend } from 'flarum/extend';
 import Page from 'flarum/components/Page';
 import ItemList from 'flarum/utils/ItemList';
 import listItems from 'flarum/helpers/listItems';
-import UserDirectoryList from 'flagrow/user-directory/components/UserDirectoryList';
+import UserDirectoryList from './UserDirectoryList';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 import LogInModal from 'flarum/components/LogInModal';
 import Select from 'flarum/components/Select';
