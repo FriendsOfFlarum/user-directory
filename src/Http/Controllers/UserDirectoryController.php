@@ -2,6 +2,7 @@
 
 namespace Flagrow\UserDirectory\Http\Controllers;
 
+use Flarum\Api\Controller\AbstractListController;
 use Flarum\Api\Controller\ListUsersController;
 use Flarum\Forum\Controller\WebAppController;
 use Flarum\Http\Exception\RouteNotFoundException;
@@ -10,8 +11,9 @@ use Flarum\Api\Client as ApiClient;
 use Flarum\Core\User;
 use Flarum\Forum\WebApp;
 use Illuminate\Contracts\Events\Dispatcher;
+use Tobscure\JsonApi\Document;
 
-class UserDirectoryController extends WebAppController
+class UserDirectoryController extends AbstractListController
 {
     /**
      * @var ApiClient
@@ -39,20 +41,25 @@ class UserDirectoryController extends WebAppController
     /**
      * {@inheritdoc}
      */
-    public function __construct(WebApp $webApp, Dispatcher $events, ApiClient $api)
+    public function __construct(ApiClient $api)
     {
-        parent::__construct($webApp, $events);
-
         $this->api = $api;
     }
 
     /**
-     * @param Request $request
-     * @return \Flarum\Http\WebApp\WebAppView
+     * Get the data to be serialized and assigned to the response document.
+     *
+     * @param Request  $request
+     * @param Document $document
+     * @return mixed
      */
-    protected function getView(Request $request)
+    protected function data(Request $request, Document $document)
     {
-        $view = parent::getView($request);
+        $actor = $request->getAttribute('actor');
+
+        if ($actor->cannot('flagrow.user-directory.view')) {
+            throw new RouteNotFoundException();
+        }
 
         $queryParams = $request->getQueryParams();
 
@@ -65,34 +72,6 @@ class UserDirectoryController extends WebAppController
             'filter' => compact('q'),
             'page' => ['offset' => ($page - 1) * 20, 'limit' => 20]
         ];
-
-        $document = $this->getDocument($request->getAttribute('actor'), $params);
-        $content = app('view')->make('flagrow.user-directory::index', compact('document', 'page', 'forum'));
-
-        // flarum/core dev-master (0.1.0-beta.7)
-        // @todo use the method after b7 was released
-        if (method_exists($view, 'setContent')) {
-            $view->setContent($content);
-        } else {
-            $view->content = $content;
-        }
-
-        return $view;
-    }
-
-    /**
-     * Get the result of an API request to list discussions.
-     *
-     * @param User $actor
-     * @param array $params
-     * @return object
-     * @throws RouteNotFoundException
-     */
-    private function getDocument(User $actor, array $params)
-    {
-        if ($actor->cannot('flagrow.user-directory.view')) {
-            throw new RouteNotFoundException();
-        }
 
         return json_decode($this->api->send(ListUsersController::class, $actor, $params)->getBody());
     }
