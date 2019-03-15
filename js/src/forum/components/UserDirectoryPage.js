@@ -188,7 +188,7 @@ export default class UserDirectoryPage extends Page {
                 icon: 'fas fa-sync',
                 className: 'Button Button--icon',
                 onclick: () => {
-                    app.cache.discussionList.refresh();
+                    app.cache.userDirectoryList.refresh();
                     if (app.session.user) {
                         app.store.find('users', app.session.user.id());
                         m.redraw();

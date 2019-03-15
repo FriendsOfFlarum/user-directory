@@ -120,9 +120,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.initializers.add('flagrow-user-directory', function (app) {
-  // add the permission option to the relative pane
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_2___default.a.prototype, 'viewItems', function (items) {
-    items.add('user-directory', {
+    items.add('flagrow-user-directory', {
       icon: 'far fa-address-book',
       label: app.translator.trans('flagrow-user-directory.admin.permissions.view_user_directory'),
       permission: 'flagrow.user-directory.view',

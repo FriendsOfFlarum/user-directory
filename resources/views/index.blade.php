@@ -5,7 +5,7 @@ $url = app('Flarum\Http\UrlGenerator');
     <h2>{{ $translator->trans('flagrow-user-directory.forum.page.nav') }}</h2>
 
     <ul>
-        @foreach ($document->data as $user)
+        @foreach ($apiDocument->data as $user)
             <li>
                 {{ $user->attributes->username }}
             </li>

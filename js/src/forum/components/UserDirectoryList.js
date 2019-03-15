@@ -1,3 +1,4 @@
+import app from 'flarum/app';
 import Component from 'flarum/Component';
 import Button from 'flarum/components/Button';
 import LoadingIndicator from 'flarum/components/LoadingIndicator';
@@ -112,14 +113,12 @@ export default class UserDirectoryList extends Component {
     }
     map.username_az = 'username';
     map.username_za = '-username';
-    map.newest = '-joinTime';
-    map.oldest = 'joinTime';
-    map.seen_recent = '-lastSeenTime';
-    map.seen_oldest = 'lastSeenTime';
-    // map.most_posts = '-commentsCount';
-    // map.least_posts = 'commentsCount';
-    map.most_discussions = '-discussionsCount';
-    map.least_discussions = 'discussionsCount';
+    map.newest = '-joinedAt';
+    map.oldest = 'joinedAt';
+    map.seen_recent = '-lastSeenAt';
+    map.seen_oldest = 'lastSeenAt';
+    map.most_discussions = '-discussionCount';
+    map.least_discussions = 'discussionCount';
 
     return map;
   }
@@ -154,7 +153,7 @@ export default class UserDirectoryList extends Component {
    * @return {Promise}
    */
   loadResults(offset) {
-    const preloadedUsers = app.preloadedDocument();
+    const preloadedUsers = app.preloadedApiDocument();
 
     if (preloadedUsers) {
       return m.deferred().resolve(preloadedUsers).promise;
