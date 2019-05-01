@@ -4,6 +4,9 @@ import UsersSearchSource from 'flarum/components/UsersSearchSource';
 import LinkButton from 'flarum/components/LinkButton';
 import UserDirectoryPage from './components/UserDirectoryPage';
 
+// Allow other extensions to extend the page
+export {UserDirectoryPage};
+
 app.initializers.add('flagrow-user-directory', app => {
     app.routes.flagrow_user_directory = {path: '/users', component: UserDirectoryPage.component()};
 
