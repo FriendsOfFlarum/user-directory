@@ -1758,7 +1758,7 @@ findup-sync@^2.0.0:
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
 
-flarum-webpack-config@^0.1.0-beta.8:
+flarum-webpack-config@0.1.0-beta.10:
   version "0.1.0-beta.10"
   resolved "https://registry.yarnpkg.com/flarum-webpack-config/-/flarum-webpack-config-0.1.0-beta.10.tgz#8271be87f076cfb27fb76afa5fdf5ed9d03c069e"
   integrity sha512-Iri/5sGBW4ebUQIZw9thR3LdS/avhdlgqgOxy2so1Abh6IyVNjaHInPgHNJSCMxbvfQJz4K3kcsbIpjwi3YB+g==
