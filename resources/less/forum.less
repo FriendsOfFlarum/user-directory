@@ -21,13 +21,17 @@
         .UserCard-controls {
             // delete important rule once those rules in core files by flarum are removed
             position: relative !important;
-            z-index: 999;
+            z-index: auto;
         }
 
         .Button {
             @media @phone {
                 color: #fff !important;
             }
+        }
+        .Dropdown-menu {
+            // for not overlapping header 
+            z-index: 999;
         }
     }
 }
