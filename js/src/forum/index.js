@@ -7,8 +7,8 @@ import UserDirectoryPage from './components/UserDirectoryPage';
 // Allow other extensions to extend the page
 export {UserDirectoryPage};
 
-app.initializers.add('flagrow-user-directory', app => {
-    app.routes.flagrow_user_directory = {path: '/users', component: UserDirectoryPage.component()};
+app.initializers.add('fof-user-directory', app => {
+    app.routes.fof_user_directory = {path: '/users', component: UserDirectoryPage.component()};
 
     extend(UsersSearchSource.prototype, 'view', function (view, query) {
         if (!view) {
@@ -20,8 +20,8 @@ app.initializers.add('flagrow-user-directory', app => {
         view.splice(1, 0, <li>
             {LinkButton.component({
                 icon: 'fas fa-search',
-                children: app.translator.trans('flagrow-user-directory.forum.search.users_heading', {query}),
-                href: app.route('flagrow_user_directory', {q: query}),
+                children: app.translator.trans('fof-user-directory.forum.search.users_heading', {query}),
+                href: app.route('fof_user_directory', {q: query}),
             })}
         </li>);
     })

@@ -1,10 +1,9 @@
 {
-    "name": "flagrow/user-directory",
+    "name": "fof/user-directory",
     "description": "The permission based public user directory extension for your Flarum forum.",
     "keywords": [
         "extension",
         "flarum",
-        "flagrow",
         "user list",
         "member list",
         "user directory"
@@ -26,13 +25,16 @@
     "require": {
         "flarum/core": "^0.1.0-beta.8"
     },
+    "replace": {
+        "flagrow/user-directory": "*"
+    },
     "extra": {
         "flarum-extension": {
-            "title": "User Directory",
+            "title": "FoF User Directory",
             "icon": {
                 "name": "far fa-address-book",
-                "backgroundColor": "#f4f4f4",
-                "color": "#5f4bb6"
+                "backgroundColor": "#e74c3c",
+                "color": "#fff"
             }
         },
         "flagrow": {
@@ -41,7 +43,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Flagrow\\UserDirectory\\": "src/"
+            "FoF\\UserDirectory\\": "src/"
         }
     }
 }

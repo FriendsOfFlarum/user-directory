@@ -1,6 +1,6 @@
 {
     "private": true,
-    "name": "@flagrow/user-directory",
+    "name": "@fof/user-directory",
     "dependencies": {
         "flarum-webpack-config": "0.1.0-beta.10",
         "webpack": "^4.0.0",

@@ -1,4 +1,4 @@
-flagrow-user-directory:
+fof-user-directory:
     forum:
         search:
             users_heading: 'Search all users for "{query}"'

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\UserDirectory\Content;
+namespace FoF\UserDirectory\Content;
 
 use Flarum\Api\Controller\ListUsersController;
 use Flarum\Frontend\Document;
@@ -46,7 +46,7 @@ class UserDirectory
 
     private function getDocument(User $actor, array $params)
     {
-        if ($actor->cannot('flagrow.user-directory.view')) {
+        if ($actor->cannot('fof.user-directory.view')) {
             throw new RouteNotFoundException();
         }
 
@@ -69,7 +69,7 @@ class UserDirectory
 
         $apiDocument = $this->getDocument($request->getAttribute('actor'), $params);
 
-        $document->content = $this->view->make('flagrow.user-directory::index', compact('page', 'forum', 'apiDocument'));
+        $document->content = $this->view->make('fof.user-directory::index', compact('page', 'forum', 'apiDocument'));
 
         $document->payload['apiDocument'] = $apiDocument;
 

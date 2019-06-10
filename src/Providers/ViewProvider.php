@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\UserDirectory\Providers;
+namespace FoF\UserDirectory\Providers;
 
 use Flarum\Foundation\AbstractServiceProvider;
 
@@ -10,7 +10,7 @@ class ViewProvider extends AbstractServiceProvider
     {
         $this->loadViewsFrom(
             __DIR__ . '/../../resources/views',
-            'flagrow.user-directory'
+            'fof.user-directory'
         );
     }
 }

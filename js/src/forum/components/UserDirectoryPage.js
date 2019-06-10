@@ -1,4 +1,5 @@
 import { extend } from 'flarum/extend';
+import app from 'flarum/app';
 import Page from 'flarum/components/Page';
 import ItemList from 'flarum/utils/ItemList';
 import listItems from 'flarum/helpers/listItems';
@@ -25,26 +26,26 @@ export default class UserDirectoryPage extends Page {
         // probably want to refresh the results. We will clear the discussion list
         // cache so that results are reloaded.
         if (app.previous instanceof UserDirectoryPage) {
-            app.cache.userDirectoryList = null;
+            app.cache.fofUserDirectoryList = null;
         }
 
         const params = this.params();
 
-        if (app.cache.userDirectoryList) {
+        if (app.cache.fofUserDirectoryList) {
             // Compare the requested parameters (sort, search query) to the ones that
             // are currently present in the cached discussion list. If they differ, we
             // will clear the cache and set up a new discussion list component with
             // the new parameters.
             Object.keys(params).some(key => {
-                if (app.cache.userDirectoryList.props.params[key] !== params[key]) {
-                    app.cache.userDirectoryList = null;
+                if (app.cache.fofUserDirectoryList.props.params[key] !== params[key]) {
+                    app.cache.fofUserDirectoryList = null;
                     return true;
                 }
             });
         }
 
-        if (!app.cache.userDirectoryList) {
-            app.cache.userDirectoryList = new UserDirectoryList({params});
+        if (!app.cache.fofUserDirectoryList) {
+            app.cache.fofUserDirectoryList = new UserDirectoryList({params});
         }
 
         this.bodyClass = 'User--directory';
@@ -70,7 +71,7 @@ export default class UserDirectoryPage extends Page {
                                 <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
                                 <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
                             </div>
-                            {app.cache.userDirectoryList.render()}
+                            {app.cache.fofUserDirectoryList.render()}
                         </div>
                     </div>
                 </div>
@@ -136,8 +137,8 @@ export default class UserDirectoryPage extends Page {
 
        items.add('userDirectory',
             LinkButton.component({
-                href: app.route('flagrow_user_directory', params),
-                children: app.translator.trans('flagrow-user-directory.forum.page.nav'),
+                href: app.route('fof_user_directory', params),
+                children: app.translator.trans('fof-user-directory.forum.page.nav'),
                 icon: 'far fa-address-book'
             }),
             85
@@ -155,11 +156,11 @@ export default class UserDirectoryPage extends Page {
      */
     viewItems() {
         const items = new ItemList();
-        const sortMap = app.cache.userDirectoryList.sortMap();
+        const sortMap = app.cache.fofUserDirectoryList.sortMap();
 
         const sortOptions = {};
         for (const i in sortMap) {
-            sortOptions[i] = app.translator.trans('flagrow-user-directory.forum.page.sort.' + i);
+            sortOptions[i] = app.translator.trans('fof-user-directory.forum.page.sort.' + i);
         }
 
         items.add('sort',
@@ -188,7 +189,7 @@ export default class UserDirectoryPage extends Page {
                 icon: 'fas fa-sync',
                 className: 'Button Button--icon',
                 onclick: () => {
-                    app.cache.userDirectoryList.refresh();
+                    app.cache.fofUserDirectoryList.refresh();
                     if (app.session.user) {
                         app.store.find('users', app.session.user.id());
                         m.redraw();
@@ -232,7 +233,7 @@ export default class UserDirectoryPage extends Page {
     changeSort(sort) {
         const params = this.params();
 
-        if (sort === Object.keys(app.cache.userDirectoryList.sortMap())[0]) {
+        if (sort === Object.keys(app.cache.fofUserDirectoryList.sortMap())[0]) {
             delete params.sort;
         } else {
             params.sort = sort;
