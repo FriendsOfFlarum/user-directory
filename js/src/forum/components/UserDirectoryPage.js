@@ -1,4 +1,4 @@
-import { extend } from 'flarum/extend';
+import {extend} from 'flarum/extend';
 import app from 'flarum/app';
 import Page from 'flarum/components/Page';
 import ItemList from 'flarum/utils/ItemList';
@@ -135,7 +135,7 @@ export default class UserDirectoryPage extends Page {
         const items = IndexPage.prototype.navItems();
         const params = this.stickyParams();
 
-       items.add('userDirectory',
+        items.add('fof-user-directory',
             LinkButton.component({
                 href: app.route('fof_user_directory', params),
                 children: app.translator.trans('fof-user-directory.forum.page.nav'),

@@ -2,6 +2,7 @@ import {extend} from 'flarum/extend';
 import app from 'flarum/app';
 import UsersSearchSource from 'flarum/components/UsersSearchSource';
 import LinkButton from 'flarum/components/LinkButton';
+import IndexPage from 'flarum/components/IndexPage';
 import UserDirectoryPage from './components/UserDirectoryPage';
 
 // Allow other extensions to extend the page
@@ -24,5 +25,19 @@ app.initializers.add('fof-user-directory', app => {
                 href: app.route('fof_user_directory', {q: query}),
             })}
         </li>);
-    })
+    });
+
+    extend(IndexPage.prototype, 'navItems', items => {
+        console.log(app.forum, app.forum.attribute('canSeeUserDirectoryLink'));
+        if (app.forum.attribute('canSeeUserDirectoryLink')) {
+            items.add('fof-user-directory',
+                LinkButton.component({
+                    href: app.route('fof_user_directory'),
+                    children: app.translator.trans('fof-user-directory.forum.page.nav'),
+                    icon: 'far fa-address-book'
+                }),
+                85
+            );
+        }
+    });
 });

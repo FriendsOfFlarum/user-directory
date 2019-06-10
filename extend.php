@@ -13,6 +13,7 @@ return [
         ->css(__DIR__ . '/resources/less/forum.less')
         ->route('/users', 'fof_user_directory', Content\UserDirectory::class),
     new Extend\Locales(__DIR__ . '/resources/locale'),
+    new \FoF\UserDirectory\Extend\Settings(),
     function (Application $app) {
         $app->register(Providers\ViewProvider::class);
     },
