@@ -17,21 +17,22 @@
         .UserCard-identity {
             font-size: 22px;
         }
+    }
+}
 
-        .UserCard-controls {
-            // delete important rule once those rules in core files by flarum are removed
-            position: relative !important;
-            z-index: auto;
+// Workaround for https://github.com/flarum/core/issues/1792
+.UserDirectoryList .UserCard--directory {
+    .UserCard-controls {
+        position: relative !important;
+        z-index: auto;
+    }
+    .Button {
+        @media @phone {
+            color: #fff !important;
         }
-
-        .Button {
-            @media @phone {
-                color: #fff !important;
-            }
-        }
-        .Dropdown-menu {
-            // for not overlapping header 
-            z-index: 999;
-        }
+    }
+    .Dropdown-menu {
+        // for not overlapping header
+        z-index: 999;
     }
 }
