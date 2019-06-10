@@ -19,3 +19,20 @@
         }
     }
 }
+
+// Workaround for https://github.com/flarum/core/issues/1792
+.UserDirectoryList .UserCard--directory {
+    .UserCard-controls {
+        position: relative !important;
+        z-index: auto;
+    }
+    .Button {
+        @media @phone {
+            color: #fff !important;
+        }
+    }
+    .Dropdown-menu {
+        // for not overlapping header
+        z-index: 999;
+    }
+}
