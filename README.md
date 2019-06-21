@@ -47,8 +47,8 @@ Then enable the new extension in the admin panel.
 ### Links
 
 - [Flarum Discuss post](https://discuss.flarum.org/d/5682)
-- [Source code on GitHub](https://github.com/fof/user-directory)
-- [Report an issue](https://github.com/fof/user-directory/issues)
+- [Source code on GitHub](https://github.com/FriendsOfFlarum/user-directory)
+- [Report an issue](https://github.com/FriendsOfFlarum/user-directory/issues)
 - [Download via Packagist](https://packagist.org/packages/fof/user-directory)
 
 An extension by [FriendsOfFlarum](https://github.com/FriendsOfFlarum)
