@@ -62,7 +62,8 @@ class UserDirectory
         $page = array_pull($queryParams, 'page', 1);
 
         $params = [
-            'sort' => array_get($this->sortMap, $sort, ''),
+            // ?? used to prevent null values. null would result in the whole sortMap array being sent in the params
+            'sort' => array_get($this->sortMap, $sort ?? '', ''),
             'filter' => compact('q'),
             'page' => ['offset' => ($page - 1) * 20, 'limit' => 20],
         ];
