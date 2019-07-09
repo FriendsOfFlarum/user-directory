@@ -28,7 +28,6 @@ app.initializers.add('fof-user-directory', app => {
     });
 
     extend(IndexPage.prototype, 'navItems', items => {
-        console.log(app.forum, app.forum.attribute('canSeeUserDirectoryLink'));
         if (app.forum.attribute('canSeeUserDirectoryLink')) {
             items.add('fof-user-directory',
                 LinkButton.component({
