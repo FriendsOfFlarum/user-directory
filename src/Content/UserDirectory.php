@@ -70,7 +70,7 @@ class UserDirectory
 
         $apiDocument = $this->getDocument($request->getAttribute('actor'), $params);
 
-        $document->content = $this->view->make('fof.user-directory::index', compact('page', 'forum', 'apiDocument'));
+        $document->content = $this->view->make('fof.user-directory::index', compact('page', 'apiDocument'));
 
         $document->payload['apiDocument'] = $apiDocument;
 
