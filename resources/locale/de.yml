@@ -1,0 +1,25 @@
+fof-user-directory:
+    forum:
+        search:
+            users_heading: 'Alle Mitglieder nack "{query}" durchsuchen'
+        page:
+            nav: Mitglieder
+            sort:
+                relevance: Relevanz
+                default: Standard
+                username_az: Benutzername (a-z)
+                username_za: Benutzername (z-a)
+                newest: Jüngste
+                oldest: Älteste
+                seen_recent: Vor kurzem aktiv
+                seen_oldest: Am längsten inaktiv
+                most_posts: Meiste Beiträge
+                least_posts: Wenigste Beiträge
+                most_discussions: Meiste Diskussionen
+                least_discussions: Wenigste Diskussionen
+    admin:
+        permissions:
+            view_user_directory: View user directory
+        settings:
+            title: Mitgliederverzeichnis Einstellungen
+            link: Fügt einen Link zur Homepage hinzu, damit Mitglieder das Benutzerverzeichnis aufrufen können
