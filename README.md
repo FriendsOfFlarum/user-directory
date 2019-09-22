@@ -33,7 +33,7 @@ composer require fof/user-directory
 
 ### Updating from Flagrow
 
-This extension replaces [Flagrow User Directory](https://packagist.org/packages/fof/user-directory).
+This extension replaces [Flagrow User Directory](https://packagist.org/packages/flagrow/user-directory).
 
 To upgrade from the old extension to the new one:
 
