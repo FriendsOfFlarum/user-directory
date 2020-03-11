@@ -4,8 +4,10 @@ namespace FoF\UserDirectory;
 
 use Flarum\Extend;
 use Flarum\Foundation\Application;
+use FoF\Components\Extend\AddFofComponents;
 
 return [
+    new AddFofComponents(),
     (new Extend\Frontend('admin'))
         ->js(__DIR__ . '/js/dist/admin.js'),
     (new Extend\Frontend('forum'))

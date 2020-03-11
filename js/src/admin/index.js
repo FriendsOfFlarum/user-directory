@@ -1,8 +1,12 @@
 import {extend} from 'flarum/extend';
 import app from 'flarum/app';
 import PermissionGrid from 'flarum/components/PermissionGrid';
-import SettingsModal from '@fof/components/admin/settings/SettingsModal';
-import BooleanItem from '@fof/components/admin/settings/items/BooleanItem';
+
+import { settings } from '@fof-components';
+const {
+    SettingsModal,
+    items: { BooleanItem },
+} = settings;
 
 app.initializers.add('fof-user-directory', app => {
     extend(PermissionGrid.prototype, 'viewItems', items => {
