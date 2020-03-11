@@ -71,7 +71,7 @@ export default class UserDirectoryList extends Component {
               </div>
             );
           })}
-        <div className="UserDirectoryList-loadMore">
+        <div key="load-more" className="UserDirectoryList-loadMore">
           {loading}
         </div>
       </div>
