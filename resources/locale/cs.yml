@@ -1,0 +1,26 @@
+fof-user-directory:
+    forum:
+        search:
+            users_heading: 'Vyhledej ve všech uživatelích "{query}"'
+        page:
+            nav: Členové
+            sort:
+                relevance: Relevance
+                default: Výchozí
+                username_az: Jméno (a-z)
+                username_za: Jméno (z-a)
+                newest: Nejnovější
+                oldest: Nejstarší
+                seen_recent: Nedávno online
+                seen_oldest: Nejdéle nepřítomen
+                most_posts: Nejvíc příspěvků
+                least_posts: Nejméně příspěvků
+                most_discussions: Nejvíce diskuzí
+                least_discussions: Nejméně diskuzí
+    admin:
+        permissions:
+            view_user_directory: Zobrazit výpis členů
+        settings:
+            title: Nastavení výpisu členů
+            link: Přidat odkaz na výpis členů na domovskou stránku
+
