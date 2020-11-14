@@ -4,18 +4,6 @@ fof-user-directory:
             users_heading: 'Search all users for "{query}"'
         page:
             nav: User Directory
-            sort:
-                default: Default
-                username_az: Username (a-z)
-                username_za: Username (z-a)
-                newest: Newest
-                oldest: Oldest
-                seen_recent: Recently online
-                seen_oldest: Longest away
-                most_posts: Most posts
-                least_posts: Least posts
-                most_discussions: Most discussions
-                least_discussions: Least discussions
             refresh_tooltip: => core.forum.index.refresh_tooltip
             load_more_button: => core.ref.load_more
             empty_text: We could not find any user matching your search.
@@ -26,3 +14,19 @@ fof-user-directory:
         settings:
             title: User Directory Settings
             link: Add link on homepage for users able to see the directory
+            default-sort: Default sort
+
+    lib:
+        sort:
+            not_specified: Use Flarum default
+            default: Default
+            username_az: Username (a-z)
+            username_za: Username (z-a)
+            newest: Newest
+            oldest: Oldest
+            seen_recent: Recently online
+            seen_oldest: Longest away
+            most_posts: Most posts
+            least_posts: Least posts
+            most_discussions: Most discussions
+            least_discussions: Least discussions

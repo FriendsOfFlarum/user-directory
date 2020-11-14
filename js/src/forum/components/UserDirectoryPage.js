@@ -99,14 +99,14 @@ export default class UserDirectoryPage extends Page {
 
         const sortOptions = {};
         for (const i in sortMap) {
-            sortOptions[i] = app.translator.trans('fof-user-directory.forum.page.sort.' + i);
+            sortOptions[i] = app.translator.trans('fof-user-directory.lib.sort.' + i);
         }
 
         items.add(
             'sort',
             Select.component({
                 options: sortOptions,
-                value: this.params().sort || Object.keys(sortMap)[0],
+                value: this.params().sort || app.forum.attribute('userDirectoryDefaultSort'),
                 onchange: this.changeSort.bind(this),
             })
         );
@@ -144,7 +144,7 @@ export default class UserDirectoryPage extends Page {
     changeSort(sort) {
         const params = this.params();
 
-        if (sort === Object.keys(this.state.sortMap())[0]) {
+        if (sort === app.forum.attribute('userDirectoryDefaultSort')) {
             delete params.sort;
         } else {
             params.sort = sort;

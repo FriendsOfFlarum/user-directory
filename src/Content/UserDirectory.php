@@ -6,6 +6,7 @@ use Flarum\Api\Controller\ListUsersController;
 use Flarum\Frontend\Document;
 use Flarum\Http\Exception\RouteNotFoundException;
 use Flarum\Api\Client;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Arr;
@@ -58,7 +59,7 @@ class UserDirectory
     {
         $queryParams = $request->getQueryParams();
 
-        $sort = Arr::pull($queryParams, 'sort');
+        $sort = Arr::pull($queryParams, 'sort') ?: app(SettingsRepositoryInterface::class)->get('fof-user-directory.default-sort');
         $q = Arr::pull($queryParams, 'q');
         $page = Arr::pull($queryParams, 'page', 1);
 

@@ -7,9 +7,10 @@ import UserDirectoryPage from './components/UserDirectoryPage';
 import UserDirectoryList from './components/UserDirectoryList';
 import UserDirectoryListItem from './components/UserDirectoryListItem';
 import UserDirectoryState from './states/UserDirectoryState';
+import SortMap from '../common/utils/SortMap';
 
 // Allow other extensions to extend the page
-export { UserDirectoryPage, UserDirectoryList, UserDirectoryListItem, UserDirectoryState };
+export { UserDirectoryPage, UserDirectoryList, UserDirectoryListItem, UserDirectoryState, SortMap };
 
 app.initializers.add('fof-user-directory', (app) => {
     app.routes.fof_user_directory = {

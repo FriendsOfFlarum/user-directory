@@ -1,6 +1,8 @@
 /**
  * Based on Flarum's DiscussionListState
  */
+import SortMap from '../../common/utils/SortMap';
+
 export default class UserDirectoryState {
     constructor(params = {}, app = window.app) {
         this.params = params;
@@ -17,7 +19,10 @@ export default class UserDirectoryState {
     requestParams() {
         const params = { include: [], filter: {} };
 
-        params.sort = this.sortMap()[this.params.sort];
+        const sortKey = this.params.sort || app.forum.attribute('userDirectoryDefaultSort');
+
+        // sort might be set to null if no sort params has been passed
+        params.sort = this.sortMap()[sortKey];
 
         if (this.params.q) {
             params.filter.q = this.params.q;
@@ -27,19 +32,10 @@ export default class UserDirectoryState {
     }
 
     sortMap() {
-        const map = {};
-
-        map.default = '';
-        map.username_az = 'username';
-        map.username_za = '-username';
-        map.newest = '-joinedAt';
-        map.oldest = 'joinedAt';
-        map.seen_recent = '-lastSeenAt';
-        map.seen_oldest = 'lastSeenAt';
-        map.most_discussions = '-discussionCount';
-        map.least_discussions = 'discussionCount';
-
-        return map;
+        return {
+            default: '',
+            ...new SortMap().sortMap(),
+        };
     }
 
     getParams() {

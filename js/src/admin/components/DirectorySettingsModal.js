@@ -1,8 +1,9 @@
 import SettingsModal from 'flarum/components/SettingsModal';
 import { settings } from '@fof-components';
+import SortMap from '../../common/utils/SortMap';
 
 const {
-    items: { BooleanItem },
+    items: { BooleanItem, SelectItem },
 } = settings;
 
 export default class AuthSettingsModal extends SettingsModal {
@@ -15,14 +16,34 @@ export default class AuthSettingsModal extends SettingsModal {
     }
 
     form() {
+        const sortOptions = {
+            '': app.translator.trans('fof-user-directory.lib.sort.not_specified'),
+        };
+
+        Object.keys(new SortMap().sortMap()).forEach((sort) => {
+            sortOptions[sort] = app.translator.trans('fof-user-directory.lib.sort.' + sort);
+        });
+
         return [
-            BooleanItem.component(
-                {
-                    name: 'fof-user-directory-link',
+            <div className="Form-group">
+                {BooleanItem.component(
+                    {
+                        name: 'fof-user-directory-link',
+                        setting: this.setting.bind(this),
+                    },
+                    app.translator.trans('fof-user-directory.admin.settings.link')
+                )}
+            </div>,
+            <div className="Form-group">
+                <label>{app.translator.trans('fof-user-directory.admin.settings.default-sort')}</label>
+
+                {SelectItem.component({
+                    options: sortOptions,
+                    name: 'fof-user-directory.default-sort',
                     setting: this.setting.bind(this),
-                },
-                app.translator.trans('fof-user-directory.admin.settings.link')
-            ),
+                    default: '',
+                })}
+            </div>,
         ];
     }
 }

@@ -26,6 +26,7 @@ class Settings implements ExtenderInterface
 
             // The link is visible if the user can access the user directory AND the link was enabled in extension settings
             $event->attributes['canSeeUserDirectoryLink'] = $event->actor->can('fof.user-directory.view') && $settings->get('fof-user-directory-link');
+            $event->attributes['userDirectoryDefaultSort'] = $settings->get('fof-user-directory.default-sort') ?: 'default';
         }
     }
 }
