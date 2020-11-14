@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2019 FriendsOfFlarum
+Copyright (c) 2019-2020 FriendsOfFlarum
 Copyright (c) 2017-2019 Flagrow
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

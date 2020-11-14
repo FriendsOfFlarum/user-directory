@@ -3,7 +3,6 @@
 namespace FoF\UserDirectory;
 
 use Flarum\Extend;
-use Flarum\Foundation\Application;
 use FoF\Components\Extend\AddFofComponents;
 
 return [
@@ -16,7 +15,6 @@ return [
         ->route('/users', 'fof_user_directory', Content\UserDirectory::class),
     new Extend\Locales(__DIR__ . '/resources/locale'),
     new \FoF\UserDirectory\Extend\Settings(),
-    function (Application $app) {
-        $app->register(Providers\ViewProvider::class);
-    },
+    (new Extend\View())
+    ->namespace('fof.user-directory', __DIR__.'/resources/views'),
 ];
