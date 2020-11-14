@@ -5,7 +5,6 @@ fof-user-directory:
         page:
             nav: User Directory
             sort:
-                relevance: Relevance
                 default: Default
                 username_az: Username (a-z)
                 username_za: Username (z-a)
@@ -17,6 +16,10 @@ fof-user-directory:
                 least_posts: Least posts
                 most_discussions: Most discussions
                 least_discussions: Least discussions
+            refresh_tooltip: => core.forum.index.refresh_tooltip
+            load_more_button: => core.ref.load_more
+            empty_text: We could not find any user matching your search.
+
     admin:
         permissions:
             view_user_directory: View user directory

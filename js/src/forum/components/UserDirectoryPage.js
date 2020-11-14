@@ -20,8 +20,6 @@ export default class UserDirectoryPage extends Page {
         this.state = new UserDirectoryState({});
         this.state.refreshParams(app.search.params());
 
-        app.history.push('index', app.translator.trans('core.forum.header.back_to_index_tooltip'));
-
         this.bodyClass = 'User--directory';
     }
 
@@ -122,7 +120,7 @@ export default class UserDirectoryPage extends Page {
         items.add(
             'refresh',
             Button.component({
-                title: app.translator.trans('core.forum.index.refresh_tooltip'),
+                title: app.translator.trans('fof-user-directory.forum.page.refresh_tooltip'),
                 icon: 'fas fa-sync',
                 className: 'Button Button--icon',
                 onclick: () => {

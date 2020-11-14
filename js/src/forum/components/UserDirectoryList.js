@@ -23,12 +23,12 @@ export default class UserDirectoryList extends Component {
                     className: 'Button',
                     onclick: state.loadMore.bind(state),
                 },
-                app.translator.trans('core.forum.discussion_list.load_more_button')
+                app.translator.trans('fof-user-directory.forum.page.load_more_button')
             );
         }
 
         if (state.empty()) {
-            const text = app.translator.trans('core.forum.discussion_list.empty_text');
+            const text = app.translator.trans('fof-user-directory.forum.page.empty_text');
             return <div className="DiscussionList">{Placeholder.component({ text })}</div>;
         }
 
