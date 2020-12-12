@@ -1,20 +1,41 @@
-import { extend } from 'flarum/extend';
 import app from 'flarum/app';
-import PermissionGrid from 'flarum/components/PermissionGrid';
-import DirectorySettingsModal from './components/DirectorySettingsModal';
 import SortMap from '../common/utils/SortMap';
 
 export { SortMap };
 
 app.initializers.add('fof-user-directory', (app) => {
-    extend(PermissionGrid.prototype, 'viewItems', (items) => {
-        items.add('fof-user-directory', {
-            icon: 'far fa-address-book',
-            label: app.translator.trans('fof-user-directory.admin.permissions.view_user_directory'),
-            permission: 'fof.user-directory.view',
-            allowGuest: true,
-        });
+    const sortOptions = {
+        '': app.translator.trans('fof-user-directory.lib.sort.not_specified'),
+    };
+
+    Object.keys(new SortMap().sortMap()).forEach((sort) => {
+        sortOptions[sort] = app.translator.trans('fof-user-directory.lib.sort.' + sort);
     });
 
-    app.extensionSettings['fof-user-directory'] = () => app.modal.show(DirectorySettingsModal);
+    app.extensionData.for('fof-user-directory')
+        .registerSetting(
+            {
+                setting: 'fof-user-directory-link',
+                label: app.translator.trans('fof-user-directory.admin.settings.link'),
+                type: 'boolean',
+            }
+        )
+        .registerSetting(
+            {
+                setting: 'fof-user-directory.default-sort',
+                label: app.translator.trans('fof-user-directory.admin.settings.default-sort'),
+                options: sortOptions,
+                type: 'select',
+                default: '',
+            }
+        )
+        .registerPermission(
+            {
+                icon: 'far fa-address-book',
+                label: app.translator.trans('fof-user-directory.admin.permissions.view_user_directory'),
+                permission: 'fof.user-directory.view',
+                allowGuest: true,
+            },
+            'view'
+        );
 });
