@@ -4,12 +4,17 @@ import UsersSearchSource from 'flarum/components/UsersSearchSource';
 import LinkButton from 'flarum/components/LinkButton';
 import IndexPage from 'flarum/components/IndexPage';
 import UserDirectoryPage from './components/UserDirectoryPage';
+import Text from './models/Text';
 
 // Allow other extensions to extend the page
-export {UserDirectoryPage};
+export {UserDirectoryPage}; // Backward compatibility for when the component was placed at the root of the export
+export * from './components';
+export * from './searchTypes';
 
 app.initializers.add('fof-user-directory', app => {
     app.routes.fof_user_directory = {path: '/users', component: UserDirectoryPage.component()};
+
+    app.store.models['fof-user-directory-text'] = Text;
 
     extend(UsersSearchSource.prototype, 'view', function (view, query) {
         if (!view) {

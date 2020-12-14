@@ -11,6 +11,7 @@ import Button from 'flarum/components/Button';
 import LinkButton from 'flarum/components/LinkButton';
 import SelectDropdown from 'flarum/components/SelectDropdown';
 import UserDirectoryList from './UserDirectoryList';
+import SearchField from './SearchField';
 
 /**
  * The `IndexPage` component displays the index page, including the welcome
@@ -170,6 +171,8 @@ export default class UserDirectoryPage extends Page {
                 onchange: this.changeSort.bind(this)
             })
         );
+
+        items.add('search', SearchField.component());
 
         return items;
     }

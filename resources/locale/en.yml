@@ -2,6 +2,11 @@ fof-user-directory:
     forum:
         search:
             users_heading: 'Search all users for "{query}"'
+            kinds:
+                group: Group
+                text: Free text
+            field:
+                placeholder: Search users
         page:
             nav: User Directory
             sort:
