@@ -12,7 +12,6 @@ fof-user-directory:
         permissions:
             view_user_directory: View user directory
         settings:
-            title: User Directory Settings
             link: Add link on homepage for users able to see the directory
             default-sort: Default sort
 
