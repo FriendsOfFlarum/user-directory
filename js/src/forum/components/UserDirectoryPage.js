@@ -7,8 +7,10 @@ import Select from 'flarum/components/Select';
 import Button from 'flarum/components/Button';
 import LinkButton from 'flarum/components/LinkButton';
 import SelectDropdown from 'flarum/components/SelectDropdown';
+import Dropdown from 'flarum/components/Dropdown';
 import UserDirectoryList from './UserDirectoryList';
 import UserDirectoryState from '../states/UserDirectoryState';
+import CheckableButton from './CheckableButton';
 
 /**
  * This page re-uses Flarum's IndexPage CSS classes
@@ -21,6 +23,14 @@ export default class UserDirectoryPage extends Page {
         this.state.refreshParams(app.search.params());
 
         this.bodyClass = 'User--directory';
+
+        let idSegments = [];
+        if (this.params().q) {
+            Array.from(this.params().q.matchAll(/group:([\d,]+)/g)).forEach(match => {
+                idSegments.push(match[1]);
+            });
+        }
+        this.enabledGroupFilters = idSegments.join(',').split(',').filter(id => id);
     }
 
     view() {
@@ -107,8 +117,36 @@ export default class UserDirectoryPage extends Page {
             Select.component({
                 options: sortOptions,
                 value: this.params().sort || app.forum.attribute('userDirectoryDefaultSort'),
-                onchange: this.changeSort.bind(this),
+                onchange: this.changeParams.bind(this)
             })
+        );
+
+        const groupButtons = app.store
+            .all('groups')
+            .filter(group => group.id() !== '2' && group.id() !== '3')
+            .map(group => CheckableButton.component({
+                className: "GroupFilterButton",
+                icon: group.icon(),
+                checked: this.enabledGroupFilters.includes(group.id()),
+                onclick: () => {
+                    const id = group.id();
+                    if (this.enabledGroupFilters.includes(id)) {
+                        this.enabledGroupFilters = this.enabledGroupFilters.filter(e => e != id);
+                    } else {
+                        this.enabledGroupFilters.push(id);
+                    }
+
+                    this.changeParams(this.params().sort)
+                }
+            }, group.namePlural()), this);
+
+        items.add('filterGroups',
+            Dropdown.component({
+                caretIcon: 'fas fa-filter',
+                label: app.translator.trans('fof-user-directory.forum.page.filter_button'),
+                buttonClassName: 'FormControl',
+                className: 'GroupFilterDropdown'
+            }, groupButtons)
         );
 
         return items;
@@ -141,13 +179,19 @@ export default class UserDirectoryPage extends Page {
      *
      * @param {String} sort
      */
-    changeSort(sort) {
+    changeParams(sort) {
         const params = this.params();
 
         if (sort === app.forum.attribute('userDirectoryDefaultSort')) {
             delete params.sort;
         } else {
             params.sort = sort;
+        }
+
+        if (this.enabledGroupFilters.length > 0) {
+            params.q = 'group:' + this.enabledGroupFilters.join(',');
+        } else {
+            delete params.q;
         }
 
         m.route.set(app.route(this.attrs.routeName, params));
