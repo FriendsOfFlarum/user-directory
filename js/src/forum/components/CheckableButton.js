@@ -11,7 +11,7 @@ export default class CheckableButton extends Button {
     getButtonContent(children) {
         const prev = super.getButtonContent(children);
 
-        if (this.attrs.checked) prev.push(icon('fas fa-check', { className: 'Button-icon ButtonCheck' }))
+        if (this.attrs.checked) prev.push(icon('fas fa-check', { className: 'Button-icon ButtonCheck' }));
 
         return prev;
     }

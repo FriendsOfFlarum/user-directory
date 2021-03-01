@@ -24,6 +24,6 @@ export default class SearchField extends Component {
     }
 
     performNewSearch() {
-        this.attrs.state.refreshParams({...this.attrs.state.getParams(), qBuilder: {filter: this.filter}});
+        this.attrs.state.refreshParams({ ...this.attrs.state.getParams(), qBuilder: { filter: this.filter } });
     }
 }
