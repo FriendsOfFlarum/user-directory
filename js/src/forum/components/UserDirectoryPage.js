@@ -11,6 +11,7 @@ import Dropdown from 'flarum/components/Dropdown';
 import UserDirectoryList from './UserDirectoryList';
 import UserDirectoryState from '../states/UserDirectoryState';
 import CheckableButton from './CheckableButton';
+import SearchField from './SearchField';
 
 /**
  * This page re-uses Flarum's IndexPage CSS classes
@@ -26,11 +27,14 @@ export default class UserDirectoryPage extends Page {
 
         let idSegments = [];
         if (this.params().q) {
-            Array.from(this.params().q.matchAll(/group:([\d,]+)/g)).forEach(match => {
+            Array.from(this.params().q.matchAll(/group:([\d,]+)/g)).forEach((match) => {
                 idSegments.push(match[1]);
             });
         }
-        this.enabledGroupFilters = idSegments.join(',').split(',').filter(id => id);
+        this.enabledGroupFilters = idSegments
+            .join(',')
+            .split(',')
+            .filter((id) => id);
     }
 
     view() {
@@ -117,36 +121,54 @@ export default class UserDirectoryPage extends Page {
             Select.component({
                 options: sortOptions,
                 value: this.params().sort || app.forum.attribute('userDirectoryDefaultSort'),
-                onchange: this.changeParams.bind(this)
+                onchange: this.changeParams.bind(this),
             })
         );
 
         const groupButtons = app.store
             .all('groups')
-            .filter(group => group.id() !== '2' && group.id() !== '3')
-            .map(group => CheckableButton.component({
-                className: "GroupFilterButton",
-                icon: group.icon(),
-                checked: this.enabledGroupFilters.includes(group.id()),
-                onclick: () => {
-                    const id = group.id();
-                    if (this.enabledGroupFilters.includes(id)) {
-                        this.enabledGroupFilters = this.enabledGroupFilters.filter(e => e != id);
-                    } else {
-                        this.enabledGroupFilters.push(id);
-                    }
+            .filter((group) => group.id() !== '2' && group.id() !== '3')
+            .map(
+                (group) =>
+                    CheckableButton.component(
+                        {
+                            className: 'GroupFilterButton',
+                            icon: group.icon(),
+                            checked: this.enabledGroupFilters.includes(group.id()),
+                            onclick: () => {
+                                const id = group.id();
+                                if (this.enabledGroupFilters.includes(id)) {
+                                    this.enabledGroupFilters = this.enabledGroupFilters.filter((e) => e != id);
+                                } else {
+                                    this.enabledGroupFilters.push(id);
+                                }
 
-                    this.changeParams(this.params().sort)
-                }
-            }, group.namePlural()), this);
+                                this.changeParams(this.params().sort);
+                            },
+                        },
+                        group.namePlural()
+                    ),
+                this
+            );
 
-        items.add('filterGroups',
-            Dropdown.component({
-                caretIcon: 'fas fa-filter',
-                label: app.translator.trans('fof-user-directory.forum.page.filter_button'),
-                buttonClassName: 'FormControl',
-                className: 'GroupFilterDropdown'
-            }, groupButtons)
+        items.add(
+            'filterGroups',
+            Dropdown.component(
+                {
+                    caretIcon: 'fas fa-filter',
+                    label: app.translator.trans('fof-user-directory.forum.page.filter_button'),
+                    buttonClassName: 'FormControl',
+                    className: 'GroupFilterDropdown',
+                },
+                groupButtons
+            )
+        );
+
+        items.add(
+            'search',
+            SearchField.component({
+                state: this.state,
+            })
         );
 
         return items;
@@ -189,12 +211,12 @@ export default class UserDirectoryPage extends Page {
         }
 
         if (this.enabledGroupFilters.length > 0) {
-            params.q = 'group:' + this.enabledGroupFilters.join(',');
+            params.qBuilder = { groups: 'group:' + this.enabledGroupFilters.join(',') };
         } else {
-            delete params.q;
+            params.qBuilder = { groups: '' };
         }
 
-        m.route.set(app.route(this.attrs.routeName, params));
+        this.state.refreshParams(params);
     }
 
     stickyParams() {
