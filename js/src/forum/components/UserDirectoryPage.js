@@ -11,6 +11,7 @@ import Dropdown from 'flarum/components/Dropdown';
 import UserDirectoryList from './UserDirectoryList';
 import UserDirectoryState from '../states/UserDirectoryState';
 import CheckableButton from './CheckableButton';
+import SearchField from './SearchField';
 
 /**
  * This page re-uses Flarum's IndexPage CSS classes
@@ -149,6 +150,13 @@ export default class UserDirectoryPage extends Page {
             }, groupButtons)
         );
 
+        items.add(
+            'search', 
+            SearchField.component({
+                state: this.state
+            })
+        );
+
         return items;
     }
 
@@ -189,12 +197,12 @@ export default class UserDirectoryPage extends Page {
         }
 
         if (this.enabledGroupFilters.length > 0) {
-            params.q = 'group:' + this.enabledGroupFilters.join(',');
+            params.qBuilder = {groups: 'group:' + this.enabledGroupFilters.join(',')};
         } else {
-            delete params.q;
+            params.qBuilder = {groups: ''};
         }
 
-        m.route.set(app.route(this.attrs.routeName, params));
+        this.state.refreshParams(params);
     }
 
     stickyParams() {
