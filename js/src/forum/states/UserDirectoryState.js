@@ -53,7 +53,6 @@ export default class UserDirectoryState {
         if (!this.hasUsers() || Object.keys(newParams).some((key) => this.getParams()[key] !== newParams[key])) {
             this.params = newParams;
             Object.assign(this.qBuilder, newParams.qBuilder || {});
-            console.log(this.params);
             this.params.q = Object.values(this.qBuilder).join(' ').trim();
             this.refresh();
         }
