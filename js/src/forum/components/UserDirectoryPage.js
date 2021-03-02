@@ -12,6 +12,7 @@ import UserDirectoryList from './UserDirectoryList';
 import UserDirectoryState from '../states/UserDirectoryState';
 import CheckableButton from './CheckableButton';
 import SearchField from './SearchField';
+import Separator from 'flarum/components/Separator';
 
 /**
  * This page re-uses Flarum's IndexPage CSS classes
@@ -35,6 +36,8 @@ export default class UserDirectoryPage extends Page {
             .join(',')
             .split(',')
             .filter((id) => id);
+
+        this.enabledSpecialGroupFilters = [];
     }
 
     view() {
@@ -151,6 +154,33 @@ export default class UserDirectoryPage extends Page {
                 this
             );
 
+        if (app.initializers.has('flarum-suspend') && app.forum.attribute('suspend')) {
+            groupButtons.splice(
+                0,
+                0,
+                CheckableButton.component(
+                    {
+                        className: 'GroupFilterButton',
+                        icon: 'fas fa-ban',
+                        checked: this.enabledSpecialGroupFilters.includes('flarum-suspend'),
+                        onclick: () => {
+                            const id = 'flarum-suspend';
+                            if (this.enabledSpecialGroupFilters.includes(id)) {
+                                this.enabledSpecialGroupFilters = this.enabledSpecialGroupFilters.filter((e) => e != id);
+                            } else {
+                                this.enabledSpecialGroupFilters.push(id);
+                            }
+
+                            this.changeParams(this.params().sort);
+                        }
+                    },
+                    app.translator.trans('flarum-suspend.forum.user_badge.suspended_tooltip')
+                )
+            );
+
+            groupButtons.splice(1, 0, Separator.component());
+        }
+
         items.add(
             'filterGroups',
             Dropdown.component(
@@ -210,10 +240,12 @@ export default class UserDirectoryPage extends Page {
             params.sort = sort;
         }
 
+        const suspend = this.enabledSpecialGroupFilters.includes('flarum-suspend') ? 'is:suspended' : '';
+
         if (this.enabledGroupFilters.length > 0) {
             params.qBuilder = { groups: 'group:' + this.enabledGroupFilters.join(',') };
         } else {
-            params.qBuilder = { groups: '' };
+            params.qBuilder = { groups: '', q: suspend };
         }
 
         this.state.refreshParams(params);

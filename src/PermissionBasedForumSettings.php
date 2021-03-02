@@ -24,6 +24,7 @@ class PermissionBasedForumSettings
         // The link is visible if the user can access the user directory AND the link was enabled in extension settings
         $attributes['canSeeUserDirectoryLink'] = $serializer->getActor()->can('fof.user-directory.view') && $this->settings->get('fof-user-directory-link');
         $attributes['userDirectoryDefaultSort'] = $this->settings->get('fof-user-directory.default-sort') ?: 'default';
+        $attributes['suspend'] = $serializer->getActor()->hasPermission('user.suspend');
 
         return $attributes;
     }
