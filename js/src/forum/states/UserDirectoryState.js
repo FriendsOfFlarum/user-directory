@@ -14,6 +14,8 @@ export default class UserDirectoryState {
         this.moreResults = false;
 
         this.loading = false;
+
+        this.qBuilder = {};
     }
 
     requestParams() {
@@ -50,7 +52,9 @@ export default class UserDirectoryState {
     refreshParams(newParams) {
         if (!this.hasUsers() || Object.keys(newParams).some((key) => this.getParams()[key] !== newParams[key])) {
             this.params = newParams;
-
+            Object.assign(this.qBuilder, newParams.qBuilder || {});
+            console.log(this.params)
+            this.params.q = Object.values(this.qBuilder).join(' ').trim();
             this.refresh();
         }
     }
@@ -62,6 +66,7 @@ export default class UserDirectoryState {
 
         return this.loadResults().then(
             (results) => {
+                this.users = [];
                 this.parseResults(results);
             },
             () => {
