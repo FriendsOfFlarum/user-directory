@@ -188,13 +188,13 @@ export default class UserDirectoryPage extends Page {
                     {
                         className: 'GroupFilterButton',
                         icon: 'fas fa-ban',
-                        checked: this.enabledSpecialGroupFilters.includes('flarum-suspend'),
+                        checked: this.enabledSpecialGroupFilters['flarum-suspend'] === 'is:suspended',
                         onclick: () => {
                             const id = 'flarum-suspend';
-                            if (this.enabledSpecialGroupFilters.includes(id)) {
-                                this.enabledSpecialGroupFilters = this.enabledSpecialGroupFilters.filter((e) => e != id);
+                            if (this.enabledSpecialGroupFilters[id] === 'is:suspended') {
+                                this.enabledSpecialGroupFilters[id] = '';
                             } else {
-                                this.enabledSpecialGroupFilters.push(id);
+                                this.enabledSpecialGroupFilters[id] = 'is:suspended';
                             }
 
                             this.changeParams(this.params().sort);
@@ -247,12 +247,15 @@ export default class UserDirectoryPage extends Page {
             params.sort = sort;
         }
 
-        const suspend = this.enabledSpecialGroupFilters.includes('flarum-suspend') ? 'is:suspended' : '';
+        let moreQ = '';
+        for (var filter in this.enabledSpecialGroupFilters) {
+            moreQ += this.enabledSpecialGroupFilters[filter] + ' ';
+        }
 
         if (this.enabledGroupFilters.length > 0) {
             params.qBuilder = { groups: 'group:' + this.enabledGroupFilters.join(',') };
         } else {
-            params.qBuilder = { groups: '', q: suspend };
+            params.qBuilder = { groups: '', q: moreQ.trim() };
         }
 
         this.state.refreshParams(params);
