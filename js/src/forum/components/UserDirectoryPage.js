@@ -12,6 +12,7 @@ import UserDirectoryList from './UserDirectoryList';
 import UserDirectoryState from '../states/UserDirectoryState';
 import CheckableButton from './CheckableButton';
 import SearchField from './SearchField';
+import Separator from 'flarum/components/Separator';
 
 /**
  * This page re-uses Flarum's IndexPage CSS classes
@@ -35,6 +36,8 @@ export default class UserDirectoryPage extends Page {
             .join(',')
             .split(',')
             .filter((id) => id);
+
+        this.enabledSpecialGroupFilters = [];
     }
 
     view() {
@@ -125,11 +128,38 @@ export default class UserDirectoryPage extends Page {
             })
         );
 
-        const groupButtons = app.store
+        items.add(
+            'filterGroups',
+            Dropdown.component(
+                {
+                    caretIcon: 'fas fa-filter',
+                    label: app.translator.trans('fof-user-directory.forum.page.filter_button'),
+                    buttonClassName: 'FormControl',
+                    className: 'GroupFilterDropdown',
+                },
+                this.groupItems().toArray()
+            )
+        );
+
+        items.add(
+            'search',
+            SearchField.component({
+                state: this.state,
+            })
+        );
+
+        return items;
+    }
+
+    groupItems() {
+        const items = new ItemList();
+
+        app.store
             .all('groups')
             .filter((group) => group.id() !== '2' && group.id() !== '3')
-            .map(
-                (group) =>
+            .forEach((group) => {
+                items.add(
+                    group.namePlural(),
                     CheckableButton.component(
                         {
                             className: 'GroupFilterButton',
@@ -147,29 +177,36 @@ export default class UserDirectoryPage extends Page {
                             },
                         },
                         group.namePlural()
-                    ),
-                this
+                    )
+                );
+            });
+
+        if (app.initializers.has('flarum-suspend') && app.forum.attribute('hasSuspendPermission')) {
+            items.add(
+                'suspend',
+                CheckableButton.component(
+                    {
+                        className: 'GroupFilterButton',
+                        icon: 'fas fa-ban',
+                        checked: this.enabledSpecialGroupFilters['flarum-suspend'] === 'is:suspended',
+                        onclick: () => {
+                            const id = 'flarum-suspend';
+                            if (this.enabledSpecialGroupFilters[id] === 'is:suspended') {
+                                this.enabledSpecialGroupFilters[id] = '';
+                            } else {
+                                this.enabledSpecialGroupFilters[id] = 'is:suspended';
+                            }
+
+                            this.changeParams(this.params().sort);
+                        },
+                    },
+                    app.translator.trans('flarum-suspend.forum.user_badge.suspended_tooltip')
+                ),
+                90
             );
 
-        items.add(
-            'filterGroups',
-            Dropdown.component(
-                {
-                    caretIcon: 'fas fa-filter',
-                    label: app.translator.trans('fof-user-directory.forum.page.filter_button'),
-                    buttonClassName: 'FormControl',
-                    className: 'GroupFilterDropdown',
-                },
-                groupButtons
-            )
-        );
-
-        items.add(
-            'search',
-            SearchField.component({
-                state: this.state,
-            })
-        );
+            items.add('seperator', Separator.component(), 50);
+        }
 
         return items;
     }
@@ -210,10 +247,15 @@ export default class UserDirectoryPage extends Page {
             params.sort = sort;
         }
 
+        let moreQ = '';
+        for (var filter in this.enabledSpecialGroupFilters) {
+            moreQ += this.enabledSpecialGroupFilters[filter] + ' ';
+        }
+
         if (this.enabledGroupFilters.length > 0) {
             params.qBuilder = { groups: 'group:' + this.enabledGroupFilters.join(',') };
         } else {
-            params.qBuilder = { groups: '' };
+            params.qBuilder = { groups: '', q: moreQ.trim() };
         }
 
         this.state.refreshParams(params);

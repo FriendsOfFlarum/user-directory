@@ -25,6 +25,11 @@ class PermissionBasedForumSettings
         $attributes['canSeeUserDirectoryLink'] = $serializer->getActor()->can('fof.user-directory.view') && $this->settings->get('fof-user-directory-link');
         $attributes['userDirectoryDefaultSort'] = $this->settings->get('fof-user-directory.default-sort') ?: 'default';
 
+        // Only serialize if the actor has permission
+        if ($permission = $serializer->getActor()->hasPermission('user.suspend')) {
+            $attributes['hasSuspendPermission'] = $permission;
+        }
+
         return $attributes;
     }
 }
