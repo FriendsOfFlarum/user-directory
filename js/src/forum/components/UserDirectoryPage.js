@@ -128,59 +128,6 @@ export default class UserDirectoryPage extends Page {
             })
         );
 
-        // const groupButtons = app.store
-        //     .all('groups')
-        //     .filter((group) => group.id() !== '2' && group.id() !== '3')
-        //     .map(
-        //         (group) =>
-        //             CheckableButton.component(
-        //                 {
-        //                     className: 'GroupFilterButton',
-        //                     icon: group.icon(),
-        //                     checked: this.enabledGroupFilters.includes(group.id()),
-        //                     onclick: () => {
-        //                         const id = group.id();
-        //                         if (this.enabledGroupFilters.includes(id)) {
-        //                             this.enabledGroupFilters = this.enabledGroupFilters.filter((e) => e != id);
-        //                         } else {
-        //                             this.enabledGroupFilters.push(id);
-        //                         }
-
-        //                         this.changeParams(this.params().sort);
-        //                     },
-        //                 },
-        //                 group.namePlural()
-        //             ),
-        //         this
-        //     );
-
-        // if (app.initializers.has('flarum-suspend') && app.forum.attribute('hasSuspendPermission')) {
-        //     groupButtons.splice(
-        //         0,
-        //         0,
-        //         CheckableButton.component(
-        //             {
-        //                 className: 'GroupFilterButton',
-        //                 icon: 'fas fa-ban',
-        //                 checked: this.enabledSpecialGroupFilters.includes('flarum-suspend'),
-        //                 onclick: () => {
-        //                     const id = 'flarum-suspend';
-        //                     if (this.enabledSpecialGroupFilters.includes(id)) {
-        //                         this.enabledSpecialGroupFilters = this.enabledSpecialGroupFilters.filter((e) => e != id);
-        //                     } else {
-        //                         this.enabledSpecialGroupFilters.push(id);
-        //                     }
-
-        //                     this.changeParams(this.params().sort);
-        //                 },
-        //             },
-        //             app.translator.trans('flarum-suspend.forum.user_badge.suspended_tooltip')
-        //         )
-        //     );
-
-        //     groupButtons.splice(1, 0, Separator.component());
-        // }
-
         items.add(
             'filterGroups',
             Dropdown.component(
