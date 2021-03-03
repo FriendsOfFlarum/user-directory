@@ -154,7 +154,7 @@ export default class UserDirectoryPage extends Page {
                 this
             );
 
-        if (app.initializers.has('flarum-suspend') && app.forum.attribute('suspend')) {
+        if (app.initializers.has('flarum-suspend') && app.forum.attribute('hasSuspendPermission')) {
             groupButtons.splice(
                 0,
                 0,
