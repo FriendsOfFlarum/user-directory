@@ -8,9 +8,10 @@ import UserDirectoryList from './components/UserDirectoryList';
 import UserDirectoryListItem from './components/UserDirectoryListItem';
 import UserDirectoryState from './states/UserDirectoryState';
 import SortMap from '../common/utils/SortMap';
+import CheckableButton from './components/CheckableButton';
 
 // Allow other extensions to extend the page
-export { UserDirectoryPage, UserDirectoryList, UserDirectoryListItem, UserDirectoryState, SortMap };
+export { UserDirectoryPage, UserDirectoryList, UserDirectoryListItem, UserDirectoryState, SortMap, CheckableButton };
 
 app.initializers.add('fof-user-directory', (app) => {
     app.routes.fof_user_directory = {
