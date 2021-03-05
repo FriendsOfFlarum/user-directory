@@ -38,6 +38,8 @@ export default class UserDirectoryPage extends Page {
             .filter((id) => id);
 
         this.enabledSpecialGroupFilters = [];
+
+        app.history.push('users', app.translator.trans('fof-user-directory.forum.header.back_to_user_directory_tooltip'));
     }
 
     view() {

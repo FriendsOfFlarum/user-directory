@@ -1,5 +1,8 @@
 fof-user-directory:
     forum:
+        header:
+            back_to_user_directory_tooltip: Back to User Directory
+
         search:
             users_heading: 'Search all users for "{query}"'
             field:
