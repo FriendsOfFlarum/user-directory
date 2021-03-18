@@ -1,18 +1,18 @@
-import app from 'flarum/app';
-import Page from 'flarum/components/Page';
-import ItemList from 'flarum/utils/ItemList';
-import listItems from 'flarum/helpers/listItems';
-import IndexPage from 'flarum/components/IndexPage';
-import Select from 'flarum/components/Select';
-import Button from 'flarum/components/Button';
-import LinkButton from 'flarum/components/LinkButton';
-import SelectDropdown from 'flarum/components/SelectDropdown';
-import Dropdown from 'flarum/components/Dropdown';
+import app from 'flarum/common/app';
+import Page from 'flarum/common/components/Page';
+import ItemList from 'flarum/common/utils/ItemList';
+import listItems from 'flarum/common/helpers/listItems';
+import IndexPage from 'flarum/common/components/IndexPage';
+import Select from 'flarum/common/components/Select';
+import Button from 'flarum/common/components/Button';
+import LinkButton from 'flarum/common/components/LinkButton';
+import SelectDropdown from 'flarum/common/components/SelectDropdown';
+import Dropdown from 'flarum/common/components/Dropdown';
 import UserDirectoryList from './UserDirectoryList';
 import UserDirectoryState from '../states/UserDirectoryState';
 import CheckableButton from './CheckableButton';
 import SearchField from './SearchField';
-import Separator from 'flarum/components/Separator';
+import Separator from 'flarum/common/components/Separator';
 
 /**
  * This page re-uses Flarum's IndexPage CSS classes

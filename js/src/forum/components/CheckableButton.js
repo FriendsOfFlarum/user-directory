@@ -1,5 +1,5 @@
-import Button from 'flarum/components/Button';
-import icon from 'flarum/helpers/icon';
+import Button from 'flarum/common/components/Button';
+import icon from 'flarum/common/helpers/icon';
 
 export default class CheckableButton extends Button {
     /**

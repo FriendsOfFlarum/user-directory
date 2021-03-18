@@ -1,8 +1,8 @@
-import { extend } from 'flarum/extend';
-import app from 'flarum/app';
-import UsersSearchSource from 'flarum/components/UsersSearchSource';
-import LinkButton from 'flarum/components/LinkButton';
-import IndexPage from 'flarum/components/IndexPage';
+import { extend } from 'flarum/common/extend';
+import app from 'flarum/common/app';
+import UsersSearchSource from 'flarum/common/components/UsersSearchSource';
+import LinkButton from 'flarum/common/components/LinkButton';
+import IndexPage from 'flarum/common/components/IndexPage';
 import UserDirectoryPage from './components/UserDirectoryPage';
 import UserDirectoryList from './components/UserDirectoryList';
 import UserDirectoryListItem from './components/UserDirectoryListItem';

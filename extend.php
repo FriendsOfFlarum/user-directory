@@ -17,7 +17,7 @@ return [
     new Extend\Locales(__DIR__ . '/resources/locale'),
 
     (new Extend\ApiSerializer(ForumSerializer::class))
-        ->mutate(PermissionBasedForumSettings::class),
+        ->attributes(PermissionBasedForumSettings::class),
 
     (new Extend\View())
         ->namespace('fof.user-directory', __DIR__.'/resources/views'),

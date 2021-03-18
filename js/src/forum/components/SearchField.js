@@ -1,6 +1,6 @@
-import app from 'flarum/app';
-import Component from 'flarum/Component';
-import withAttr from 'flarum/utils/withAttr';
+import app from 'flarum/common/app';
+import Component from 'flarum/common/Component';
+import withAttr from 'flarum/common/utils/withAttr';
 
 export default class SearchField extends Component {
     oninit(vnode) {

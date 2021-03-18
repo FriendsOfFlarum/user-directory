@@ -1,5 +1,5 @@
-import Component from 'flarum/Component';
-import UserCard from 'flarum/components/UserCard';
+import Component from 'flarum/common/Component';
+import UserCard from 'flarum/common/components/UserCard';
 
 export default class UserDirectoryListItem extends Component {
     view() {

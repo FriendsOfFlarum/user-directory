@@ -1,8 +1,8 @@
-import app from 'flarum/app';
-import Component from 'flarum/Component';
-import Button from 'flarum/components/Button';
-import LoadingIndicator from 'flarum/components/LoadingIndicator';
-import Placeholder from 'flarum/components/Placeholder';
+import app from 'flarum/common/app';
+import Component from 'flarum/common/Component';
+import Button from 'flarum/common/components/Button';
+import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
+import Placeholder from 'flarum/common/components/Placeholder';
 import UserDirectoryListItem from './UserDirectoryListItem';
 
 /**
