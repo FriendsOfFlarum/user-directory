@@ -9,8 +9,6 @@ export default class SortMap {
             username_za: '-username',
             newest: '-joinedAt',
             oldest: 'joinedAt',
-            seen_recent: '-lastSeenAt',
-            seen_oldest: 'lastSeenAt',
             most_discussions: '-discussionCount',
             least_discussions: 'discussionCount',
         };
