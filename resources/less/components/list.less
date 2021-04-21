@@ -1,0 +1,48 @@
+.UserDirectoryList {
+    .UserDirectoryList-users {
+        list-style: none;
+        padding: 0;
+        clear: both;
+    }
+    .User {
+        margin-bottom: 1px;
+    }
+
+    .UserCard--directory {
+        width: 100%;
+        .box-shadow(0 2px 6px @shadow-color);
+        margin-bottom: 10px;
+
+        &,
+        .darkenBackground {
+            border-radius: @border-radius;
+        }
+        .container {
+            width: auto !important;
+            padding: 20px !important;
+        }
+        .UserCard-identity {
+            font-size: 22px;
+        }
+        // Workaround for https://github.com/flarum/core/issues/1792
+        .UserCard-controls {
+            position: relative !important;
+            z-index: auto;
+        }
+        .Button {
+            @media @phone {
+                color: #fff !important;
+            }
+        }
+        .Dropdown-menu {
+            // for not overlapping header
+            z-index: @zindex-header - 1;
+        }
+    }
+
+    &-loadMore {
+        text-align: center;
+    }
+}
+
+@import "./smallCards";

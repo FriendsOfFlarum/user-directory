@@ -1,0 +1,126 @@
+.UserDirectoryList {
+    .UserCard--small {
+        .container {
+            padding: 8px !important;
+        }
+
+        .UserCard-profile {
+            padding-left: 0;
+            position: relative;
+        }
+
+        .UserCard-identity {
+            font-size: 14px;
+        }
+
+        .UserCard-avatar {
+            margin-left: 0;
+            margin-right: 10px;
+
+            .Avatar {
+                @avatar-size: 26px;
+                width: @avatar-size;
+                height: @avatar-size;
+                line-height: @avatar-size;
+                border-width: 2px;
+                font-size: 14px;
+            }
+        }
+
+        .UserCard-info {
+            margin-left: 5px;
+
+            & > li {
+                display: block;
+            }
+        }
+
+        .UserCard-controls {
+            z-index: @zindex-header - 1 !important;
+        }
+
+        @media @phone {
+            .UserCard-avatar {
+                margin: 0 auto 15px auto;
+
+                .Avatar {
+                    @avatar-size: 36px;
+                    width: @avatar-size;
+                    height: @avatar-size;
+                    line-height: @avatar-size;
+                    font-size: 20px;
+                }
+            }
+
+            .username {
+                font-size: 16px;
+            }
+
+            .UserCard-badges {
+                margin-left: 5px;
+                margin-right: 0;
+            }
+        }
+
+        @media (min-width: @screen-phone-max) {
+            .UserCard-avatar {
+                display: inline-block;
+            }
+
+            //Long usernames
+            a {
+                display: flex;
+                white-space: nowrap;
+            }
+
+            .username {
+                font-size: 18px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+
+        @media @tablet-up {
+            .UserCard-badges {
+                position: absolute;
+                top: -8px;
+                left: 3px;
+
+                .Badge {
+                    width: 18px;
+                    height: 18px;
+                    line-height: 16px;
+
+                    &-icon {
+                        font-size: 9px;
+                    }
+                }
+            }
+
+            .UserCard-info {
+                margin: 0 0 0 40px;
+            }
+        }
+    }
+
+    &--small-cards {
+        .UserDirectoryList-users {
+            display: grid;
+            //Equal Width Columns
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-column-gap: 10px;
+
+            @media (max-width: @screen-tablet-max) {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            @media @phone {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            @media (max-width: 400px) {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}
