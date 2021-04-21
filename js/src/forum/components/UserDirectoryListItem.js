@@ -1,18 +1,17 @@
 import Component from 'flarum/common/Component';
 import UserCard from 'flarum/common/components/UserCard';
+import SmallUserCard from './SmallUserCard';
 
 export default class UserDirectoryListItem extends Component {
-    view() {
-        const { user } = this.attrs;
+    view(vnode) {
+        const { user, useSmallCards } = this.attrs;
 
-        return (
-            <div className="User">
-                {UserCard.component({
-                    user,
-                    className: 'UserCard--directory',
-                    controlsButtonClassName: 'Button Button--icon Button--flat',
-                })}
-            </div>
-        );
+        const attributes = {
+            user,
+            className: `UserCard--directory${useSmallCards ? ' UserCard--small' : ''}`,
+            controlsButtonClassName: 'Button Button--icon Button--flat',
+        };
+
+        return <div className="User">{useSmallCards ? SmallUserCard.component(attributes) : UserCard.component(attributes)}</div>;
     }
 }

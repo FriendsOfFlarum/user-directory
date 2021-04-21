@@ -2,16 +2,19 @@
     .UserDirectoryList-users {
         list-style: none;
         padding: 0;
+        clear: both;
     }
     .User {
         margin-bottom: 1px;
     }
+
     .UserCard--directory {
         width: 100%;
         .box-shadow(0 2px 6px @shadow-color);
-        margin-bottom:10px;
+        margin-bottom: 10px;
 
-        &, .darkenBackground {
+        &,
+        .darkenBackground {
             border-radius: @border-radius;
         }
         .container {
@@ -22,6 +25,127 @@
             font-size: 22px;
         }
     }
+
+    .UserCard--small {
+        .container {
+            padding: 8px !important;
+        }
+
+        .UserCard-profile {
+            padding-left: 0;
+            position: relative;
+        }
+
+        .UserCard-identity {
+            font-size: 14px;
+        }
+
+        .UserCard-avatar {
+            margin-left: 0;
+            margin-right: 10px;
+
+            .Avatar {
+                @avatar-size: 26px;
+                width: @avatar-size;
+                height: @avatar-size;
+                line-height: @avatar-size;
+                border-width: 2px;
+                font-size: 14px;
+            }
+        }
+
+        .UserCard-info {
+            margin-left: 5px;
+
+            & > li {
+                display: block;
+            }
+        }
+
+        //.UserCard-controls {
+        //    z-index: @zindex-header;
+        //}
+
+        @media @phone {
+            .UserCard-avatar {
+                margin: 0 auto 20px auto;
+
+                .Avatar {
+                    @avatar-size: 36px;
+                    width: @avatar-size;
+                    height: @avatar-size;
+                    line-height: @avatar-size;
+                    border-width: 2px;
+                    font-size: 20px;
+                }
+            }
+
+            .UserCard-badges {
+                margin-left: 5px;
+                margin-right: 0;
+            }
+        }
+
+        @media (min-width: @screen-phone-max) {
+            .UserCard-avatar {
+                display: inline-block;
+            }
+
+            //Long usernames
+            a {
+                display: flex;
+                white-space: nowrap;
+            }
+            .username {
+                font-size: 18px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+
+        @media @tablet-up {
+            .UserCard-badges {
+                position: absolute;
+                top: -8px;
+                left: 3px;
+
+                .Badge {
+                    width: 18px;
+                    height: 18px;
+                    line-height: 16px;
+
+                    &-icon {
+                        font-size: 9px;
+                    }
+                }
+            }
+
+            .UserCard-info {
+                margin: 0 0 0 40px;
+            }
+        }
+    }
+
+    &--small-cards {
+        .UserDirectoryList-users {
+            display: grid;
+            //Equal Width Columns
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-column-gap: 10px;
+
+            @media @phone {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            @media (max-width: 400px) {
+                grid-template-columns: 1fr;
+            }
+
+            @media @desktop-up {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+    }
 }
 
 // Workaround for https://github.com/flarum/core/issues/1792
@@ -30,6 +154,7 @@
         position: relative !important;
         z-index: auto;
     }
+
     .Button {
         @media @phone {
             color: #fff !important;
@@ -39,6 +164,10 @@
         // for not overlapping header
         z-index: 999;
     }
+}
+
+.UserDirectoryList-loadMore {
+    text-align: center;
 }
 
 .item-filterGroups {

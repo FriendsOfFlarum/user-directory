@@ -250,7 +250,7 @@ export default class UserDirectoryPage extends Page {
         }
 
         let moreQ = '';
-        for (var filter in this.enabledSpecialGroupFilters) {
+        for (const filter in this.enabledSpecialGroupFilters) {
             moreQ += this.enabledSpecialGroupFilters[filter] + ' ';
         }
 

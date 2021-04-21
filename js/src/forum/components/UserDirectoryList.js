@@ -13,6 +13,7 @@ export default class UserDirectoryList extends Component {
         const { state } = this.attrs;
 
         const params = state.getParams();
+        const useSmallCards = app.forum.attribute('userDirectorySmallCards');
         let loading;
 
         if (state.isLoading()) {
@@ -33,12 +34,18 @@ export default class UserDirectoryList extends Component {
         }
 
         return (
-            <div className={'UserDirectoryList' + (state.isSearchResults() ? ' UserDirectoryList--searchResults' : '')}>
+            <div
+                className={
+                    'UserDirectoryList' +
+                    (state.isSearchResults() ? ' UserDirectoryList--searchResults' : '') +
+                    (useSmallCards ? ' UserDirectoryList--small-cards' : '')
+                }
+            >
                 <ul className="UserDirectoryList-users">
                     {state.users.map((user) => {
                         return (
                             <li key={user.id()} data-id={user.id()}>
-                                {UserDirectoryListItem.component({ user, params })}
+                                {UserDirectoryListItem.component({ user, params, useSmallCards })}
                             </li>
                         );
                     })}

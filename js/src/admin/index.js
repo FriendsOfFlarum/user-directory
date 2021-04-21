@@ -20,6 +20,11 @@ app.initializers.add('fof-user-directory', (app) => {
             type: 'boolean',
         })
         .registerSetting({
+            setting: 'fof-user-directory.use-small-cards',
+            label: app.translator.trans('fof-user-directory.admin.settings.use-small-cards'),
+            type: 'boolean',
+        })
+        .registerSetting({
             setting: 'fof-user-directory.default-sort',
             label: app.translator.trans('fof-user-directory.admin.settings.default-sort'),
             options: sortOptions,
