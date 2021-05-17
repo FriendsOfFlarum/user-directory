@@ -35,7 +35,7 @@
         }
     ],
     "require": {
-        "flarum/core": "^0.1.0-beta.16",
+        "flarum/core": "^1.0.0",
         "ext-json": "*"
     },
     "replace": {
@@ -49,7 +49,10 @@
                 "name": "far fa-address-book",
                 "backgroundColor": "#e74c3c",
                 "color": "#fff"
-            }
+            },
+            "optional-dependencies": [
+                "flarum/suspend"
+            ]
         },
         "flagrow": {
             "discuss": "https://discuss.flarum.org/d/5682"

@@ -2,7 +2,6 @@
 
 namespace FoF\UserDirectory\Content;
 
-use Flarum\Api\Controller\ListUsersController;
 use Flarum\Frontend\Document;
 use Flarum\Http\Exception\RouteNotFoundException;
 use Flarum\Api\Client;
@@ -50,7 +49,7 @@ class UserDirectory
             throw new RouteNotFoundException();
         }
 
-        return json_decode($this->api->send(ListUsersController::class, $actor, $params)->getBody());
+        return json_decode($this->api->withQueryParams($params)->withActor($actor)->get('/users')->getBody());
     }
 
     public function __invoke(Document $document, Request $request)
