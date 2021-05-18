@@ -1,5 +1,5 @@
 import Component from 'flarum/common/Component';
-import UserCard from 'flarum/common/components/UserCard';
+import UserCard from 'flarum/forum/components/UserCard';
 import SmallUserCard from './SmallUserCard';
 
 export default class UserDirectoryListItem extends Component {

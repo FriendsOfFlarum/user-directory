@@ -1,4 +1,4 @@
-import app from 'flarum/common/app';
+import app from 'flarum/forum/app';
 import Component from 'flarum/common/Component';
 import withAttr from 'flarum/common/utils/withAttr';
 
