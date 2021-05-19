@@ -5,6 +5,8 @@ namespace FoF\UserDirectory\Content;
 use Flarum\Frontend\Document;
 use Flarum\Http\Exception\RouteNotFoundException;
 use Flarum\Api\Client;
+use Flarum\Foundation\Paths;
+use Flarum\Http\UrlGenerator;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use Illuminate\Contracts\View\Factory;
@@ -24,6 +26,11 @@ class UserDirectory
     private $view;
 
     /**
+     * @var UrlGenerator
+     */
+    private $paths;
+
+    /**
      * A map of sort query param values to their API sort param.
      *
      * @var array
@@ -37,10 +44,11 @@ class UserDirectory
         'least_discussions' => 'discussionCount'
     ];
 
-    public function __construct(Client $api, Factory $view)
+    public function __construct(Client $api, Factory $view, UrlGenerator $url)
     {
         $this->api = $api;
         $this->view = $view;
+        $this->url = $url;
     }
 
     private function getDocument(User $actor, array $params)
@@ -49,7 +57,7 @@ class UserDirectory
             throw new RouteNotFoundException();
         }
 
-        return json_decode($this->api->withQueryParams($params)->withActor($actor)->get('/users')->getBody());
+        return json_decode($this->api->withQueryParams($params)->withActor($actor)->get($this->url->to('forum')->base() . '/users')->getBody());
     }
 
     public function __invoke(Document $document, Request $request)
