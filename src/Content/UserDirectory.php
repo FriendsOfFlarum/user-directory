@@ -5,7 +5,6 @@ namespace FoF\UserDirectory\Content;
 use Flarum\Frontend\Document;
 use Flarum\Http\Exception\RouteNotFoundException;
 use Flarum\Api\Client;
-use Flarum\Foundation\Paths;
 use Flarum\Http\UrlGenerator;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
@@ -28,7 +27,7 @@ class UserDirectory
     /**
      * @var UrlGenerator
      */
-    private $paths;
+    private $url;
 
     /**
      * A map of sort query param values to their API sort param.
