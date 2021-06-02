@@ -2,11 +2,11 @@
     .UserCard--small {
         .container {
             padding: 8px !important;
+            position: relative;
         }
 
         .UserCard-profile {
             padding-left: 0;
-            position: relative;
         }
 
         .UserCard-identity {
@@ -33,10 +33,6 @@
             & > li {
                 display: block;
             }
-        }
-
-        .UserCard-controls {
-            z-index: @zindex-header - 1 !important;
         }
 
         @media @phone {
@@ -83,8 +79,8 @@
         @media @tablet-up {
             .UserCard-badges {
                 position: absolute;
-                top: -8px;
-                left: 3px;
+                top: 0;
+                left: 8px;
 
                 .Badge {
                     width: 18px;
