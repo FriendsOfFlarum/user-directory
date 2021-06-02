@@ -34,9 +34,12 @@
                 color: #fff !important;
             }
         }
-        .Dropdown-menu {
-            // for not overlapping header
-            z-index: @zindex-header - 1;
+
+        @media @tablet-up {
+            .Dropdown-menu {
+                // for not overlapping header
+                z-index: @zindex-header - 1;
+            }
         }
     }
 
