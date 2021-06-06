@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * This file is part of fof/user-directory.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\UserDirectory\Content;
 
+use Flarum\Api\Client;
 use Flarum\Frontend\Document;
 use Flarum\Http\Exception\RouteNotFoundException;
-use Flarum\Api\Client;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use Illuminate\Contracts\View\Factory;
@@ -29,12 +38,12 @@ class UserDirectory
      * @var array
      */
     private $sortMap = [
-        'username_az' => 'username',
-        'username_za' => '-username',
-        'newest' => '-joinedAt',
-        'oldest' => 'joinedAt',
-        'most_discussions' => '-discussionCount',
-        'least_discussions' => 'discussionCount'
+        'username_az'       => 'username',
+        'username_za'       => '-username',
+        'newest'            => '-joinedAt',
+        'oldest'            => 'joinedAt',
+        'most_discussions'  => '-discussionCount',
+        'least_discussions' => 'discussionCount',
     ];
 
     public function __construct(Client $api, Factory $view)
@@ -62,9 +71,9 @@ class UserDirectory
 
         $params = [
             // ?? used to prevent null values. null would result in the whole sortMap array being sent in the params
-            'sort' => Arr::get($this->sortMap, $sort ?? '', ''),
+            'sort'   => Arr::get($this->sortMap, $sort ?? '', ''),
             'filter' => compact('q'),
-            'page' => ['offset' => ($page - 1) * 20, 'limit' => 20],
+            'page'   => ['offset' => ($page - 1) * 20, 'limit' => 20],
         ];
 
         $apiDocument = $this->getDocument($request->getAttribute('actor'), $params, $request);
