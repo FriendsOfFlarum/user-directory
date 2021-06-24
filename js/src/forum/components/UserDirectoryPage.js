@@ -125,7 +125,7 @@ export default class UserDirectoryPage extends Page {
             'sort',
             Select.component({
                 options: sortOptions,
-                value: this.params().sort || app.forum.attribute('userDirectoryDefaultSort'),
+                value: this.state.getParams().sort || app.forum.attribute('userDirectoryDefaultSort'),
                 onchange: this.changeParams.bind(this),
             })
         );
