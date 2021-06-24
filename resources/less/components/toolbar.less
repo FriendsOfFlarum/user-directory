@@ -1,8 +1,45 @@
+.User--directory .IndexPage-toolbar {
+    @media @phone {
+        display: flex;
+        flex-direction: column;
+
+        .IndexPage-toolbar-view,
+        .IndexPage-toolbar-action {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .IndexPage-toolbar-view {
+            flex-wrap: wrap-reverse;
+            margin-bottom: 5px;
+
+            & > li {
+                margin-right: 0;
+            }
+        }
+
+        .IndexPage-toolbar-action {
+            & > li {
+                margin-left: 0;
+            }
+            li.item-refresh {
+                margin-left: auto;
+            }
+        }
+    }
+    @media screen and (max-width: 370px) {
+        .IndexPage-toolbar-view {
+            & > li {
+                width: 100%;
+            }
+        }
+    }
+}
+
 .item-filterGroups {
     margin-left: 15px;
 
-    @media screen and (max-width: 360px) {
-        margin-left: 13px;
+    @media screen and (max-width: 370px) {
+        margin-bottom: 5px;
     }
 
     @media screen and (max-width: 320px) {
@@ -10,7 +47,7 @@
     }
 
     @media @phone {
-        margin-top: 5px;
+        margin-left: auto;
     }
 
     .ButtonGroup {
@@ -38,5 +75,7 @@
 
     @media @phone {
         margin-top: 5px;
+        width: 100%;
+        margin-bottom: 5px;
     }
 }
