@@ -1,6 +1,6 @@
 # User directory by FriendsOfFlarum
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/user-directory.svg)](https://packagist.org/packages/fof/user-directory)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/user-directory.svg)](https://packagist.org/packages/fof/user-directory) [![Compatibility](https://flarum-badge-api.davwheat.dev/v1/compat-latest/fof/user-directory)](https://flarum-badge-api.davwheat.dev/v1/compat-latest/fof/user-directory)
 
 An extension that generates a new url `/users` that provides a list of users, with the ability to sort. You can search through the users from the global
 search input field, a new item shows up "Search all users for ...".
@@ -12,7 +12,7 @@ A setting allows you to show a link to the directory from the homepage sidebar, 
 ### Installation
 
 ```sh
-composer require fof/user-directory
+composer require fof/user-directory:"*"
 ```
 
 ### Updating
@@ -26,21 +26,8 @@ composer update fof/user-directory
 To the latest compatible version:
 
 ```sh
-composer require fof/user-directory
+composer require fof/user-directory:"*"
 ```
-
-### Updating from Flagrow
-
-This extension replaces [Flagrow User Directory](https://packagist.org/packages/flagrow/user-directory).
-
-To upgrade from the old extension to the new one:
-
-```sh
-composer remove flagrow/user-directory
-composer require fof/user-directory
-```
-
-Then enable the new extension in the admin panel.
 
 ### Links
 
