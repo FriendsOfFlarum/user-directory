@@ -13,6 +13,6 @@
     },
     "devDependencies": {
         "flarum-tsconfig": "^1.0.0",
-        "prettier": "^2.2.1"
+        "prettier": "^2.3.2"
     }
 }
