@@ -6,4 +6,4 @@ export const searchTypes = {
     AbstractType,
     GroupFilter,
     TextFilter,
-}
+};

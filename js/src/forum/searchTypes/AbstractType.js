@@ -1,7 +1,7 @@
 /**
  * @abstract
  */
- export default class AbstractType {
+export default class AbstractType {
     constructor() {
         this.suggestions = [];
         this.loading = false;

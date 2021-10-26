@@ -19,7 +19,7 @@ export default class GroupFilter extends AbstractType {
 
         query = query.toLowerCase();
 
-        app.store.all('groups').forEach(group => {
+        app.store.all('groups').forEach((group) => {
             // Do not allow Guest group as it wouldn't do anything
             if (group.id() === Group.GUEST_ID) {
                 return;
@@ -36,18 +36,18 @@ export default class GroupFilter extends AbstractType {
     }
 
     renderLabel(group) {
-        return m('.UserDirectorySearchLabel', group.color() ? {
-            className: 'colored',
-            style: {
-                backgroundColor: group.color(),
-            },
-        } : {}, [
-            group.icon() ? [
-                icon(group.icon()),
-                ' ',
-            ] : null,
-            group.namePlural(),
-        ]);
+        return m(
+            '.UserDirectorySearchLabel',
+            group.color()
+                ? {
+                      className: 'colored',
+                      style: {
+                          backgroundColor: group.color(),
+                      },
+                  }
+                : {},
+            [group.icon() ? [icon(group.icon()), ' '] : null, group.namePlural()]
+        );
     }
 
     applyFilter(params, group) {
@@ -64,7 +64,7 @@ export default class GroupFilter extends AbstractType {
 
         const groups = [];
 
-        app.store.all('groups').forEach(group => {
+        app.store.all('groups').forEach((group) => {
             if (qWithSpacesAround.indexOf('group:' + group.namePlural()) !== -1) {
                 groups.push(group);
             }

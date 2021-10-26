@@ -41,13 +41,18 @@ export default class TextFilter extends AbstractType {
             return Promise.resolve([]);
         }
 
-        return Promise.resolve(params.q.split(' ')
-            // Words with : are gambits and we will ignore them
-            .filter(word => word.indexOf(':') === -1)
-            .map(word => app.store.createRecord('fof-user-directory-text', {
-                attributes: {
-                    text: word,
-                },
-            })));
+        return Promise.resolve(
+            params.q
+                .split(' ')
+                // Words with : are gambits and we will ignore them
+                .filter((word) => word.indexOf(':') === -1)
+                .map((word) =>
+                    app.store.createRecord('fof-user-directory-text', {
+                        attributes: {
+                            text: word,
+                        },
+                    })
+                )
+        );
     }
 }
