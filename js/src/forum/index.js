@@ -9,6 +9,7 @@ import UserDirectoryListItem from './components/UserDirectoryListItem';
 import UserDirectoryState from './states/UserDirectoryState';
 import SortMap from '../common/utils/SortMap';
 import CheckableButton from './components/CheckableButton';
+import Text from './models/Text';
 
 // Allow other extensions to extend the page
 export { UserDirectoryPage, UserDirectoryList, UserDirectoryListItem, UserDirectoryState, SortMap, CheckableButton };
@@ -18,6 +19,8 @@ app.initializers.add('fof-user-directory', (app) => {
         path: '/users',
         component: UserDirectoryPage,
     };
+
+    app.store.models['fof-user-directory-text'] = Text;
 
     extend(UsersSearchSource.prototype, 'view', function (view, query) {
         if (!view || app.forum.attribute('userDirectoryDisableGlobalSearchSource')) {
