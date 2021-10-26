@@ -63,3 +63,4 @@ app.initializers.add('fof-user-directory', (app) => {
 });
 
 export * from './components';
+export * from './searchTypes';
