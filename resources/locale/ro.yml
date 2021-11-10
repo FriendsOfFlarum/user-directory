@@ -1,0 +1,37 @@
+fof-user-directory:
+    forum:
+        header:
+            back_to_user_directory_tooltip: Înapoi la lista utilizatorilor
+
+        search:
+            users_heading: 'Caută toți utilizatorii după "{query}"'
+            field:
+                placeholder: Caută toți utilizatorii
+        page:
+            nav: Listă utilizatorilor
+            refresh_tooltip: => core.forum.index.refresh_tooltip
+            load_more_button: => core.ref.load_more
+            empty_text: Nu am putut găsi niciun utilizator care să corespundă căutării dvs. 
+            filter_button: Grupuri de filtrare
+
+    admin:
+        permissions:
+            view_user_directory: Vezi lista utilizatorilor
+        settings:
+            link: Adăugați link pe pagina de pornire pentru utilizatorii care pot vedea directorul 
+            default-sort: Sortare implicită 
+            use-small-cards: Folosiți carduri de utilizator mici 
+            disable-global-search-source: Nu adăugați lista de utilizatori în câmpul de căutare globală Flarum 
+
+    lib:
+        sort:
+            not_specified: Utilizați implicit Flarum 
+            default: Mod implicit
+            username_az: Username (a-z)
+            username_za: Username (z-a)
+            newest: Cel mai nou 
+            oldest: Cel mai vechi
+            most_posts: Cele mai multe posturi
+            least_posts: Cele mai puține posturi
+            most_discussions: Cele mai multe discuții
+            least_discussions: Cele mai puține discuții
