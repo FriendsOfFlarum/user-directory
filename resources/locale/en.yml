@@ -7,6 +7,9 @@ fof-user-directory:
             users_heading: 'Search all users for "{query}"'
             field:
                 placeholder: Search all users
+            kinds:
+                group: Group
+                text: Free text
         page:
             nav: User Directory
             refresh_tooltip: => core.forum.index.refresh_tooltip

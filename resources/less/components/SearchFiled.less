@@ -1,0 +1,73 @@
+// Style based on TagDiscussionModal.less from flarum/tags
+.UserDirectorySearchInput {
+    padding-top: 0;
+    padding-bottom: 0;
+    height: auto;
+    position: relative;
+    margin-left: 15px; // Space with sort dropdown
+
+    // Same background as .focus to give it better visibility
+    background-color: @body-bg;
+    color: @text-color;
+    border-color: @control-bg;
+
+    input {
+        display: inline;
+        outline: none;
+        margin-top: -2px;
+        border: 0 !important;
+        padding: 0;
+        width: 100%;
+        margin-right: -100%;
+        background: transparent !important;
+    }
+
+    .LoadingIndicator {
+        float: right;
+        pointer-events: none;
+    }
+
+    .Dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: block;
+    }
+}
+
+.UserDirectorySearchInput-filter {
+    cursor: not-allowed;
+}
+
+.UserDirectorySearchInput-selected {
+    .UserDirectorySearchInput-filter {
+        margin-right: 5px;
+
+        &:last-child {
+            margin-right: 10px;
+        }
+    }
+}
+
+.UserDirectorySearchLabel {
+    font-size: 85%;
+    font-weight: 600;
+    display: inline-block;
+    padding: 0.1em 0.5em;
+    border-radius: @border-radius;
+    background: @control-bg;
+    color: @control-color;
+    text-transform: none;
+
+    &.colored {
+        color: @body-bg !important;
+    }
+}
+
+.UserDirectorySearchKind {
+    display: inline-block;
+    min-width: 5em;
+    color: #aaa;
+    font-style: italic;
+}
