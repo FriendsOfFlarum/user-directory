@@ -38,6 +38,12 @@ export default class UserDirectoryPage extends Page {
             .filter((id) => id);
 
         this.enabledSpecialGroupFilters = [];
+        if (app.initializers.has('flarum-suspend') && app.forum.attribute('hasSuspendPermission')) {
+            // If there is a special group filter int the params, enable it here
+            if (this.params()?.q?.includes('is:suspended')) {
+                this.enabledSpecialGroupFilters['flarum-suspend'] = 'is:suspended';
+            }
+        }
 
         app.history.push('users', app.translator.trans('fof-user-directory.forum.header.back_to_user_directory_tooltip'));
     }
@@ -173,6 +179,8 @@ export default class UserDirectoryPage extends Page {
                                     this.enabledGroupFilters = this.enabledGroupFilters.filter((e) => e != id);
                                 } else {
                                     this.enabledGroupFilters.push(id);
+                                    // Empty the special group filters
+                                    this.enabledSpecialGroupFilters = [];
                                 }
 
                                 this.changeParams(this.params().sort);
@@ -197,6 +205,8 @@ export default class UserDirectoryPage extends Page {
                                 this.enabledSpecialGroupFilters[id] = '';
                             } else {
                                 this.enabledSpecialGroupFilters[id] = 'is:suspended';
+                                // Empty the group filters
+                                this.enabledGroupFilters = [];
                             }
 
                             this.changeParams(this.params().sort);
@@ -255,12 +265,21 @@ export default class UserDirectoryPage extends Page {
         }
 
         if (this.enabledGroupFilters.length > 0) {
-            params.qBuilder = { groups: 'group:' + this.enabledGroupFilters.join(',') };
+            const groupsQ = this.enabledGroupFilters.reduce((prev, curr) => {
+                return `${prev}${prev ? ' ' : ''}group:${curr}`;
+            }, '');
+
+            params.qBuilder = { groups: groupsQ };
         } else {
             params.qBuilder = { groups: '', q: moreQ.trim() };
         }
 
         this.state.refreshParams(params);
+
+        const routeParams = { ...params };
+        delete routeParams.qBuilder;
+
+        m.route.set(app.route('fof_user_directory', routeParams));
     }
 
     stickyParams() {

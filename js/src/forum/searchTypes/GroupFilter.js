@@ -52,7 +52,7 @@ export default class GroupFilter extends AbstractType {
 
     applyFilter(params, group) {
         params.q = params.q ? params.q + ' ' : '';
-        params.q += 'group:' + group.namePlural();
+        params.q += 'group:' + group.id();
     }
 
     initializeFromParams(params) {
@@ -65,7 +65,7 @@ export default class GroupFilter extends AbstractType {
         const groups = [];
 
         app.store.all('groups').forEach((group) => {
-            if (qWithSpacesAround.indexOf('group:' + group.namePlural()) !== -1) {
+            if (qWithSpacesAround.indexOf('group:' + group.id()) !== -1) {
                 groups.push(group);
             }
         });
