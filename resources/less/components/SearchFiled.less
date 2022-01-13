@@ -2,7 +2,6 @@
 .UserDirectorySearchInput {
     padding-top: 0;
     padding-bottom: 0;
-    height: auto;
     position: relative;
 
     @media (@tablet-up) {
@@ -13,6 +12,10 @@
     background-color: @body-bg;
     color: @text-color;
     border-color: @control-bg;
+
+    &:focus-within {
+        border-color: @primary-color;
+    }
 
     input {
         display: inline;
