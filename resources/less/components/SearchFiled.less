@@ -4,7 +4,10 @@
     padding-bottom: 0;
     height: auto;
     position: relative;
-    margin-left: 15px; // Space with sort dropdown
+
+    @media (@tablet-up) {
+        margin-left: 15px; // Space with sort dropdown
+    }
 
     // Same background as .focus to give it better visibility
     background-color: @body-bg;
