@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import UserCard from 'flarum/forum/components/UserCard';
 import ItemList from 'flarum/common/utils/ItemList';
 import humanTime from 'flarum/common/utils/humanTime';
