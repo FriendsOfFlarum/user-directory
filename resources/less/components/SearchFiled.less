@@ -1,14 +1,23 @@
+.Usersearchbox {
+    position: relative;
+}
+
 // Style based on TagDiscussionModal.less from flarum/tags
 .UserDirectorySearchInput {
+    overflow-x: auto;
     padding-top: 0;
     padding-bottom: 0;
     height: auto;
-    position: relative;
 
     // Same background as .focus to give it better visibility
     background-color: @body-bg;
     color: @text-color;
     border-color: @control-bg;
+
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     &:focus-within {
         border-color: @primary-color;
@@ -20,7 +29,6 @@
         margin-top: -4px;
         border: 0 !important;
         padding: 0;
-        width: 100%;
         margin-right: -100%;
         background: transparent !important;
     }
