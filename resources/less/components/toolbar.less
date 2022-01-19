@@ -1,4 +1,8 @@
 .User--directory .IndexPage-toolbar {
+    .IndexPage-toolbar-view {
+        display: inline-flex;
+    }
+
     @media @phone {
         display: flex;
         flex-direction: column;
@@ -77,5 +81,20 @@
         margin-top: 5px;
         width: 100%;
         margin-bottom: 5px;
+    }
+}
+
+@media @tablet-up {
+    .IndexPage-toolbar-action {
+        .item-clarkwinkelmann-mailing {
+            .Button {
+                & > .Button-icon {
+                    margin-right: 0;
+                }
+                & > .Button-label {
+                    display: none;
+                }
+            }
+        }
     }
 }
