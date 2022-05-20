@@ -4,6 +4,7 @@ import SmallUserCard from './SmallUserCard';
 import UserDirectoryList from './UserDirectoryList';
 import UserDirectoryListItem from './UserDirectoryListItem';
 import UserDirectoryPage from './UserDirectoryPage';
+import UserDirectoryUserCard from './UserDirectoryUserCard';
 
 export const components = {
   CheckableButton,
@@ -12,4 +13,5 @@ export const components = {
   UserDirectoryList,
   UserDirectoryListItem,
   UserDirectoryPage,
+  UserDirectoryUserCard,
 };

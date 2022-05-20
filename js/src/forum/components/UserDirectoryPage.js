@@ -79,7 +79,7 @@ export default class UserDirectoryPage extends Page {
   sidebarItems() {
     const items = IndexPage.prototype.sidebarItems();
 
-    items.replace(
+    items.setContent(
       'nav',
       SelectDropdown.component(
         {
@@ -133,7 +133,8 @@ export default class UserDirectoryPage extends Page {
         options: sortOptions,
         value: this.state.getParams().sort || app.forum.attribute('userDirectoryDefaultSort'),
         onchange: this.changeParams.bind(this),
-      })
+      }),
+      100
     );
 
     items.add(
@@ -146,14 +147,16 @@ export default class UserDirectoryPage extends Page {
           className: 'GroupFilterDropdown',
         },
         this.groupItems().toArray()
-      )
+      ),
+      80
     );
 
     items.add(
       'search',
       SearchField.component({
         state: this.state,
-      })
+      }),
+      60
     );
 
     return items;

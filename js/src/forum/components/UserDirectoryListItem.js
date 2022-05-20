@@ -1,6 +1,7 @@
 import Component from 'flarum/common/Component';
 import UserCard from 'flarum/forum/components/UserCard';
 import SmallUserCard from './SmallUserCard';
+import UserDirectoryUserCard from './UserDirectoryUserCard';
 
 export default class UserDirectoryListItem extends Component {
   view(vnode) {
@@ -12,6 +13,6 @@ export default class UserDirectoryListItem extends Component {
       controlsButtonClassName: 'Button Button--icon Button--flat',
     };
 
-    return <div className="User">{useSmallCards ? SmallUserCard.component(attributes) : UserCard.component(attributes)}</div>;
+    return <div className="User">{useSmallCards ? SmallUserCard.component(attributes) : UserDirectoryUserCard.component(attributes)}</div>;
   }
 }

@@ -16,6 +16,9 @@ fof-user-directory:
             load_more_button: => core.ref.load_more
             empty_text: We could not find any user matching your search.
             filter_button: Filter Groups
+            usercard:
+                discussion-count: "{count, plural, one { {count} discussion} other {{count} discussions}}"
+                post-count: "{count, plural, one { {count} post} other {{count} posts}}"
 
     admin:
         permissions:
