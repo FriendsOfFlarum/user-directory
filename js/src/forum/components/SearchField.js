@@ -8,206 +8,206 @@ import TextFilter from '../searchTypes/TextFilter';
 import GroupFilter from '../searchTypes/GroupFilter';
 
 export default class SearchField extends Component {
-    oninit(vnode) {
-        super.oninit(vnode);
+  oninit(vnode) {
+    super.oninit(vnode);
 
-        this.searchIndex = 0;
-        this.navigator = new KeyboardNavigatable();
-        this.navigator
-            .when((event) => {
-                // Do not handle keyboard when TAB is pressed and there's nothing in field
-                // Without this it's impossible to TAB out of the field
-                return event.key !== 'Tab' || !!this.filter;
-            })
-            .onUp(() => {
-                if (this.searchIndex > 0) {
-                    this.searchIndex--;
-                    m.redraw();
-                }
-            })
-            .onDown(() => {
-                if (this.searchIndex < this.allSuggestions().length - 1) {
-                    this.searchIndex++;
-                    m.redraw();
-                }
-            })
-            .onSelect(() => {
-                if (this.filter) {
-                    this.selectResult(this.allSuggestions()[this.searchIndex]);
-                    m.redraw();
-                } else {
+    this.searchIndex = 0;
+    this.navigator = new KeyboardNavigatable();
+    this.navigator
+      .when((event) => {
+        // Do not handle keyboard when TAB is pressed and there's nothing in field
+        // Without this it's impossible to TAB out of the field
+        return event.key !== 'Tab' || !!this.filter;
+      })
+      .onUp(() => {
+        if (this.searchIndex > 0) {
+          this.searchIndex--;
+          m.redraw();
+        }
+      })
+      .onDown(() => {
+        if (this.searchIndex < this.allSuggestions().length - 1) {
+          this.searchIndex++;
+          m.redraw();
+        }
+      })
+      .onSelect(() => {
+        if (this.filter) {
+          this.selectResult(this.allSuggestions()[this.searchIndex]);
+          m.redraw();
+        } else {
+          this.applyFiltering();
+        }
+      })
+      .onRemove(() => {
+        this.appliedFilters.pop();
+      });
+
+    this.availableFilters = this.filterTypes().toArray();
+    this.appliedFilters = [];
+
+    this.filter = '';
+    this.focused = false;
+
+    // When the page loads, initialize UI with filters from the parameters
+    this.availableFilters.forEach((filter) => {
+      filter
+        .initializeFromParams({
+          sort: m.route.param('sort'),
+          q: m.route.param('q'),
+        })
+        .then((resources) => {
+          this.appliedFilters.push(...resources);
+          m.redraw();
+        });
+    });
+  }
+
+  view() {
+    const suggestions = this.allSuggestions();
+
+    const loading = this.availableFilters.some((filter) => filter.loading);
+
+    return (
+      <div className="Form-group Usersearchbox">
+        <div className={`UserDirectorySearchInput FormControl ${this.focused ? 'focus' : ''}`}>
+          <span className="UserDirectorySearchInput-selected">
+            {this.appliedFilters.map((recipient, index) => (
+              <span
+                className="UserDirectorySearchInput-filter"
+                onclick={() => {
+                  this.appliedFilters.splice(index, 1);
+                  this.applyFiltering();
+                }}
+                title={this.searchResultKind(recipient)}
+              >
+                {this.recipientLabel(recipient)}
+              </span>
+            ))}
+          </span>
+          <input
+            className="FormControl"
+            placeholder={app.translator.trans('fof-user-directory.forum.search.field.placeholder')}
+            value={this.filter}
+            oninput={withAttr('value', (value) => {
+              this.filter = value;
+              this.performNewSearch();
+            })}
+            onkeydown={this.navigator.navigate.bind(this.navigator)}
+            onfocus={() => {
+              this.focused = true;
+            }}
+            onblur={() => {
+              this.focused = false;
+            }}
+          />
+          {loading && <LoadingIndicator />}
+          {!!suggestions.length && (
+            <ul className="Dropdown-menu">
+              {suggestions.map((result, index) => (
+                <li
+                  className={this.searchIndex === index ? 'active' : ''}
+                  onclick={() => {
+                    this.selectResult(result);
                     this.applyFiltering();
-                }
-            })
-            .onRemove(() => {
-                this.appliedFilters.pop();
-            });
+                  }}
+                >
+                  <button type="button">
+                    <span className="UserDirectorySearchKind">{this.searchResultKind(result)}</span>
+                    {this.recipientLabel(result)}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    );
+  }
 
-        this.availableFilters = this.filterTypes().toArray();
-        this.appliedFilters = [];
+  filterTypes() {
+    const items = new ItemList();
 
-        this.filter = '';
-        this.focused = false;
+    items.add('text', new TextFilter(), 10);
+    items.add('group', new GroupFilter(), 20);
 
-        // When the page loads, initialize UI with filters from the parameters
-        this.availableFilters.forEach((filter) => {
-            filter
-                .initializeFromParams({
-                    sort: m.route.param('sort'),
-                    q: m.route.param('q'),
-                })
-                .then((resources) => {
-                    this.appliedFilters.push(...resources);
-                    m.redraw();
-                });
-        });
+    return items;
+  }
+
+  filterForResource(resource) {
+    return this.availableFilters.find((f) => f.resourceType() === resource.data.type);
+  }
+
+  recipientLabel(resource) {
+    const filter = this.filterForResource(resource);
+
+    if (filter) {
+      return filter.renderLabel(resource);
     }
 
-    view() {
-        const suggestions = this.allSuggestions();
+    return '[unknown]';
+  }
 
-        const loading = this.availableFilters.some((filter) => filter.loading);
+  searchResultKind(resource) {
+    const filter = this.filterForResource(resource);
 
-        return (
-            <div className="Form-group Usersearchbox">
-                <div className={`UserDirectorySearchInput FormControl ${this.focused ? 'focus' : ''}`}>
-                    <span className="UserDirectorySearchInput-selected">
-                        {this.appliedFilters.map((recipient, index) => (
-                            <span
-                                className="UserDirectorySearchInput-filter"
-                                onclick={() => {
-                                    this.appliedFilters.splice(index, 1);
-                                    this.applyFiltering();
-                                }}
-                                title={this.searchResultKind(recipient)}
-                            >
-                                {this.recipientLabel(recipient)}
-                            </span>
-                        ))}
-                    </span>
-                    <input
-                        className="FormControl"
-                        placeholder={app.translator.trans('fof-user-directory.forum.search.field.placeholder')}
-                        value={this.filter}
-                        oninput={withAttr('value', (value) => {
-                            this.filter = value;
-                            this.performNewSearch();
-                        })}
-                        onkeydown={this.navigator.navigate.bind(this.navigator)}
-                        onfocus={() => {
-                            this.focused = true;
-                        }}
-                        onblur={() => {
-                            this.focused = false;
-                        }}
-                    />
-                    {loading && <LoadingIndicator />}
-                    {!!suggestions.length && (
-                        <ul className="Dropdown-menu">
-                            {suggestions.map((result, index) => (
-                                <li
-                                    className={this.searchIndex === index ? 'active' : ''}
-                                    onclick={() => {
-                                        this.selectResult(result);
-                                        this.applyFiltering();
-                                    }}
-                                >
-                                    <button type="button">
-                                        <span className="UserDirectorySearchKind">{this.searchResultKind(result)}</span>
-                                        {this.recipientLabel(result)}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            </div>
-        );
+    if (filter) {
+      return filter.renderKind(resource);
     }
 
-    filterTypes() {
-        const items = new ItemList();
+    return '[unknown]';
+  }
 
-        items.add('text', new TextFilter(), 10);
-        items.add('group', new GroupFilter(), 20);
-
-        return items;
+  selectResult(result) {
+    if (!result) {
+      return;
     }
 
-    filterForResource(resource) {
-        return this.availableFilters.find((f) => f.resourceType() === resource.data.type);
-    }
+    this.appliedFilters.push(result);
+    this.clearSuggestions();
+  }
 
-    recipientLabel(resource) {
-        const filter = this.filterForResource(resource);
+  clearSuggestions() {
+    this.filter = '';
+    this.availableFilters.forEach((filter) => {
+      filter.search('');
+    });
+  }
 
-        if (filter) {
-            return filter.renderLabel(resource);
-        }
+  allSuggestions() {
+    return [].concat(...this.availableFilters.map((filter) => filter.suggestions));
+  }
 
-        return '[unknown]';
-    }
+  performNewSearch() {
+    this.searchIndex = 0;
 
-    searchResultKind(resource) {
-        const filter = this.filterForResource(resource);
+    this.availableFilters.forEach((filter) => {
+      filter.search(this.filter);
+    });
 
-        if (filter) {
-            return filter.renderKind(resource);
-        }
+    this.attrs.state.refreshParams({ ...this.attrs.state.getParams(), qBuilder: this.qBuilder() });
+  }
 
-        return '[unknown]';
-    }
+  qBuilder(params = {}) {
+    this.appliedFilters.forEach((resource) => {
+      const filter = this.filterForResource(resource);
 
-    selectResult(result) {
-        if (!result) {
-            return;
-        }
+      if (filter) {
+        filter.applyFilter(params, resource);
+      } else {
+        console.warn('Cannot find filter class for resource', resource);
+      }
+    });
+    return { filter: `${this.filter} ${params.q || ''}` };
+  }
 
-        this.appliedFilters.push(result);
-        this.clearSuggestions();
-    }
+  applyFiltering() {
+    const params = {
+      sort: m.route.param('sort'),
+    };
 
-    clearSuggestions() {
-        this.filter = '';
-        this.availableFilters.forEach((filter) => {
-            filter.search('');
-        });
-    }
+    this.qBuilder(params);
 
-    allSuggestions() {
-        return [].concat(...this.availableFilters.map((filter) => filter.suggestions));
-    }
-
-    performNewSearch() {
-        this.searchIndex = 0;
-
-        this.availableFilters.forEach((filter) => {
-            filter.search(this.filter);
-        });
-
-        this.attrs.state.refreshParams({ ...this.attrs.state.getParams(), qBuilder: this.qBuilder() });
-    }
-
-    qBuilder(params = {}) {
-        this.appliedFilters.forEach((resource) => {
-            const filter = this.filterForResource(resource);
-
-            if (filter) {
-                filter.applyFilter(params, resource);
-            } else {
-                console.warn('Cannot find filter class for resource', resource);
-            }
-        });
-        return { filter: `${this.filter} ${params.q || ''}` };
-    }
-
-    applyFiltering() {
-        const params = {
-            sort: m.route.param('sort'),
-        };
-
-        this.qBuilder(params);
-
-        m.route.set(app.route('fof_user_directory', params));
-    }
+    m.route.set(app.route('fof_user_directory', params));
+  }
 }
