@@ -15,51 +15,51 @@ import Text from './models/Text';
 export { UserDirectoryPage, UserDirectoryList, UserDirectoryListItem, UserDirectoryState, SortMap, CheckableButton };
 
 app.initializers.add('fof-user-directory', (app) => {
-    app.routes.fof_user_directory = {
-        path: '/users',
-        component: UserDirectoryPage,
-    };
+  app.routes.fof_user_directory = {
+    path: '/users',
+    component: UserDirectoryPage,
+  };
 
-    app.store.models['fof-user-directory-text'] = Text;
+  app.store.models['fof-user-directory-text'] = Text;
 
-    extend(UsersSearchSource.prototype, 'view', function (view, query) {
-        if (!view || app.forum.attribute('userDirectoryDisableGlobalSearchSource')) {
-            return;
-        }
+  extend(UsersSearchSource.prototype, 'view', function (view, query) {
+    if (!view || app.forum.attribute('userDirectoryDisableGlobalSearchSource')) {
+      return;
+    }
 
-        query = query.toLowerCase();
+    query = query.toLowerCase();
 
-        view.splice(
-            1,
-            0,
-            m(
-                'li',
-                LinkButton.component(
-                    {
-                        href: app.route('fof_user_directory', { q: query }),
-                        icon: 'fas fa-search',
-                    },
-                    app.translator.trans('fof-user-directory.forum.search.users_heading', { query })
-                )
-            )
-        );
-    });
+    view.splice(
+      1,
+      0,
+      m(
+        'li',
+        LinkButton.component(
+          {
+            href: app.route('fof_user_directory', { q: query }),
+            icon: 'fas fa-search',
+          },
+          app.translator.trans('fof-user-directory.forum.search.users_heading', { query })
+        )
+      )
+    );
+  });
 
-    extend(IndexPage.prototype, 'navItems', (items) => {
-        if (app.forum.attribute('canSeeUserDirectoryLink')) {
-            items.add(
-                'fof-user-directory',
-                LinkButton.component(
-                    {
-                        href: app.route('fof_user_directory'),
-                        icon: 'far fa-address-book',
-                    },
-                    app.translator.trans('fof-user-directory.forum.page.nav')
-                ),
-                85
-            );
-        }
-    });
+  extend(IndexPage.prototype, 'navItems', (items) => {
+    if (app.forum.attribute('canSeeUserDirectoryLink')) {
+      items.add(
+        'fof-user-directory',
+        LinkButton.component(
+          {
+            href: app.route('fof_user_directory'),
+            icon: 'far fa-address-book',
+          },
+          app.translator.trans('fof-user-directory.forum.page.nav')
+        ),
+        85
+      );
+    }
+  });
 });
 
 export * from './components';

@@ -6,70 +6,70 @@ import AbstractType from './AbstractType';
 /* global m */
 
 export default class GroupFilter extends AbstractType {
-    resourceType() {
-        return 'groups';
+  resourceType() {
+    return 'groups';
+  }
+
+  search(query) {
+    this.suggestions = [];
+
+    if (!query) {
+      return;
     }
 
-    search(query) {
-        this.suggestions = [];
+    query = query.toLowerCase();
 
-        if (!query) {
-            return;
-        }
+    app.store.all('groups').forEach((group) => {
+      // Do not allow Guest group as it wouldn't do anything
+      if (group.id() === Group.GUEST_ID) {
+        return;
+      }
 
-        query = query.toLowerCase();
+      if (group.nameSingular().toLowerCase().indexOf(query) !== -1 || group.namePlural().toLowerCase().indexOf(query) !== -1) {
+        this.suggestions.push(group);
+      }
+    });
+  }
 
-        app.store.all('groups').forEach((group) => {
-            // Do not allow Guest group as it wouldn't do anything
-            if (group.id() === Group.GUEST_ID) {
-                return;
-            }
+  renderKind() {
+    return app.translator.trans('fof-user-directory.forum.search.kinds.group');
+  }
 
-            if (group.nameSingular().toLowerCase().indexOf(query) !== -1 || group.namePlural().toLowerCase().indexOf(query) !== -1) {
-                this.suggestions.push(group);
-            }
-        });
+  renderLabel(group) {
+    return m(
+      '.UserDirectorySearchLabel',
+      group.color()
+        ? {
+            className: 'colored',
+            style: {
+              backgroundColor: group.color(),
+            },
+          }
+        : {},
+      [group.icon() ? [icon(group.icon()), ' '] : null, group.namePlural()]
+    );
+  }
+
+  applyFilter(params, group) {
+    params.q = params.q ? params.q + ' ' : '';
+    params.q += 'group:' + group.id();
+  }
+
+  initializeFromParams(params) {
+    if (!params.q) {
+      return Promise.resolve([]);
     }
 
-    renderKind() {
-        return app.translator.trans('fof-user-directory.forum.search.kinds.group');
-    }
+    const qWithSpacesAround = ' ' + params.q + ' ';
 
-    renderLabel(group) {
-        return m(
-            '.UserDirectorySearchLabel',
-            group.color()
-                ? {
-                      className: 'colored',
-                      style: {
-                          backgroundColor: group.color(),
-                      },
-                  }
-                : {},
-            [group.icon() ? [icon(group.icon()), ' '] : null, group.namePlural()]
-        );
-    }
+    const groups = [];
 
-    applyFilter(params, group) {
-        params.q = params.q ? params.q + ' ' : '';
-        params.q += 'group:' + group.id();
-    }
+    app.store.all('groups').forEach((group) => {
+      if (qWithSpacesAround.indexOf('group:' + group.id()) !== -1) {
+        groups.push(group);
+      }
+    });
 
-    initializeFromParams(params) {
-        if (!params.q) {
-            return Promise.resolve([]);
-        }
-
-        const qWithSpacesAround = ' ' + params.q + ' ';
-
-        const groups = [];
-
-        app.store.all('groups').forEach((group) => {
-            if (qWithSpacesAround.indexOf('group:' + group.id()) !== -1) {
-                groups.push(group);
-            }
-        });
-
-        return Promise.resolve(groups);
-    }
+    return Promise.resolve(groups);
+  }
 }

@@ -6,10 +6,10 @@ import UserDirectoryListItem from './UserDirectoryListItem';
 import UserDirectoryPage from './UserDirectoryPage';
 
 export const components = {
-    CheckableButton,
-    SearchField,
-    SmallUserCard,
-    UserDirectoryList,
-    UserDirectoryListItem,
-    UserDirectoryPage,
+  CheckableButton,
+  SearchField,
+  SmallUserCard,
+  UserDirectoryList,
+  UserDirectoryListItem,
+  UserDirectoryPage,
 };

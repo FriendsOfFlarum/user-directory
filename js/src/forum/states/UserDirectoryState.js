@@ -4,130 +4,130 @@
 import SortMap from '../../common/utils/SortMap';
 
 export default class UserDirectoryState {
-    constructor(params = {}, app = window.app) {
-        this.params = params;
+  constructor(params = {}, app = window.app) {
+    this.params = params;
 
-        this.app = app;
+    this.app = app;
 
+    this.users = [];
+
+    this.moreResults = false;
+
+    this.loading = false;
+
+    this.qBuilder = {};
+  }
+
+  requestParams() {
+    const params = { include: [], filter: {} };
+
+    const sortKey = this.params.sort || app.forum.attribute('userDirectoryDefaultSort');
+
+    // sort might be set to null if no sort params has been passed
+    params.sort = this.sortMap()[sortKey];
+
+    if (this.params.q) {
+      params.filter.q = this.params.q;
+    }
+
+    return params;
+  }
+
+  sortMap() {
+    return {
+      default: '',
+      ...new SortMap().sortMap(),
+    };
+  }
+
+  getParams() {
+    return this.params;
+  }
+
+  clear() {
+    this.users = [];
+    m.redraw();
+  }
+
+  refreshParams(newParams) {
+    if (!this.hasUsers() || Object.keys(newParams).some((key) => this.getParams()[key] !== newParams[key])) {
+      const q = '';
+      this.params = newParams;
+
+      if (newParams.qBuilder) {
+        Object.assign(this.qBuilder, newParams.qBuilder || {});
+        this.params.q = Object.values(this.qBuilder).join(' ').trim();
+      }
+
+      if (!this.params.q && q) {
+        this.params.q = q;
+      }
+
+      this.refresh();
+    }
+  }
+
+  refresh() {
+    this.loading = true;
+
+    this.clear();
+
+    return this.loadResults().then(
+      (results) => {
         this.users = [];
-
-        this.moreResults = false;
-
+        this.parseResults(results);
+      },
+      () => {
         this.loading = false;
-
-        this.qBuilder = {};
-    }
-
-    requestParams() {
-        const params = { include: [], filter: {} };
-
-        const sortKey = this.params.sort || app.forum.attribute('userDirectoryDefaultSort');
-
-        // sort might be set to null if no sort params has been passed
-        params.sort = this.sortMap()[sortKey];
-
-        if (this.params.q) {
-            params.filter.q = this.params.q;
-        }
-
-        return params;
-    }
-
-    sortMap() {
-        return {
-            default: '',
-            ...new SortMap().sortMap(),
-        };
-    }
-
-    getParams() {
-        return this.params;
-    }
-
-    clear() {
-        this.users = [];
         m.redraw();
+      }
+    );
+  }
+
+  loadResults(offset) {
+    const preloadedUsers = this.app.preloadedApiDocument();
+
+    if (preloadedUsers) {
+      return Promise.resolve(preloadedUsers);
     }
 
-    refreshParams(newParams) {
-        if (!this.hasUsers() || Object.keys(newParams).some((key) => this.getParams()[key] !== newParams[key])) {
-            const q = '';
-            this.params = newParams;
+    const params = this.requestParams();
+    params.page = { offset };
+    params.include = params.include.join(',');
 
-            if (newParams.qBuilder) {
-                Object.assign(this.qBuilder, newParams.qBuilder || {});
-                this.params.q = Object.values(this.qBuilder).join(' ').trim();
-            }
+    return this.app.store.find('users', params);
+  }
 
-            if (!this.params.q && q) {
-                this.params.q = q;
-            }
+  loadMore() {
+    this.loading = true;
 
-            this.refresh();
-        }
-    }
+    this.loadResults(this.users.length).then(this.parseResults.bind(this));
+  }
 
-    refresh() {
-        this.loading = true;
+  parseResults(results) {
+    this.users.push(...results);
 
-        this.clear();
+    this.loading = false;
+    this.moreResults = !!results.payload.links && !!results.payload.links.next;
 
-        return this.loadResults().then(
-            (results) => {
-                this.users = [];
-                this.parseResults(results);
-            },
-            () => {
-                this.loading = false;
-                m.redraw();
-            }
-        );
-    }
+    m.redraw();
 
-    loadResults(offset) {
-        const preloadedUsers = this.app.preloadedApiDocument();
+    return results;
+  }
 
-        if (preloadedUsers) {
-            return Promise.resolve(preloadedUsers);
-        }
+  hasUsers() {
+    return this.users.length > 0;
+  }
 
-        const params = this.requestParams();
-        params.page = { offset };
-        params.include = params.include.join(',');
+  isLoading() {
+    return this.loading;
+  }
 
-        return this.app.store.find('users', params);
-    }
+  isSearchResults() {
+    return !!this.params.q;
+  }
 
-    loadMore() {
-        this.loading = true;
-
-        this.loadResults(this.users.length).then(this.parseResults.bind(this));
-    }
-
-    parseResults(results) {
-        this.users.push(...results);
-
-        this.loading = false;
-        this.moreResults = !!results.payload.links && !!results.payload.links.next;
-
-        m.redraw();
-
-        return results;
-    }
-
-    hasUsers() {
-        return this.users.length > 0;
-    }
-
-    isLoading() {
-        return this.loading;
-    }
-
-    isSearchResults() {
-        return !!this.params.q;
-    }
-
-    empty() {
-        return !this.hasUsers() && !this.isLoading();
-    }
+  empty() {
+    return !this.hasUsers() && !this.isLoading();
+  }
 }
