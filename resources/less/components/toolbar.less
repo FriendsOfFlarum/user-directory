@@ -1,58 +1,64 @@
-.User--directory .IndexPage-toolbar {
-    .IndexPage-toolbar-view > li {
-        vertical-align: middle;
-    }
-    @media @phone {
+.User--directory {
+    .IndexPage-toolbar {
         display: flex;
-        flex-direction: column;
+        row-gap: 10px;
 
-        .IndexPage-toolbar-view,
-        .IndexPage-toolbar-action {
+        .IndexPage-toolbar-view {
             display: flex;
-            flex-wrap: wrap;
-        }
-        .IndexPage-toolbar-view {
-            flex-wrap: wrap-reverse;
-            margin-bottom: 5px;
+            column-gap: 10px;
+            row-gap: 5px;
+            flex-grow: 1;
 
-            & > li {
-                margin-right: 0;
+            > li {
+                vertical-align: middle;
+                width: fit-content;
             }
         }
 
-        .IndexPage-toolbar-action {
-            & > li {
-                margin-left: 0;
+        @media @phone {
+            flex-direction: column;
+
+            .item-search {
+                flex: 0 1 100%;
             }
-            li.item-refresh {
-                margin-left: auto;
+
+            .IndexPage-toolbar-view,
+            .IndexPage-toolbar-action {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .IndexPage-toolbar-view {
+                flex-wrap: wrap-reverse;
+                justify-content: space-between;
+
+                & > li {
+                    margin-right: 0;
+                }
+            }
+
+            .IndexPage-toolbar-action {
+                flex-shrink: 1;
+                float: none;
+
+                & > li {
+                    margin-left: 0;
+                }
+                li.item-refresh {
+                    margin-left: auto;
+                }
             }
         }
-    }
-    @media screen and (max-width: 370px) {
-        .IndexPage-toolbar-view {
-            & > li {
-                width: 100%;
+        @media screen and (max-width: 370px) {
+            .IndexPage-toolbar-view {
+                & > li {
+                    width: 100%;
+                }
             }
         }
     }
 }
 
 .item-filterGroups {
-    margin-left: 15px;
-
-    @media screen and (max-width: 370px) {
-        margin-bottom: 5px;
-    }
-
-    @media screen and (max-width: 320px) {
-        margin-left: 0;
-    }
-
-    @media @phone {
-        margin-left: auto;
-    }
-
     .ButtonGroup {
         button {
             @media @phone {
@@ -70,14 +76,6 @@
         .ButtonCheck {
             margin-left: 10px;
         }
-    }
-}
-
-.item-search {
-    @media @phone {
-        margin-top: 5px;
-        width: 100%;
-        margin-bottom: 5px;
     }
 }
 

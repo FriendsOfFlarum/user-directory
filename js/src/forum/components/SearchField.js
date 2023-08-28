@@ -70,7 +70,7 @@ export default class SearchField extends Component {
 
     return (
       <div className="Form-group Usersearchbox">
-        <div className={`UserDirectorySearchInput FormControl ${this.focused ? 'focus' : ''}`}>
+        <label className={`UserDirectorySearchInput FormControl ${this.focused ? 'focus' : ''}`}>
           <span className="UserDirectorySearchInput-selected">
             {this.appliedFilters.map((recipient, index) => (
               <span
@@ -120,7 +120,7 @@ export default class SearchField extends Component {
               ))}
             </ul>
           )}
-        </div>
+        </label>
       </div>
     );
   }
