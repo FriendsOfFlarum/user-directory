@@ -23,7 +23,7 @@ app.initializers.add('fof-user-directory', (app) => {
   app.store.models['fof-user-directory-text'] = Text;
 
   extend(UsersSearchSource.prototype, 'view', function (view, query) {
-    if (!view || app.forum.attribute('userDirectoryDisableGlobalSearchSource')) {
+    if (!view || !app.forum.attribute('canSeeUserDirectoryLink') || app.forum.attribute('userDirectoryDisableGlobalSearchSource')) {
       return;
     }
 
@@ -46,7 +46,7 @@ app.initializers.add('fof-user-directory', (app) => {
   });
 
   extend(IndexPage.prototype, 'navItems', (items) => {
-    if (app.forum.attribute('canSeeUserDirectoryLink')) {
+    if (app.forum.attribute('canSeeUserDirectoryLink') && app.forum.attribute('canSearchUsers')) {
       items.add(
         'fof-user-directory',
         LinkButton.component(

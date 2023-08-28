@@ -31,7 +31,7 @@ class PermissionBasedForumSettings
         $attributes = [];
 
         // The link is visible if the user can access the user directory AND the link was enabled in extension settings
-        $attributes['canSeeUserDirectoryLink'] = $serializer->getActor()->can('fof.user-directory.view') && $this->settings->get('fof-user-directory-link');
+        $attributes['canSeeUserDirectoryLink'] = $serializer->getActor()->can('seeUserList');
         $attributes['userDirectorySmallCards'] = (bool) $this->settings->get('fof-user-directory.use-small-cards');
         $attributes['userDirectoryDisableGlobalSearchSource'] = (bool) $this->settings->get('fof-user-directory.disable-global-search-source');
         $attributes['userDirectoryDefaultSort'] = $this->settings->get('fof-user-directory.default-sort') ?: 'default';

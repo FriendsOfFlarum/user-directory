@@ -13,6 +13,7 @@ namespace FoF\UserDirectory;
 
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Extend;
+use Flarum\User\User;
 
 return [
     (new Extend\Frontend('admin'))
@@ -27,6 +28,9 @@ return [
 
     (new Extend\ApiSerializer(ForumSerializer::class))
         ->attributes(PermissionBasedForumSettings::class),
+
+    (new Extend\Policy())
+        ->modelPolicy(User::class, Access\UserPolicy::class),
 
     (new Extend\View())
         ->namespace('fof.user-directory', __DIR__.'/resources/views'),

@@ -13,8 +13,9 @@ namespace FoF\UserDirectory\Content;
 
 use Flarum\Api\Client;
 use Flarum\Frontend\Document;
-use Flarum\Http\Exception\RouteNotFoundException;
+use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\Exception\PermissionDeniedException;
 use Flarum\User\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Arr;
@@ -54,16 +55,18 @@ class UserDirectory
 
     private function getDocument(User $actor, array $params, Request $request)
     {
-        if ($actor->cannot('fof.user-directory.view')) {
-            throw new RouteNotFoundException();
-        }
+        $actor->assertCan('seeUserList');
 
         return json_decode($this->api->withQueryParams($params)->withParentRequest($request)->get('/users')->getBody());
     }
 
-    public function __invoke(Document $document, Request $request)
+    /**
+     * @throws PermissionDeniedException
+     */
+    public function __invoke(Document $document, Request $request): Document
     {
         $queryParams = $request->getQueryParams();
+        $actor = RequestUtil::getActor($request);
 
         $sort = Arr::pull($queryParams, 'sort') ?: resolve(SettingsRepositoryInterface::class)->get('fof-user-directory.default-sort');
         $q = Arr::pull($queryParams, 'q');
@@ -76,7 +79,7 @@ class UserDirectory
             'page'   => ['offset' => ($page - 1) * 20, 'limit' => 20],
         ];
 
-        $apiDocument = $this->getDocument($request->getAttribute('actor'), $params, $request);
+        $apiDocument = $this->getDocument($actor, $params, $request);
 
         $document->content = $this->view->make('fof.user-directory::index', compact('page', 'apiDocument'));
 
