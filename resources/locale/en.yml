@@ -28,6 +28,7 @@ fof-user-directory:
             default-sort: Default sort
             use-small-cards: Use small user cards
             disable-global-search-source: Do not add User Directory to the Flarum global search field
+            link-group-mentions: Link group mentions in posts to the User Directory
 
     lib:
         sort:

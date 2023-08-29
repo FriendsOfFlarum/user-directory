@@ -35,6 +35,7 @@ class PermissionBasedForumSettings
         $attributes['userDirectorySmallCards'] = (bool) $this->settings->get('fof-user-directory.use-small-cards');
         $attributes['userDirectoryDisableGlobalSearchSource'] = (bool) $this->settings->get('fof-user-directory.disable-global-search-source');
         $attributes['userDirectoryDefaultSort'] = $this->settings->get('fof-user-directory.default-sort') ?: 'default';
+        $attributes['userDirectoryLinkGroupMentions'] = (bool) $this->settings->get('fof-user-directory.link-group-mentions');
 
         // Only serialize if the actor has permission
         if ($permission = $serializer->getActor()->hasPermission('user.suspend')) {
