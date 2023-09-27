@@ -8,6 +8,7 @@ import Button from 'flarum/common/components/Button';
 import LinkButton from 'flarum/common/components/LinkButton';
 import SelectDropdown from 'flarum/common/components/SelectDropdown';
 import Dropdown from 'flarum/common/components/Dropdown';
+import extractText from 'flarum/common/utils/extractText';
 import UserDirectoryList from './UserDirectoryList';
 import UserDirectoryState from '../states/UserDirectoryState';
 import CheckableButton from './CheckableButton';
@@ -46,6 +47,12 @@ export default class UserDirectoryPage extends Page {
     }
 
     app.history.push('users', app.translator.trans('fof-user-directory.forum.header.back_to_user_directory_tooltip'));
+  }
+
+  oncreate(vnode) {
+    super.oncreate(vnode);
+
+    app.setTitle(extractText(app.translator.trans('fof-user-directory.forum.page.nav')));
   }
 
   view() {

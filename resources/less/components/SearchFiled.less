@@ -2,18 +2,27 @@
 .UserDirectorySearchInput {
     padding-top: 0;
     padding-bottom: 0;
+    margin-bottom: 0 !important;
     height: auto;
+    min-height: 36px; // Same as .FormControl
     position: relative;
-    margin-left: 15px; // Space with sort dropdown
+
+    display: grid !important;
+    grid-template-columns: max-content 1fr;
+    column-gap: 10px;
 
     @media @phone {
         margin-left: 0;
     }
 
     // Same background as .focus to give it better visibility
-    background-color: @body-bg;
-    color: @text-color;
-    border-color: @control-bg;
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    border-color: var(--control-bg);
+
+    &:focus-within {
+        border-color: var(--primary-color);
+    }
 
     input {
         display: inline;
@@ -41,17 +50,17 @@
     }
 }
 
-.UserDirectorySearchInput-filter {
-    cursor: not-allowed;
-}
-
 .UserDirectorySearchInput-selected {
-    .UserDirectorySearchInput-filter {
-        margin-right: 5px;
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
 
-        &:last-child {
-            margin-right: 10px;
-        }
+    &:empty {
+        display: none;
+    }
+
+    .UserDirectorySearchInput-filter {
+        cursor: not-allowed;
     }
 }
 
@@ -60,13 +69,13 @@
     font-weight: 600;
     display: inline-block;
     padding: 0.1em 0.5em;
-    border-radius: @border-radius;
-    background: @control-bg;
-    color: @control-color;
+    border-radius: var(--border-radius);
+    background: var(--control-bg);
+    color: var(--control-color);
     text-transform: none;
 
     &.colored {
-        color: @body-bg !important;
+        color: var(--body-bg) !important;
     }
 }
 

@@ -30,6 +30,11 @@ app.initializers.add('fof-user-directory', (app) => {
       type: 'boolean',
     })
     .registerSetting({
+      setting: 'fof-user-directory.link-group-mentions',
+      label: app.translator.trans('fof-user-directory.admin.settings.link-group-mentions'),
+      type: 'boolean',
+    })
+    .registerSetting({
       setting: 'fof-user-directory.default-sort',
       label: app.translator.trans('fof-user-directory.admin.settings.default-sort'),
       options: sortOptions,
