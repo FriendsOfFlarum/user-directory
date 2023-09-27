@@ -64,10 +64,15 @@ export default class GroupFilter extends AbstractType {
 
     const groups = [];
 
+    const queryGroups = qWithSpacesAround.split(' ').filter((q) => q.startsWith('group:'));
+
     app.store.all('groups').forEach((group) => {
-      if (qWithSpacesAround.indexOf('group:' + group.id()) !== -1) {
-        groups.push(group);
-      }
+      queryGroups.forEach((queryGroup) => {
+        const groupIds = queryGroup.replace('group:', '').split(',');
+        if (groupIds.includes(group.id())) {
+          groups.push(group);
+        }
+      });
     });
 
     return Promise.resolve(groups);
