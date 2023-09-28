@@ -30,7 +30,7 @@ return [
         ->attributes(PermissionBasedForumSettings::class),
 
     (new Extend\Policy())
-        ->modelPolicy(User::class, Access\UserPolicy::class),
+        ->globalPolicy(Access\UserPolicy::class),
 
     (new Extend\View())
         ->namespace('fof.user-directory', __DIR__.'/resources/views'),
