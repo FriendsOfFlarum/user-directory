@@ -13,7 +13,6 @@ namespace FoF\UserDirectory;
 
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Extend;
-use Flarum\User\User;
 
 return [
     (new Extend\Frontend('admin'))
