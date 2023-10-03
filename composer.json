@@ -14,14 +14,14 @@
         "issues": "https://github.com/FriendsOfFlarum/user-directory/issues",
         "source": "https://github.com/FriendsOfFlarum/user-directory",
         "forum": "https://discuss.flarum.org/d/5682"
-      },
-      "homepage": "https://friendsofflarum.org",
-      "funding": [
+    },
+    "homepage": "https://friendsofflarum.org",
+    "funding": [
         {
-          "type": "website",
-          "url": "https://opencollective.com/fof/donate"
+            "type": "website",
+            "url": "https://opencollective.com/fof/donate"
         }
-      ],
+    ],
     "authors": [
         {
             "name": "Daniël Klabbers",
@@ -56,11 +56,40 @@
         },
         "flagrow": {
             "discuss": "https://discuss.flarum.org/d/5682"
+        },
+        "flarum-cli": {
+            "modules": {
+                "githubActions": true,
+                "backendTesting": true
+            }
         }
     },
     "autoload": {
         "psr-4": {
             "FoF\\UserDirectory\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FoF\\UserDirectory\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@test:unit",
+            "@test:integration"
+        ],
+        "test:unit": "phpunit -c tests/phpunit.unit.xml",
+        "test:integration": "phpunit -c tests/phpunit.integration.xml",
+        "test:setup": "@php tests/integration/setup.php"
+    },
+    "scripts-descriptions": {
+        "test": "Runs all tests.",
+        "test:unit": "Runs all unit tests.",
+        "test:integration": "Runs all integration tests.",
+        "test:setup": "Sets up a database for use with integration tests. Execute this only once."
+    },
+    "require-dev": {
+        "flarum/testing": "^1.0.0"
     }
 }
