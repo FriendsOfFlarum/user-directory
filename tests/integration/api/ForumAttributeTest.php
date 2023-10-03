@@ -51,6 +51,10 @@ class ForumAttributeTest extends TestCase
                     'permission' => 'fof.user-directory.view',
                     'group_id'   => 2,
                 ],
+                [
+                    'permission' => 'searchUsers',
+                    'group_id'   => 2,
+                ]
             ],
         ]);
     }
