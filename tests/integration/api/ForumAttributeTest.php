@@ -54,7 +54,7 @@ class ForumAttributeTest extends TestCase
                 [
                     'permission' => 'searchUsers',
                     'group_id'   => 2,
-                ]
+                ],
             ],
         ]);
     }
