@@ -6,6 +6,6 @@ jobs:
   run:
     uses: flarum/framework/.github/workflows/REUSABLE_backend.yml@main
     with:
-      enable_backend_testing: false
+      enable_backend_testing: true
 
       backend_directory: .
