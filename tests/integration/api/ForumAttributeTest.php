@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/user-directory.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\UserDirectory\tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
@@ -8,7 +17,7 @@ use Flarum\Testing\integration\TestCase;
 class ForumAttributeTest extends TestCase
 {
     use RetrievesAuthorizedUsers;
-    
+
     public function setUp(): void
     {
         parent::setUp();
@@ -28,7 +37,7 @@ class ForumAttributeTest extends TestCase
             'group_permission' => [
                 [
                     'permission' => 'fof.user-directory.view',
-                    'group_id' => 3,
+                    'group_id'   => 3,
                 ],
             ],
         ]);
@@ -40,7 +49,7 @@ class ForumAttributeTest extends TestCase
             'group_permission' => [
                 [
                     'permission' => 'fof.user-directory.view',
-                    'group_id' => 2,
+                    'group_id'   => 2,
                 ],
             ],
         ]);
@@ -73,7 +82,7 @@ class ForumAttributeTest extends TestCase
     public function admin_has_user_directory_link_when_setting_enabled()
     {
         $this->setting('fof-user-directory.admin.settings.link', true);
-        
+
         $response = $this->send(
             $this->request(
                 'GET',
@@ -89,8 +98,6 @@ class ForumAttributeTest extends TestCase
         $this->assertArrayHasKey('canSeeUserDirectoryLink', $data['data']['attributes']);
         $this->assertTrue($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
-
-    
 
     /**
      * @test
@@ -119,7 +126,7 @@ class ForumAttributeTest extends TestCase
     public function normal_user_does_not_have_user_directory_link_when_permission_is_granted_and_default_setting()
     {
         $this->normalUserDirectoryPermission();
-        
+
         $response = $this->send(
             $this->request(
                 'GET',
@@ -231,7 +238,7 @@ class ForumAttributeTest extends TestCase
     public function guest_does_not_have_user_directory_link_when_permission_is_granted_and_default_setting()
     {
         $this->guestUserDirectoryPermission();
-        
+
         $response = $this->send(
             $this->request(
                 'GET',
