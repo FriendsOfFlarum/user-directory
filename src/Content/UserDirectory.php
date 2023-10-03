@@ -31,7 +31,12 @@ class UserDirectory
     /**
      * @var Factory
      */
-    private $view;
+    protected $view;
+
+    /**
+     * @var SettingsRepositoryInterface
+     */
+    protected $settings;
 
     /**
      * A map of sort query param values to their API sort param.
@@ -47,10 +52,11 @@ class UserDirectory
         'least_discussions' => 'discussionCount',
     ];
 
-    public function __construct(Client $api, Factory $view)
+    public function __construct(Client $api, Factory $view, SettingsRepositoryInterface $settings)
     {
         $this->api = $api;
         $this->view = $view;
+        $this->settings = $settings;
     }
 
     private function getDocument(User $actor, array $params, Request $request)
@@ -68,7 +74,7 @@ class UserDirectory
         $queryParams = $request->getQueryParams();
         $actor = RequestUtil::getActor($request);
 
-        $sort = Arr::pull($queryParams, 'sort') ?: resolve(SettingsRepositoryInterface::class)->get('fof-user-directory.default-sort');
+        $sort = Arr::pull($queryParams, 'sort') ?: $this->settings->get('fof-user-directory.default-sort');
         $q = Arr::pull($queryParams, 'q');
         $page = Arr::pull($queryParams, 'page', 1);
 

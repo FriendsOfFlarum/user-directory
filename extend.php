@@ -33,4 +33,14 @@ return [
 
     (new Extend\View())
         ->namespace('fof.user-directory', __DIR__.'/resources/views'),
+
+    (new Extend\Settings())
+        ->default('fof-user-directory.admin.settings.link', false)
+        ->default('fof-user-directory.use-small-cards', false)
+        ->default('fof-user-directory.disable-global-search-source', false)
+        ->default('fof-user-directory.default-sort', 'default')
+        ->default('fof-user-directory.link-group-mentions', true)
+        ->serializeToForum('userDirectorySmallCards', 'fof-user-directory.use-small-cards', 'boolVal')
+        ->serializeToForum('userDirectoryDisableGlobalSearchSource', 'fof-user-directory.disable-global-search-source', 'boolVal')
+        ->serializeToForum('userDirectoryLinkGroupMentions', 'fof-user-directory.link-group-mentions', 'boolVal'),
 ];
