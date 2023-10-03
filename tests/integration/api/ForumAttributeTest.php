@@ -81,7 +81,7 @@ class ForumAttributeTest extends TestCase
      */
     public function admin_has_user_directory_link_when_setting_enabled()
     {
-        $this->setting('fof-user-directory.admin.settings.link', true);
+        $this->setting('fof-user-directory-link', true);
 
         $response = $this->send(
             $this->request(

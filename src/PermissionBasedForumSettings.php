@@ -29,7 +29,7 @@ class PermissionBasedForumSettings
     public function __invoke(ForumSerializer $serializer, $model, array $attributes): array
     {
         // The link is visible if the user can access the user directory AND the link was enabled in extension settings
-        $attributes['canSeeUserDirectoryLink'] = $serializer->getActor()->can('seeUserList');
+        $attributes['canSeeUserDirectoryLink'] = $serializer->getActor()->can('seeUserList') && $this->settings->get('fof-user-directory-link');
 
         // Only serialize if the actor has permission
         if ($permission = $serializer->getActor()->hasPermission('user.suspend')) {
