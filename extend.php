@@ -13,6 +13,8 @@ namespace FoF\UserDirectory;
 
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Extend;
+use Flarum\Api\Resource;
+use Flarum\Api\Schema;
 
 return [
     (new Extend\Frontend('admin'))
@@ -25,8 +27,8 @@ return [
 
     new Extend\Locales(__DIR__.'/resources/locale'),
 
-    (new Extend\ApiSerializer(ForumSerializer::class))
-        ->attributes(PermissionBasedForumSettings::class),
+    (new Extend\ApiResource(Resource\ForumResource::class))
+        ->fields(PermissionBasedForumSettings::class),
 
     (new Extend\Policy())
         ->globalPolicy(Access\UserPolicy::class),

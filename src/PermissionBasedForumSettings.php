@@ -13,30 +13,28 @@ namespace FoF\UserDirectory;
 
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\Api\Context;
+use Flarum\Api\Schema;
 
 class PermissionBasedForumSettings
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    public function __construct(SettingsRepositoryInterface $settings)
-    {
-        $this->settings = $settings;
+    public function __construct(
+        protected SettingsRepositoryInterface $settings
+    ) {
     }
 
-    public function __invoke(ForumSerializer $serializer, $model, array $attributes): array
+    public function __invoke(): array
     {
-        // The link is visible if the user can access the user directory AND the link was enabled in extension settings
-        $attributes['canSeeUserDirectoryLink'] = $serializer->getActor()->can('seeUserList') && $this->settings->get('fof-user-directory-link');
-        $attributes['userDirectoryDefaultSort'] = $this->settings->get('fof-user-directory.default-sort') ?: 'default';
-
-        // Only serialize if the actor has permission
-        if ($permission = $serializer->getActor()->hasPermission('user.suspend')) {
-            $attributes['hasSuspendPermission'] = $permission;
-        }
-
-        return $attributes;
+        return [
+            Schema\Boolean::make('canSeeUserDirectoryLink')
+                // The link is visible if the user can access the user directory AND the link was enabled in extension settings
+                ->get(fn ($forum, Context $context) => $context->getActor()->can('seeUserList') && $this->settings->get('fof-user-directory-link')),
+            Schema\Str::make('userDirectoryDefaultSort')
+                ->get(fn () => $this->settings->get('fof-user-directory.default-sort') ?: 'default'),
+            Schema\Boolean::make('hasSuspendPermission')
+                // Only serialize if the actor has permission
+                ->visible(fn ($forum, Context $context) => $context->getActor()->hasPermission('user.suspend'))
+                ->get(fn ($forum, Context $context) => $context->getActor()->hasPermission('user.suspend')),
+        ];
     }
 }
