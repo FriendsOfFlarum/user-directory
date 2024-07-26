@@ -3,18 +3,9 @@ import { extend } from 'flarum/common/extend';
 import app from 'flarum/forum/app';
 import UsersSearchSource from 'flarum/forum/components/UsersSearchSource';
 import LinkButton from 'flarum/common/components/LinkButton';
-import IndexPage from 'flarum/forum/components/IndexPage';
 import CommentPost from 'flarum/forum/components/CommentPost';
 import UserDirectoryPage from './components/UserDirectoryPage';
-import UserDirectoryList from './components/UserDirectoryList';
-import UserDirectoryListItem from './components/UserDirectoryListItem';
-import UserDirectoryState from './states/UserDirectoryState';
-import SortMap from '../common/utils/SortMap';
-import CheckableButton from './components/CheckableButton';
 import Text from './models/Text';
-
-// Allow other extensions to extend the page
-export { UserDirectoryPage, UserDirectoryList, UserDirectoryListItem, UserDirectoryState, SortMap, CheckableButton };
 
 export const linkGroupMentions = function () {
   if (app.forum.attribute('canSeeUserDirectoryLink') && app.forum.attribute('userDirectoryLinkGroupMentions')) {
@@ -88,6 +79,3 @@ app.initializers.add('fof-user-directory', (app) => {
   extend(CommentPost.prototype, 'oncreate', linkGroupMentions);
   extend(CommentPost.prototype, 'onupdate', linkGroupMentions);
 });
-
-export * from './components';
-export * from './searchTypes';
