@@ -1,3 +1,4 @@
+import IndexSidebar from 'flarum/forum/components/IndexSidebar';
 import { extend } from 'flarum/common/extend';
 import app from 'flarum/forum/app';
 import UsersSearchSource from 'flarum/common/components/UsersSearchSource';
@@ -68,7 +69,7 @@ app.initializers.add('fof-user-directory', (app) => {
     );
   });
 
-  extend(IndexPage.prototype, 'navItems', (items) => {
+  extend(IndexSidebar.prototype, 'navItems', (items) => {
     if (app.forum.attribute('canSeeUserDirectoryLink') && app.forum.attribute('canSearchUsers')) {
       items.add(
         'fof-user-directory',

@@ -1,3 +1,5 @@
+import IndexSidebar from 'flarum/forum/components/IndexSidebar';
+import PageStructure from 'flarum/forum/components/PageStructure';
 import app from 'flarum/forum/app';
 import Page from 'flarum/common/components/Page';
 import ItemList from 'flarum/common/utils/ItemList';
@@ -23,7 +25,7 @@ export default class UserDirectoryPage extends Page {
     super.oninit(vnode);
 
     this.state = new UserDirectoryState({});
-    this.state.refreshParams(app.search.params());
+    this.state.refreshParams(app.search.state.params());
 
     this.bodyClass = 'User--directory';
 
@@ -57,23 +59,21 @@ export default class UserDirectoryPage extends Page {
 
   view() {
     return (
-      <div className="IndexPage">
-        {IndexPage.prototype.hero()}
-        <div className="container">
-          <div className="sideNavContainer">
-            <nav className="IndexPage-nav sideNav">
-              <ul>{listItems(this.sidebarItems().toArray())}</ul>
-            </nav>
-            <div className="IndexPage-results sideNavOffset">
-              <div className="IndexPage-toolbar">
-                <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
-                <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
-              </div>
-              <UserDirectoryList state={this.state} />
-            </div>
-          </div>
+      <PageStructure
+        className="UserDirectoryPage"
+        hero={IndexPage.prototype.hero()}
+        sidebar={
+          <nav className="UserDirectoryPage-nav sideNav">
+            <ul>{listItems(this.sidebarItems().toArray())}</ul>
+          </nav>
+        }
+      >
+        <div className="IndexPage-toolbar">
+          <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
+          <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
         </div>
-      </div>
+        <UserDirectoryList state={this.state} />
+      </PageStructure>
     );
   }
 
@@ -84,7 +84,7 @@ export default class UserDirectoryPage extends Page {
    * @return {ItemList}
    */
   sidebarItems() {
-    const items = IndexPage.prototype.sidebarItems();
+    const items = IndexSidebar.prototype.items();
 
     items.setContent(
       'nav',
@@ -107,7 +107,7 @@ export default class UserDirectoryPage extends Page {
    * @return {ItemList}
    */
   navItems() {
-    const items = IndexPage.prototype.navItems();
+    const items = IndexSidebar.prototype.navItems();
     const params = this.stickyParams();
 
     items.add(

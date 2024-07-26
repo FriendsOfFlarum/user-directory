@@ -1,7 +1,7 @@
 import UserCard from 'flarum/forum/components/UserCard';
 import ItemList from 'flarum/common/utils/ItemList';
 import humanTime from 'flarum/common/utils/humanTime';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 import app from 'flarum/forum/app';
 
 export default class UserDirectoryUserCard extends UserCard {
@@ -23,7 +23,7 @@ export default class UserDirectoryUserCard extends UserCard {
     items.add(
       'discussion-count',
       <div className="userStat">
-        {icon('fas fa-comment')}
+        <Icon name="fas fa-comment" />
         {app.translator.trans('fof-user-directory.forum.page.usercard.discussion-count', {
           count: user.discussionCount(),
         })}
@@ -34,7 +34,7 @@ export default class UserDirectoryUserCard extends UserCard {
     items.add(
       'comment-count',
       <div className="userStat">
-        {icon('fas fa-comments')}
+        <Icon name="fas fa-comments" />
         {app.translator.trans('fof-user-directory.forum.page.usercard.post-count', {
           count: user.commentCount(),
         })}

@@ -1,6 +1,6 @@
 import app from 'flarum/forum/app';
 import Group from 'flarum/common/models/Group';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 import AbstractType from './AbstractType';
 
 /* global m */
@@ -46,7 +46,7 @@ export default class GroupFilter extends AbstractType {
             },
           }
         : {},
-      [group.icon() ? [icon(group.icon()), ' '] : null, group.namePlural()]
+      [group.icon() ? [<Icon name={group.icon()} />, ' '] : null, group.namePlural()]
     );
   }
 
