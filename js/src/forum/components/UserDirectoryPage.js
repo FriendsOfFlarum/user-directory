@@ -61,8 +61,8 @@ export default class UserDirectoryPage extends Page {
     return (
       <PageStructure
         className="UserDirectoryPage"
-        hero={IndexPage.prototype.hero()}
-        sidebar={
+        hero={()=> IndexPage.prototype.hero()}
+        sidebar={() =>
           <nav className="UserDirectoryPage-nav sideNav">
             <ul>{listItems(this.sidebarItems().toArray())}</ul>
           </nav>
@@ -150,7 +150,7 @@ export default class UserDirectoryPage extends Page {
         {
           caretIcon: 'fas fa-filter',
           label: app.translator.trans('fof-user-directory.forum.page.filter_button'),
-          buttonClassName: 'FormControl',
+          buttonClassName: 'Button',
           className: 'GroupFilterDropdown',
         },
         this.groupItems().toArray()

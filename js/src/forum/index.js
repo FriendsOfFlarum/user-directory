@@ -1,7 +1,7 @@
 import IndexSidebar from 'flarum/forum/components/IndexSidebar';
 import { extend } from 'flarum/common/extend';
 import app from 'flarum/forum/app';
-import UsersSearchSource from 'flarum/common/components/UsersSearchSource';
+import UsersSearchSource from 'flarum/forum/components/UsersSearchSource';
 import LinkButton from 'flarum/common/components/LinkButton';
 import IndexPage from 'flarum/forum/components/IndexPage';
 import CommentPost from 'flarum/forum/components/CommentPost';
