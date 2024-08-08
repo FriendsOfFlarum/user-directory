@@ -62,11 +62,7 @@ export default class UserDirectoryPage extends Page {
       <PageStructure
         className="UserDirectoryPage"
         hero={() => IndexPage.prototype.hero()}
-        sidebar={() => (
-          <nav className="UserDirectoryPage-nav sideNav">
-            <ul>{listItems(this.sidebarItems().toArray())}</ul>
-          </nav>
-        )}
+        sidebar={() => <IndexSidebar />}
       >
         <div className="IndexPage-toolbar">
           <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
@@ -75,54 +71,6 @@ export default class UserDirectoryPage extends Page {
         <UserDirectoryList state={this.state} />
       </PageStructure>
     );
-  }
-
-  /**
-   * Our own sidebar. Re-uses Index.sidebarItems as the base
-   * Elements added here will only show up on the user directory page
-   *
-   * @return {ItemList}
-   */
-  sidebarItems() {
-    const items = IndexSidebar.prototype.items();
-
-    items.setContent(
-      'nav',
-      SelectDropdown.component(
-        {
-          buttonClassName: 'Button',
-          className: 'App-titleControl',
-        },
-        this.navItems().toArray()
-      )
-    );
-
-    return items;
-  }
-
-  /**
-   * Our own sidebar navigation. Re-uses Index.navItems as the base
-   * Elements added here will only show up on the user directory page
-   *
-   * @return {ItemList}
-   */
-  navItems() {
-    const items = IndexSidebar.prototype.navItems();
-    const params = this.stickyParams();
-
-    items.add(
-      'fof-user-directory',
-      LinkButton.component(
-        {
-          href: app.route('fof_user_directory', params),
-          icon: 'far fa-address-book',
-        },
-        app.translator.trans('fof-user-directory.forum.page.nav')
-      ),
-      85
-    );
-
-    return items;
   }
 
   viewItems() {
