@@ -4,7 +4,7 @@ on: [workflow_dispatch, push, pull_request]
 
 jobs:
   run:
-    uses: flarum/framework/.github/workflows/REUSABLE_frontend.yml@main
+    uses: flarum/framework/.github/workflows/REUSABLE_frontend.yml@1.x
     with:
       enable_bundlewatch: false
       enable_prettier: true
@@ -12,7 +12,7 @@ jobs:
 
       frontend_directory: ./js
       backend_directory: .
-      js_package_manager: npm
+      js_package_manager: yarn
       main_git_branch: master
 
     secrets:
