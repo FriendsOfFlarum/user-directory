@@ -3,6 +3,9 @@ fof-user-directory:
         header:
             back_to_user_directory_tooltip: Back to User Directory
 
+        hero:
+            title: => fof-user-directory.forum.page.nav
+
         search:
             users_heading: 'Search all users for "{query}"'
             field:

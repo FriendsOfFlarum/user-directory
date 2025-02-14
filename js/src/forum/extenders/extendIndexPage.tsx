@@ -1,7 +1,8 @@
 import app from 'flarum/forum/app';
-import { extend } from 'flarum/common/extend';
+import { extend, override } from 'flarum/common/extend';
 import IndexPage from 'flarum/forum/components/IndexPage';
 import LinkButton from 'flarum/common/components/LinkButton';
+import UserDirectoryHero from '../components/UserDirectoryHero';
 
 export default function extendIndexPage() {
   extend(IndexPage.prototype, 'navItems', (items) => {
@@ -14,5 +15,13 @@ export default function extendIndexPage() {
         85
       );
     }
+  });
+
+  override(IndexPage.prototype, 'hero', function (original: any) {
+    if (app.current.get('routeName') === 'fof_user_directory') {
+      return <UserDirectoryHero />;
+    }
+
+    return original();
   });
 }
