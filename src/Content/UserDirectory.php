@@ -41,7 +41,8 @@ class UserDirectory
         protected Client $api,
         protected Factory $view,
         protected SettingsRepositoryInterface $settings
-    ) {}
+    ) {
+    }
 
     private function getDocument(User $actor, array $params, Request $request)
     {

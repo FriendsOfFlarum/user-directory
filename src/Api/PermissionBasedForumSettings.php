@@ -11,15 +11,16 @@
 
 namespace FoF\UserDirectory\Api;
 
-use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Api\Context;
 use Flarum\Api\Schema;
+use Flarum\Settings\SettingsRepositoryInterface;
 
 class PermissionBasedForumSettings
 {
     public function __construct(
         protected SettingsRepositoryInterface $settings
-    ) {}
+    ) {
+    }
 
     public function __invoke(): array
     {
