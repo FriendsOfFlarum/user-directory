@@ -1,6 +1,6 @@
 # User directory by FriendsOfFlarum
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/user-directory.svg)](https://packagist.org/packages/fof/user-directory) [![Compatibility](https://flarum-badge-api.davwheat.dev/v1/compat-latest/fof/user-directory)](https://flarum-badge-api.davwheat.dev/v1/compat-latest/fof/user-directory)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/user-directory.svg)](https://packagist.org/packages/fof/user-directory)
 
 An extension that generates a new url `/users` that provides a list of users, with the ability to sort. You can search through the users from the global
 search input field, a new item shows up "Search all users for ...".
