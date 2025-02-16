@@ -24,18 +24,12 @@
     ],
     "authors": [
         {
-            "name": "Daniël Klabbers",
-            "email": "daniel@klabbers.email",
-            "homepage": "https://luceos.com/"
-        },
-        {
-            "name": "Clark Winkelmann",
-            "email": "clark.winkelmann@gmail.com",
-            "homepage": "https://clarkwinkelmann.com/"
+            "name": "FriendsOfFlarum",
+            "homepage": "https://friendsofflarum.org"
         }
     ],
     "require": {
-        "flarum/core": "^1.7.0",
+        "flarum/core": "2.x-dev",
         "ext-json": "*"
     },
     "replace": {
@@ -43,7 +37,7 @@
     },
     "extra": {
         "branch-alais": {
-            "1.x": "1.x-dev"
+            "2.x": "2.x-dev"
         },
         "flarum-extension": {
             "title": "FoF User Directory",
@@ -96,8 +90,9 @@
         "analyse:phpstan": "Run static analysis"
     },
     "require-dev": {
-        "flarum/testing": "^1.0.0",
-        "flarum/phpstan": "*",
+        "flarum/testing": "2.x-dev",
+        "flarum/phpstan": "2.x-dev",
         "flarum/suspend": "*"
-    }
+    },
+    "minimum-stability": "dev"
 }
