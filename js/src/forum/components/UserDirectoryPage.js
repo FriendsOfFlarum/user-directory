@@ -57,11 +57,7 @@ export default class UserDirectoryPage extends Page {
 
   view() {
     return (
-      <PageStructure
-        className="UserDirectoryPage"
-        hero={() => <UserDirectoryHero />}
-        sidebar={() => <IndexSidebar />}
-      >
+      <PageStructure className="UserDirectoryPage" hero={() => <UserDirectoryHero />} sidebar={() => <IndexSidebar />}>
         <div className="IndexPage-toolbar">
           <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
           <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
