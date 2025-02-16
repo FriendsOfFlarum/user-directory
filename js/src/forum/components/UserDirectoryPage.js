@@ -4,11 +4,8 @@ import app from 'flarum/forum/app';
 import Page from 'flarum/common/components/Page';
 import ItemList from 'flarum/common/utils/ItemList';
 import listItems from 'flarum/common/helpers/listItems';
-import IndexPage from 'flarum/forum/components/IndexPage';
 import Select from 'flarum/common/components/Select';
 import Button from 'flarum/common/components/Button';
-import LinkButton from 'flarum/common/components/LinkButton';
-import SelectDropdown from 'flarum/common/components/SelectDropdown';
 import Dropdown from 'flarum/common/components/Dropdown';
 import extractText from 'flarum/common/utils/extractText';
 import UserDirectoryList from './UserDirectoryList';
@@ -16,6 +13,7 @@ import UserDirectoryState from '../states/UserDirectoryState';
 import CheckableButton from './CheckableButton';
 import SearchField from './SearchField';
 import Separator from 'flarum/common/components/Separator';
+import UserDirectoryHero from './UserDirectoryHero';
 
 /**
  * This page re-uses Flarum's IndexPage CSS classes
@@ -59,62 +57,18 @@ export default class UserDirectoryPage extends Page {
 
   view() {
     return (
-      <PageStructure className="UserDirectoryPage" hero={() => IndexPage.prototype.hero()} sidebar={() => <IndexSidebar />}>
-        <div className="UserDirectoryPage-toolbar">
+      <PageStructure
+        className="UserDirectoryPage"
+        hero={() => <UserDirectoryHero />}
+        sidebar={() => <IndexSidebar />}
+      >
+        <div className="IndexPage-toolbar">
           <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
           <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
         </div>
         <UserDirectoryList state={this.state} />
       </PageStructure>
     );
-  }
-
-  /**
-   * Our own sidebar. Re-uses Index.sidebarItems as the base
-   * Elements added here will only show up on the user directory page
-   *
-   * @return {ItemList}
-   */
-  sidebarItems() {
-    const items = IndexSidebar.prototype.items();
-
-    items.setContent(
-      'nav',
-      SelectDropdown.component(
-        {
-          buttonClassName: 'Button',
-          className: 'App-titleControl',
-        },
-        this.navItems().toArray()
-      )
-    );
-
-    return items;
-  }
-
-  /**
-   * Our own sidebar navigation. Re-uses Index.navItems as the base
-   * Elements added here will only show up on the user directory page
-   *
-   * @return {ItemList}
-   */
-  navItems() {
-    const items = IndexSidebar.prototype.navItems();
-    const params = this.stickyParams();
-
-    items.add(
-      'fof-user-directory',
-      LinkButton.component(
-        {
-          href: app.route('fof_user_directory', params),
-          icon: 'far fa-address-book',
-        },
-        app.translator.trans('fof-user-directory.forum.page.nav')
-      ),
-      85
-    );
-
-    return items;
   }
 
   viewItems() {
@@ -142,7 +96,7 @@ export default class UserDirectoryPage extends Page {
         {
           caretIcon: 'fas fa-filter',
           label: app.translator.trans('fof-user-directory.forum.page.filter_button'),
-          buttonClassName: 'FormControl',
+          buttonClassName: 'Button',
           className: 'GroupFilterDropdown',
         },
         this.groupItems().toArray()

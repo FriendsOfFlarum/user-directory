@@ -1,9 +1,7 @@
 import IndexSidebar from 'flarum/forum/components/IndexSidebar';
 import app from 'flarum/forum/app';
-import { extend, override } from 'flarum/common/extend';
-import IndexPage from 'flarum/forum/components/IndexPage';
+import { extend } from 'flarum/common/extend';
 import LinkButton from 'flarum/common/components/LinkButton';
-import UserDirectoryHero from '../components/UserDirectoryHero';
 
 export default function extendIndexPage() {
   extend(IndexSidebar.prototype, 'navItems', (items) => {
@@ -16,13 +14,5 @@ export default function extendIndexPage() {
         85
       );
     }
-  });
-
-  override(IndexPage.prototype, 'hero', function (original: any) {
-    if (app.current.get('routeName') === 'fof_user_directory') {
-      return <UserDirectoryHero />;
-    }
-
-    return original();
   });
 }

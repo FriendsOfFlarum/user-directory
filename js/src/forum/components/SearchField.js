@@ -3,7 +3,7 @@ import Component from 'flarum/common/Component';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import withAttr from 'flarum/common/utils/withAttr';
 import KeyboardNavigatable from 'flarum/common/utils/KeyboardNavigatable';
-import ItemList from 'flarum/utils/ItemList';
+import ItemList from 'flarum/common/utils/ItemList';
 import TextFilter from '../searchTypes/TextFilter';
 import GroupFilter from '../searchTypes/GroupFilter';
 

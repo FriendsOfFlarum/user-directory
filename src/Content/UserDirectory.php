@@ -37,9 +37,11 @@ class UserDirectory
         'least_discussions' => 'discussionCount',
     ];
 
-    public function __construct(protected Client $api, protected Factory $view, protected SettingsRepositoryInterface $settings)
-    {
-    }
+    public function __construct(
+        protected Client $api,
+        protected Factory $view,
+        protected SettingsRepositoryInterface $settings
+    ) {}
 
     private function getDocument(User $actor, array $params, Request $request)
     {
