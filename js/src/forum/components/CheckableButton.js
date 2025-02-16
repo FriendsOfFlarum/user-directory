@@ -1,5 +1,5 @@
 import Button from 'flarum/common/components/Button';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 
 export default class CheckableButton extends Button {
   /**
@@ -11,7 +11,7 @@ export default class CheckableButton extends Button {
   getButtonContent(children) {
     const prev = super.getButtonContent(children);
 
-    if (this.attrs.checked) prev.push(icon('fas fa-check', { className: 'Button-icon ButtonCheck' }));
+    if (this.attrs.checked) prev.push(<Icon name="fas fa-check" className="Button-icon ButtonCheck" />);
 
     return prev;
   }

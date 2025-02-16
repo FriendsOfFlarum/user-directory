@@ -1,3 +1,4 @@
+import IndexSidebar from 'flarum/forum/components/IndexSidebar';
 import app from 'flarum/forum/app';
 import { extend, override } from 'flarum/common/extend';
 import IndexPage from 'flarum/forum/components/IndexPage';
@@ -5,7 +6,7 @@ import LinkButton from 'flarum/common/components/LinkButton';
 import UserDirectoryHero from '../components/UserDirectoryHero';
 
 export default function extendIndexPage() {
-  extend(IndexPage.prototype, 'navItems', (items) => {
+  extend(IndexSidebar.prototype, 'navItems', (items) => {
     if (app.forum.attribute<boolean>('canSeeUserDirectoryLink') && app.forum.attribute<boolean>('canSearchUsers')) {
       items.add(
         'fof-user-directory',
