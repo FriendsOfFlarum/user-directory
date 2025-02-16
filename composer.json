@@ -42,6 +42,9 @@
         "flagrow/user-directory": "*"
     },
     "extra": {
+        "branch-alais": {
+            "1.x": "1.x-dev"
+        },
         "flarum-extension": {
             "title": "FoF User Directory",
             "category": "feature",
