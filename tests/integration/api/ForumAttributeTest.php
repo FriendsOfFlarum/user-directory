@@ -13,6 +13,8 @@ namespace FoF\UserDirectory\tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Flarum\User\User;
 
 class ForumAttributeTest extends TestCase
 {
@@ -25,7 +27,7 @@ class ForumAttributeTest extends TestCase
         $this->extension('fof-user-directory');
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
             ],
         ]);
@@ -59,9 +61,7 @@ class ForumAttributeTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function admin_does_not_have_user_directory_link_when_setting_disabled()
     {
         $response = $this->send(
@@ -80,9 +80,7 @@ class ForumAttributeTest extends TestCase
         $this->assertFalse($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function admin_has_user_directory_link_when_setting_enabled()
     {
         $this->setting('fof-user-directory-link', true);
@@ -103,9 +101,7 @@ class ForumAttributeTest extends TestCase
         $this->assertTrue($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function normal_user_does_not_have_user_directory_link_by_default()
     {
         $response = $this->send(
@@ -124,9 +120,7 @@ class ForumAttributeTest extends TestCase
         $this->assertFalse($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function normal_user_does_not_have_user_directory_link_when_permission_is_granted_and_default_setting()
     {
         $this->normalUserDirectoryPermission();
@@ -147,9 +141,7 @@ class ForumAttributeTest extends TestCase
         $this->assertFalse($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function normal_user_does_not_have_user_directory_link_when_setting_off_and_no_permission()
     {
         $this->setting('fof-user-directory-link', false);
@@ -170,9 +162,7 @@ class ForumAttributeTest extends TestCase
         $this->assertFalse($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function normal_user_does_not_have_user_directory_link_when_setting_off_but_permission_granted()
     {
         $this->normalUserDirectoryPermission();
@@ -194,9 +184,7 @@ class ForumAttributeTest extends TestCase
         $this->assertFalse($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function normal_user_does_have_user_directory_link_when_setting_on_and_permission_granted()
     {
         $this->normalUserDirectoryPermission();
@@ -218,9 +206,7 @@ class ForumAttributeTest extends TestCase
         $this->assertTrue($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function guest_does_not_have_user_directory_link_by_default()
     {
         $response = $this->send(
@@ -236,9 +222,7 @@ class ForumAttributeTest extends TestCase
         $this->assertFalse($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function guest_does_not_have_user_directory_link_when_permission_is_granted_and_default_setting()
     {
         $this->guestUserDirectoryPermission();
@@ -256,9 +240,7 @@ class ForumAttributeTest extends TestCase
         $this->assertFalse($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function guest_does_not_have_user_directory_link_when_setting_off_and_no_permission()
     {
         $this->setting('fof-user-directory-link', false);
@@ -276,9 +258,7 @@ class ForumAttributeTest extends TestCase
         $this->assertFalse($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function guest_does_not_have_user_directory_link_when_setting_off_but_permission_granted()
     {
         $this->guestUserDirectoryPermission();
@@ -297,9 +277,7 @@ class ForumAttributeTest extends TestCase
         $this->assertFalse($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function guest_does_have_user_directory_link_when_setting_on_and_permission_granted()
     {
         $this->guestUserDirectoryPermission();
@@ -319,9 +297,7 @@ class ForumAttributeTest extends TestCase
         $this->assertTrue($data['data']['attributes']['canSeeUserDirectoryLink']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function required_attributes_are_serialized_to_forum_with_correct_defaults()
     {
         $response = $this->send(
