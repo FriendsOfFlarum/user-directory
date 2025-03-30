@@ -23,28 +23,43 @@ export default class UserDirectoryPage extends Page {
     super.oninit(vnode);
 
     this.state = new UserDirectoryState({});
-    this.state.refreshParams(app.search.state.params());
 
-    this.bodyClass = 'User--directory';
+    // Initialize the group filters before refreshing params
+    this.enabledGroupFilters = [];
+    this.enabledSpecialGroupFilters = {};
 
-    let idSegments = [];
-    if (this.params().q) {
-      Array.from(this.params().q.matchAll(/group:([\d,]+)/g)).forEach((match) => {
-        idSegments.push(match[1]);
-      });
-    }
-    this.enabledGroupFilters = idSegments
-      .join(',')
-      .split(',')
-      .filter((id) => id);
+    // Extract group IDs from the query parameter
+    // First check if we have preloaded data from the server
+    const preloadedApiDocument = app.preloadedApiDocument();
+    const preloadedData = preloadedApiDocument && preloadedApiDocument.payload && preloadedApiDocument.payload.fofUserDirectory;
 
-    this.enabledSpecialGroupFilters = [];
-    if (app.initializers.has('flarum-suspend') && app.forum.attribute('hasSuspendPermission')) {
-      // If there is a special group filter int the params, enable it here
-      if (this.params()?.q?.includes('is:suspended')) {
-        this.enabledSpecialGroupFilters['flarum-suspend'] = 'is:suspended';
+    // Get query from preloaded data or URL parameter
+    const q = preloadedData ? preloadedData.q : m.route.param('q') || '';
+
+    if (q) {
+      // Extract group filters
+      const groupMatches = q.match(/\bgroup:(\d+)\b/g);
+      if (groupMatches) {
+        this.enabledGroupFilters = groupMatches.map((match) => match.replace('group:', ''));
+      }
+
+      // Extract special group filters
+      if (app.initializers.has('flarum-suspend') && app.forum.attribute('hasSuspendPermission')) {
+        if (q.includes('is:suspended')) {
+          this.enabledSpecialGroupFilters['flarum-suspend'] = 'is:suspended';
+        }
       }
     }
+
+    // Now refresh params with the current URL parameters or preloaded data
+    const params = {
+      q: q,
+      sort: preloadedData ? preloadedData.sort : m.route.param('sort'),
+    };
+
+    this.state.refreshParams(params);
+
+    this.bodyClass = 'User--directory';
 
     app.history.push('users', app.translator.trans('fof-user-directory.forum.header.back_to_user_directory_tooltip'));
   }
@@ -211,27 +226,34 @@ export default class UserDirectoryPage extends Page {
       params.sort = sort;
     }
 
-    let moreQ = '';
+    // Build the query parameter
+    let q = '';
+
+    // Add special group filters
     for (const filter in this.enabledSpecialGroupFilters) {
-      moreQ += this.enabledSpecialGroupFilters[filter] + ' ';
+      if (this.enabledSpecialGroupFilters[filter]) {
+        q += this.enabledSpecialGroupFilters[filter] + ' ';
+      }
     }
 
+    // Add group filters
     if (this.enabledGroupFilters.length > 0) {
-      const groupsQ = this.enabledGroupFilters.reduce((prev, curr) => {
-        return `${prev}${prev ? ' ' : ''}group:${curr}`;
-      }, '');
-
-      params.qBuilder = { groups: groupsQ };
-    } else {
-      params.qBuilder = { groups: '', q: moreQ.trim() };
+      this.enabledGroupFilters.forEach((groupId) => {
+        q += `group:${groupId} `;
+      });
     }
 
+    // Set the query parameter
+    params.q = q.trim();
+
+    // Remove qBuilder to avoid confusion
+    delete params.qBuilder;
+
+    // Update the state
     this.state.refreshParams(params);
 
-    const routeParams = { ...params };
-    delete routeParams.qBuilder;
-
-    m.route.set(app.route('fof_user_directory', routeParams));
+    // Update the URL
+    m.route.set(app.route('fof_user_directory', params));
   }
 
   stickyParams() {
