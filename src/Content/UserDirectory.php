@@ -81,10 +81,10 @@ class UserDirectory
         $document->content = $this->view->make('fof.user-directory::index', compact('page', 'apiDocument'));
 
         $document->payload['apiDocument'] = $apiDocument;
-        
+
         // Add query parameters to the payload so the frontend can initialize filters
         $document->payload['fofUserDirectory'] = [
-            'q' => $q,
+            'q'    => $q,
             'sort' => $sort,
         ];
 
