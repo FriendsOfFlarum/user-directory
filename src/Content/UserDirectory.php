@@ -47,16 +47,16 @@ class UserDirectory
     private function getDocument(User $actor, array $params, Request $request)
     {
         $actor->assertCan('seeUserList');
-        
+
         // Make sure groups are included in the API request
         if (!isset($params['include'])) {
             $params['include'] = 'groups';
-        } else if (is_array($params['include'])) {
+        } elseif (is_array($params['include'])) {
             if (!in_array('groups', $params['include'])) {
                 $params['include'][] = 'groups';
             }
             $params['include'] = implode(',', $params['include']);
-        } else if (is_string($params['include']) && !str_contains($params['include'], 'groups')) {
+        } elseif (is_string($params['include']) && !str_contains($params['include'], 'groups')) {
             $params['include'] .= ',groups';
         }
 
