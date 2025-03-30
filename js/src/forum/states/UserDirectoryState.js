@@ -19,7 +19,7 @@ export default class UserDirectoryState {
   }
 
   requestParams() {
-    const params = { include: [], filter: {} };
+    const params = { include: ['groups'], filter: {} };
 
     const sortKey = this.params.sort || app.forum.attribute('userDirectoryDefaultSort');
 
@@ -51,16 +51,20 @@ export default class UserDirectoryState {
 
   refreshParams(newParams) {
     if (!this.hasUsers() || Object.keys(newParams).some((key) => this.getParams()[key] !== newParams[key])) {
-      const q = '';
       this.params = newParams;
 
+      // If we have a qBuilder, use it to build the query
       if (newParams.qBuilder) {
         Object.assign(this.qBuilder, newParams.qBuilder || {});
         this.params.q = Object.values(this.qBuilder).join(' ').trim();
       }
 
-      if (!this.params.q && q) {
-        this.params.q = q;
+      // Make sure we have a query parameter
+      if (!this.params.q) {
+        this.params.q = '';
+      } else if (typeof this.params.q !== 'string') {
+        // Ensure q is a string
+        this.params.q = String(this.params.q);
       }
 
       this.refresh();

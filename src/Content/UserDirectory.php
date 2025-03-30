@@ -48,6 +48,18 @@ class UserDirectory
     {
         $actor->assertCan('seeUserList');
 
+        // Make sure groups are included in the API request
+        if (!isset($params['include'])) {
+            $params['include'] = 'groups';
+        } elseif (is_array($params['include'])) {
+            if (!in_array('groups', $params['include'])) {
+                $params['include'][] = 'groups';
+            }
+            $params['include'] = implode(',', $params['include']);
+        } elseif (is_string($params['include']) && !str_contains($params['include'], 'groups')) {
+            $params['include'] .= ',groups';
+        }
+
         return json_decode($this->api->withQueryParams($params)->withParentRequest($request)->get('/users')->getBody());
     }
 
@@ -63,6 +75,12 @@ class UserDirectory
         $q = Arr::pull($queryParams, 'q');
         $page = Arr::pull($queryParams, 'page', 1);
 
+        // Ensure the query parameter is properly formatted
+        if ($q) {
+            // Make sure it's a string
+            $q = (string) $q;
+        }
+
         $params = [
             // ?? used to prevent null values. null would result in the whole sortMap array being sent in the params
             'sort'   => Arr::get($this->sortMap, $sort ?? '', ''),
@@ -75,6 +93,12 @@ class UserDirectory
         $document->content = $this->view->make('fof.user-directory::index', compact('page', 'apiDocument'));
 
         $document->payload['apiDocument'] = $apiDocument;
+
+        // Add query parameters to the payload so the frontend can initialize filters
+        $document->payload['fofUserDirectory'] = [
+            'q'    => $q,
+            'sort' => $sort,
+        ];
 
         return $document;
     }

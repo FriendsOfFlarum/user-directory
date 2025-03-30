@@ -70,21 +70,39 @@ export default class GroupFilter extends AbstractType {
       return Promise.resolve([]);
     }
 
-    const qWithSpacesAround = ' ' + params.q + ' ';
-
     const groups = [];
 
-    const queryGroups = qWithSpacesAround.split(' ').filter((q) => q.startsWith('group:'));
+    // Extract all group: parameters from the query string
+    const groupMatches = params.q.match(/\bgroup:(\d+)\b/g);
 
-    app.store.all('groups').forEach((group) => {
-      queryGroups.forEach((queryGroup) => {
-        const groupIds = queryGroup.replace('group:', '').split(',');
-        if (groupIds.includes(group.id())) {
-          groups.push(group);
-        }
-      });
+    if (!groupMatches || !groupMatches.length) {
+      return Promise.resolve([]);
+    }
+
+    // Get all unique group IDs from all group: parameters
+    const allGroupIds = [];
+    groupMatches.forEach((match) => {
+      const id = match.replace('group:', '');
+      allGroupIds.push(id);
     });
 
-    return Promise.resolve(groups);
+    // Deduplicate group IDs
+    const uniqueGroupIds = [...new Set(allGroupIds)];
+
+    // Load all group models
+    const promises = uniqueGroupIds.map((id) => {
+      return app.store
+        .find('groups', id)
+        .then((group) => {
+          if (group) groups.push(group);
+          return group;
+        })
+        .catch((error) => {
+          console.error('Error loading group:', id, error);
+          return null;
+        });
+    });
+
+    return Promise.all(promises).then(() => groups);
   }
 }
