@@ -19,7 +19,7 @@ export default class UserDirectoryState {
   }
 
   requestParams() {
-    const params = { include: [], filter: {} };
+    const params = { include: ['groups'], filter: {} };
 
     const sortKey = this.params.sort || app.forum.attribute('userDirectoryDefaultSort');
 
