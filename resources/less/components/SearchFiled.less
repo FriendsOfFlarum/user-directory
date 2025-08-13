@@ -8,8 +8,12 @@
     position: relative;
 
     display: grid !important;
-    grid-template-columns: max-content 1fr;
+    grid-template-columns: auto 1fr;
     column-gap: 10px;
+
+    &:has(.UserDirectorySearchInput-selected:empty) {
+        grid-template-columns: 1fr;
+    }
 
     @media @phone {
         margin-left: 0;
