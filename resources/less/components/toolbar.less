@@ -5,13 +5,34 @@
 
         .IndexPage-toolbar-view {
             display: flex;
-            column-gap: 10px;
+            column-gap: 5px;
             row-gap: 5px;
             flex-grow: 1;
 
             > li {
                 vertical-align: middle;
                 width: fit-content;
+                margin-right: 0;
+            }
+
+            .item-sort,
+            .item-filterGroups {
+                flex: 0 0 auto;
+            }
+
+            .item-search {
+                flex: 1 1 auto;
+                min-width: 0;
+            }
+        }
+
+        .item-sort {
+            .Select {
+                width: 200px;
+
+                .Select-input {
+                    width: 100%;
+                }
             }
         }
 
