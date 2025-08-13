@@ -1,15 +1,18 @@
 // Style based on TagDiscussionModal.less from flarum/tags
 .UserDirectorySearchInput {
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0 5px;
     margin-bottom: 0 !important;
     height: auto;
     min-height: 36px; // Same as .FormControl
     position: relative;
 
     display: grid !important;
-    grid-template-columns: max-content 1fr;
+    grid-template-columns: auto 1fr;
     column-gap: 10px;
+
+    &:has(.UserDirectorySearchInput-selected:empty) {
+        grid-template-columns: 1fr;
+    }
 
     @media @phone {
         margin-left: 0;
@@ -34,6 +37,7 @@
         width: 100%;
         margin-right: -100%;
         background: transparent !important;
+        text-overflow: ellipsis;
     }
 
     .LoadingIndicator {
@@ -61,6 +65,7 @@
 
     .UserDirectorySearchInput-filter {
         cursor: not-allowed;
+        white-space: nowrap;
     }
 }
 

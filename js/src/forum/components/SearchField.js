@@ -86,6 +86,7 @@ export default class SearchField extends Component {
             ))}
           </span>
           <input
+            id="user-directory-search"
             className="FormControl"
             placeholder={app.translator.trans('fof-user-directory.forum.search.field.placeholder')}
             value={this.filter}
