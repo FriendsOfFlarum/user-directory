@@ -29,7 +29,7 @@
         }
     ],
     "require": {
-        "flarum/core": "2.x-dev",
+        "flarum/core": "^2.0.0-beta",
         "ext-json": "*"
     },
     "replace": {
