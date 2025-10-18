@@ -25,7 +25,7 @@ export default [
       type: 'boolean',
     }))
     .setting(() => {
-      const sortOptions = {
+      const sortOptions: Record<string, string | any[]> = {
         '': app.translator.trans('fof-user-directory.lib.sort.not_specified'),
       };
 
