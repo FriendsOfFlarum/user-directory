@@ -21,6 +21,7 @@ return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/resources/less/forum.less')
+        ->jsDirectory(__DIR__.'/js/dist/forum')
         ->route('/users', 'fof_user_directory', Content\UserDirectory::class),
 
     new Extend\Locales(__DIR__.'/resources/locale'),
