@@ -29,7 +29,7 @@
         }
     ],
     "require": {
-        "flarum/core": "^2.0.0-beta",
+        "flarum/core": "^2.0.0",
         "ext-json": "*"
     },
     "replace": {
@@ -90,9 +90,10 @@
         "analyse:phpstan": "Run static analysis"
     },
     "require-dev": {
-        "flarum/testing": "2.x-dev",
-        "flarum/phpstan": "2.x-dev",
-        "flarum/suspend": "*"
+        "flarum/testing": "^2.0.0",
+        "flarum/phpstan": "^2.0.0",
+        "flarum/suspend": "^2.0.0"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

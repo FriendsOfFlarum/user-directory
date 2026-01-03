@@ -1,3 +1,5 @@
+import app from 'flarum/forum/app';
+
 /**
  * Based on Flarum's DiscussionListState
  */
