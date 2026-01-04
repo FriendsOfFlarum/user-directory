@@ -9,7 +9,7 @@ import Button from 'flarum/common/components/Button';
 import Dropdown from 'flarum/common/components/Dropdown';
 import extractText from 'flarum/common/utils/extractText';
 import UserDirectoryList from './UserDirectoryList';
-import UserDirectoryState from '../states/UserDirectoryState';
+import UserDirectoryListState from '../states/UserDirectoryListState';
 import CheckableButton from './CheckableButton';
 import SearchField from './SearchField';
 import Separator from 'flarum/common/components/Separator';
@@ -22,7 +22,7 @@ export default class UserDirectoryPage extends Page {
   oninit(vnode) {
     super.oninit(vnode);
 
-    this.state = new UserDirectoryState({});
+    this.state = new UserDirectoryListState({}, 1);
 
     // Initialize the group filters before refreshing params
     this.enabledGroupFilters = [];
@@ -57,7 +57,7 @@ export default class UserDirectoryPage extends Page {
       sort: preloadedData ? preloadedData.sort : m.route.param('sort'),
     };
 
-    this.state.refreshParams(params);
+    this.state.refreshParams(params, 1);
 
     this.bodyClass = 'User--directory';
 
@@ -250,7 +250,7 @@ export default class UserDirectoryPage extends Page {
     delete params.qBuilder;
 
     // Update the state
-    this.state.refreshParams(params);
+    this.state.refreshParams(params, 1);
 
     // Update the URL
     m.route.set(app.route('fof_user_directory', params));
