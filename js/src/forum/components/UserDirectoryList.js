@@ -16,22 +16,25 @@ export default class UserDirectoryList extends Component {
     const useSmallCards = app.forum.attribute('userDirectorySmallCards');
     let loading;
 
-    if (state.isLoading()) {
+    if (state.isLoadingNext()) {
       loading = LoadingIndicator.component();
-    } else if (state.moreResults) {
+    } else if (state.hasNext()) {
       loading = Button.component(
         {
           className: 'Button',
-          onclick: state.loadMore.bind(state),
+          onclick: () => state.loadNext(),
         },
         app.translator.trans('fof-user-directory.forum.page.load_more_button')
       );
     }
 
-    if (state.empty()) {
+    if (state.isEmpty()) {
       const text = app.translator.trans('fof-user-directory.forum.page.empty_text');
       return <div className="DiscussionList">{Placeholder.component({ text })}</div>;
     }
+
+    // Get all users from paginated pages
+    const allUsers = state.getAllItems();
 
     return (
       <div
@@ -42,7 +45,7 @@ export default class UserDirectoryList extends Component {
         }
       >
         <ul className="UserDirectoryList-users">
-          {state.users.map((user) => {
+          {allUsers.map((user) => {
             return (
               <li key={user.id()} data-id={user.id()}>
                 {UserDirectoryListItem.component({ user, params, useSmallCards })}

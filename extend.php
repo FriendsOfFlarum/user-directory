@@ -21,7 +21,6 @@ return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/resources/less/forum.less')
-        ->jsDirectory(__DIR__.'/js/dist/forum')
         ->route('/users', 'fof_user_directory', Content\UserDirectory::class),
 
     new Extend\Locales(__DIR__.'/resources/locale'),
@@ -39,7 +38,7 @@ return [
         ->default('fof-user-directory.admin.settings.link', false)
         ->default('fof-user-directory.use-small-cards', false)
         ->default('fof-user-directory.disable-global-search-source', false)
-        ->default('fof-user-directory.default-sort', 'default')
+        ->default('fof-user-directory.default-sort', '')
         ->default('fof-user-directory.link-group-mentions', true)
         ->serializeToForum('userDirectorySmallCards', 'fof-user-directory.use-small-cards', 'boolVal')
         ->serializeToForum('userDirectoryDisableGlobalSearchSource', 'fof-user-directory.disable-global-search-source', 'boolVal')
