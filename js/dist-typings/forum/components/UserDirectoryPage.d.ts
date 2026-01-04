@@ -4,7 +4,7 @@
 export default class UserDirectoryPage extends Page<import("flarum/common/components/Page").IPageAttrs, undefined> {
     constructor();
     oninit(vnode: any): void;
-    state: UserDirectoryState;
+    state: UserDirectoryListState;
     enabledGroupFilters: any;
     enabledSpecialGroupFilters: {} | undefined;
     oncreate(vnode: any): void;
@@ -28,5 +28,5 @@ export default class UserDirectoryPage extends Page<import("flarum/common/compon
     };
 }
 import Page from "flarum/common/components/Page";
-import UserDirectoryState from "../states/UserDirectoryState";
+import UserDirectoryListState from "../states/UserDirectoryListState";
 import ItemList from "flarum/common/utils/ItemList";
