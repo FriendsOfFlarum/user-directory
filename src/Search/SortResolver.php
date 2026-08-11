@@ -69,7 +69,7 @@ class SortResolver
      */
     public function resolve(mixed $key, User $actor): string
     {
-        if (! is_string($key) || $key === '') {
+        if (!is_string($key) || $key === '') {
             return '';
         }
 
