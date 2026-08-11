@@ -37,11 +37,44 @@ class UserDirectory
         'least_discussions' => 'discussionCount',
     ];
 
+    /**
+     * Sorts that core only exposes to holders of `user.viewLastSeenAt`.
+     *
+     * Requesting one of these without the permission makes the API reject the
+     * whole request, so they are resolved separately and dropped for actors who
+     * cannot use them — see issue #66.
+     *
+     * @var array
+     */
+    private $permissionedSortMap = [
+        'seen_recent' => ['sort' => '-lastSeenAt', 'permission' => 'user.viewLastSeenAt'],
+        'seen_oldest' => ['sort' => 'lastSeenAt', 'permission' => 'user.viewLastSeenAt'],
+    ];
+
     public function __construct(
         protected Client $api,
         protected Factory $view,
         protected SettingsRepositoryInterface $settings
     ) {
+    }
+
+    /**
+     * Map a sort query param to its API sort param for the given actor.
+     *
+     * Unknown keys and permissioned sorts the actor cannot use both resolve to
+     * an empty string, so the directory falls back to the default ordering
+     * rather than sending a sort the API would reject.
+     */
+    private function resolveSort(?string $sort, User $actor): string
+    {
+        $sort ??= '';
+
+        if ($permissioned = Arr::get($this->permissionedSortMap, $sort)) {
+            return $actor->hasPermission($permissioned['permission']) ? $permissioned['sort'] : '';
+        }
+
+        // ?? used to prevent null values. null would result in the whole sortMap array being sent in the params
+        return Arr::get($this->sortMap, $sort, '');
     }
 
     private function getDocument(User $actor, array $params, Request $request): object
@@ -85,8 +118,7 @@ class UserDirectory
         }
 
         $params = [
-            // ?? used to prevent null values. null would result in the whole sortMap array being sent in the params
-            'sort'   => Arr::get($this->sortMap, $sort ?? '', ''),
+            'sort'   => $this->resolveSort($sort, $actor),
             'filter' => compact('q'),
             'page'   => ['offset' => ($page - 1) * 20, 'limit' => 20],
         ];
