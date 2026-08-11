@@ -25,8 +25,14 @@ class PermissionBasedForumSettings
     public function __invoke(): array
     {
         return [
+            Schema\Boolean::make('canViewUserDirectory')
+                // Whether the actor may reach the directory at all. Anything that links
+                // into it — global search, group mentions — gates on this, so those
+                // features do not depend on the separate sidebar link setting.
+                ->get(fn ($forum, Context $context) => $context->getActor()->can('seeUserList')),
             Schema\Boolean::make('canSeeUserDirectoryLink')
-                // The link is visible if the user can access the user directory AND the link was enabled in extension settings
+                // Narrower: whether to show the *sidebar link*, which additionally
+                // requires an admin to have enabled it.
                 ->get(fn ($forum, Context $context) => $context->getActor()->can('seeUserList') && $this->settings->get('fof-user-directory-link')),
             Schema\Str::make('userDirectoryDefaultSort')
                 ->get(fn () => $this->settings->get('fof-user-directory.default-sort') ?: 'default'),

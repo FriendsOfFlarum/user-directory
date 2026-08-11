@@ -2,10 +2,10 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/user-directory.svg)](https://packagist.org/packages/fof/user-directory)
 
-An extension that generates a new url `/users` that provides a list of users, with the ability to sort. You can search through the users from the global
-search input field, a new item shows up "Search all users for ...".
+An extension that generates a new url `/users` that provides a list of users, with the ability to sort and filter by group. Searching from the global
+search field also offers a "Search all users for ..." link, taking you to the directory with your query applied.
 
-You can protect access to the list with a permission. If the user has no access, they will see a 404 not found page.
+You can protect access to the list with a permission. If the user has no access, they will see a permission denied page.
 
 A setting allows you to show a link to the directory from the homepage sidebar, or you can use the [links extension](https://discuss.flarum.org/d/18335-friendsofflarum-links) if you prefer a link in the header.
 

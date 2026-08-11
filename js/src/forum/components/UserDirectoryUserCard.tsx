@@ -1,16 +1,28 @@
-import UserCard from 'flarum/forum/components/UserCard';
-import ItemList from 'flarum/common/utils/ItemList';
-import humanTime from 'flarum/common/utils/humanTime';
-import Icon from 'flarum/common/components/Icon';
 import app from 'flarum/forum/app';
+import UserCard from 'flarum/forum/components/UserCard';
+import Icon from 'flarum/common/components/Icon';
+import type ItemList from 'flarum/common/utils/ItemList';
+import type Mithril from 'mithril';
+import type User from 'flarum/common/models/User';
+
+/**
+ * The full-size user card shown in the directory, adding the discussion and
+ * post counts alongside core's own info items.
+ */
+export interface UserDirectoryUserCardAttrs extends Mithril.Attributes {
+  user: User;
+  className?: string;
+  editable?: boolean;
+  controlsButtonClassName?: string;
+}
 
 export default class UserDirectoryUserCard extends UserCard {
+  attrs!: UserDirectoryUserCardAttrs;
+
   /**
-   * Allowing to add additonal items unique to the user directory.
-   *
-   * @return {ItemList<import('mithril').Children>}
+   * Allows other extensions to add items unique to the user directory.
    */
-  infoItems() {
+  infoItems(): ItemList<Mithril.Children> {
     const items = super.infoItems();
     const user = this.attrs.user;
 

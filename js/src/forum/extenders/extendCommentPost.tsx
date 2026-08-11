@@ -2,9 +2,12 @@ import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import CommentPost from 'flarum/forum/components/CommentPost';
 import Group from 'flarum/common/models/Group';
+import { gambitFor } from '../utils/groupGambit';
 
 export const linkGroupMentions = function () {
-  if (app.forum.attribute<boolean>('canSeeUserDirectoryLink') && app.forum.attribute<boolean>('userDirectoryLinkGroupMentions')) {
+  // Linking a mention into the directory only needs access to the directory;
+  // it is unrelated to whether the sidebar link is shown.
+  if (app.forum.attribute<boolean>('canViewUserDirectory') && app.forum.attribute<boolean>('userDirectoryLinkGroupMentions')) {
     // @ts-ignore
     this.$('.GroupMention').each(function () {
       // @ts-ignore
@@ -15,7 +18,7 @@ export const linkGroupMentions = function () {
       const group = app.store.getBy<Group>('groups', 'namePlural', name.slice(1));
 
       if (group) {
-        const link = $(`<a class="GroupMention-link" href="${app.route('fof_user_directory', { q: `group:${group.id()}` })}"></a>`);
+        const link = $(`<a class="GroupMention-link" href="${app.route('fof_user_directory', { q: gambitFor(group.id()!) })}"></a>`);
 
         link.on('click', function (e) {
           // @ts-ignore

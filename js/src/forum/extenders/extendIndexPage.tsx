@@ -5,7 +5,9 @@ import LinkButton from 'flarum/common/components/LinkButton';
 
 export default function extendIndexPage() {
   extend(IndexSidebar.prototype, 'navItems', (items) => {
-    if (app.forum.attribute<boolean>('canSeeUserDirectoryLink') && app.forum.attribute<boolean>('canSearchUsers')) {
+    // `canSeeUserDirectoryLink` already covers the searchUsers permission via
+    // the seeUserList policy, as well as the admin's link setting.
+    if (app.forum.attribute<boolean>('canSeeUserDirectoryLink')) {
       items.add(
         'fof-user-directory',
         <LinkButton href={app.route('fof_user_directory')} icon="far fa-address-book">
