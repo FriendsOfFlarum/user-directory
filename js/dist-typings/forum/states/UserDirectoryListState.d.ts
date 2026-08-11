@@ -20,6 +20,10 @@ export default class UserDirectoryListState extends PaginatedListState<User, Use
     /**
      * Get the sort map for the user directory.
      *
+     * Permissioned sorts are only included when the forum reports that the actor
+     * may use them, so a sort the API would reject can never be selected, sent,
+     * or restored from a URL — see issue #66.
+     *
      * **Note for extension developers**: Do NOT extend this method.
      * Instead, extend the `SortMap` class from `common/utils/SortMap`:
      *
