@@ -1,8 +1,15 @@
-export default class TextFilter extends AbstractType {
-    search(query: any): void;
-    renderKind(): string | any[];
-    renderLabel(resource: any): any;
-    applyFilter(params: any, resource: any): void;
-    initializeFromParams(params: any): Promise<any>;
+import type Mithril from 'mithril';
+import AbstractType, { type FilterParams } from './AbstractType';
+import type Text from '../models/Text';
+/**
+ * Matches free text, i.e. anything that is not a recognised gambit.
+ */
+export default class TextFilter extends AbstractType<Text> {
+    resourceType(): string;
+    search(query: string): void;
+    renderKind(): Mithril.Children;
+    renderLabel(resource: Text): Mithril.Children;
+    applyFilter(params: FilterParams, resource: Text): void;
+    initializeFromParams(params: FilterParams): Promise<Text[]>;
+    private createRecord;
 }
-import AbstractType from "./AbstractType";

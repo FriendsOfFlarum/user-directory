@@ -1,11 +1,14 @@
-export default class CheckableButton extends Button<import("flarum/common/components/Button").IButtonAttrs> {
-    constructor();
+import Button, { type IButtonAttrs } from 'flarum/common/components/Button';
+import type Mithril from 'mithril';
+export interface ICheckableButtonAttrs extends IButtonAttrs {
     /**
-     * Get the template for the button's content.
-     *
-     * @return {*}
-     * @protected
+     * Whether to show a check mark alongside the button's label.
      */
-    protected getButtonContent(children: any): any;
+    checked?: boolean;
 }
-import Button from "flarum/common/components/Button";
+/**
+ * A button that displays a check mark when active, used for the group filters.
+ */
+export default class CheckableButton<CustomAttrs extends ICheckableButtonAttrs = ICheckableButtonAttrs> extends Button<CustomAttrs> {
+    protected getButtonContent(children: Mithril.Children): Mithril.ChildArray;
+}

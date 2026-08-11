@@ -1,46 +1,55 @@
+import type Mithril from 'mithril';
+import type Model from 'flarum/common/Model';
 /**
- * @abstract
+ * Parameters a filter can read from, and write filtering into, when building a
+ * directory request.
  */
-export default class AbstractType {
-    suggestions: any[];
+export interface FilterParams {
+    q?: string;
+    sort?: string;
+    [key: string]: unknown;
+}
+/**
+ * A kind of value the directory search field can suggest and filter by.
+ *
+ * Note this predates core's gambit system (`common/query/IGambit`), which is
+ * where this should eventually move — core now ships a `GroupGambit` covering
+ * most of what `GroupFilter` does here.
+ */
+export default abstract class AbstractType<T extends Model = Model> {
+    /**
+     * Suggestions matching the current query, updated by `search()`.
+     */
+    suggestions: T[];
+    /**
+     * Whether an asynchronous search is in flight.
+     */
     loading: boolean;
     /**
-     * The `type` property of the Models used in suggestions and applied filters for this type
-     * @return {String}
+     * The `type` of the models used in suggestions and applied filters.
      */
-    resourceType(): string;
+    abstract resourceType(): string;
     /**
-     * Executed when the search query changes
-     * The method should update this.suggestions with the new results
-     * If asynchronous loading is used, this.loading should be set to true during the process
-     * @param {String} query
+     * Update `suggestions` for the given query.
+     *
+     * Set `loading` while any asynchronous work is in progress.
      */
-    search(query: string): void;
+    abstract search(query: string): void;
     /**
-     * Renders the "kind" label next to the value indicating what kind of information that result is
-     * Should probably just be a translated text
-     * @param {Model} resource
-     * @return {vnode}
+     * Render the "kind" label shown next to a suggestion, indicating what sort of
+     * value it is. Usually just translated text.
      */
-    renderKind(resource: Model): vnode;
+    abstract renderKind(resource?: T): Mithril.Children;
     /**
-     * Renders the Label containing the suggestion's value
-     * Should be a vdom template using the .UserDirectorySearchLabel class or similar
-     * @param {Model} resource
-     * @return {vnode}
+     * Render the label containing a suggestion's value.
      */
-    renderLabel(resource: Model): vnode;
+    abstract renderLabel(resource: T): Mithril.Children;
     /**
-     * Applies a filter on a params object to use in the page request
-     * @param {Object} params Object. Might or might not contain a `q` property or `sort` property. In the future, `filters` object might be supported
-     * @param {Model} resource
+     * Apply this resource as a filter on the params used for the page request.
      */
-    applyFilter(params: Object, resource: Model): void;
+    abstract applyFilter(params: FilterParams, resource: T): void;
     /**
-     * Used to populate the search field on page load with values from the querystring
-     * A promise must be returned, and the UI will auto-update once the promise returns
-     * @param {Object} params Object with a `q` and `sort` property. `filters` might be supported in the future
-     * @return {Promise<Model[]>}
+     * Populate the search field from the query string on page load.
      */
-    initializeFromParams(params: Object): Promise<Model[]>;
+    abstract initializeFromParams(params: FilterParams): Promise<T[]>;
 }

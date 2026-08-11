@@ -1,5 +1,10 @@
-export default class UserDirectoryListItem extends Component<any, undefined> {
-    constructor();
-    view(vnode: any): JSX.Element;
+import Component, { type ComponentAttrs } from 'flarum/common/Component';
+import type Mithril from 'mithril';
+import type User from 'flarum/common/models/User';
+export interface IUserDirectoryListItemAttrs extends ComponentAttrs {
+    user: User;
+    useSmallCards?: boolean;
 }
-import Component from "flarum/common/Component";
+export default class UserDirectoryListItem<CustomAttrs extends IUserDirectoryListItemAttrs = IUserDirectoryListItemAttrs> extends Component<CustomAttrs> {
+    view(): Mithril.Children;
+}
