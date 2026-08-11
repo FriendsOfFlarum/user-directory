@@ -79,7 +79,11 @@ class UserDirectorySortTest extends TestCase
      */
     protected function renderedUsernames($response): array
     {
-        preg_match_all('/<li>\s*(\S+)\s*<\/li>/', $response->getBody()->getContents(), $matches);
+        preg_match_all(
+            '/<li>\s*<a [^>]*>\s*(\S+)\s*<\/a>\s*<\/li>/',
+            $response->getBody()->getContents(),
+            $matches
+        );
 
         return $matches[1];
     }

@@ -12,6 +12,7 @@
 namespace FoF\UserDirectory;
 
 use Flarum\Api\Resource;
+use Flarum\Api\Sort;
 use Flarum\Extend;
 
 return [
@@ -28,6 +29,26 @@ return [
     (new Extend\ApiResource(Resource\ForumResource::class))
         ->fields(Api\PermissionBasedForumSettings::class),
 
+    // Register the directory's sort keys as aliases on core's own sorts, so
+    // `UserResource::sortMap()` is the single source of truth for the mapping
+    // and the server-rendered page needs no duplicate of it.
+    (new Extend\ApiResource(Resource\UserResource::class))
+        ->sort('username', fn (Sort\SortColumn $sort) => $sort
+            ->ascendingAlias('username_az')
+            ->descendingAlias('username_za'))
+        ->sort('joinedAt', fn (Sort\SortColumn $sort) => $sort
+            ->ascendingAlias('oldest')
+            ->descendingAlias('newest'))
+        ->sort('discussionCount', fn (Sort\SortColumn $sort) => $sort
+            ->ascendingAlias('least_discussions')
+            ->descendingAlias('most_discussions'))
+        // Core already gates the lastSeenAt sort itself; SortResolver drops
+        // these aliases for actors without the permission so the request is
+        // never sent in the first place. See issue #66.
+        ->sort('lastSeenAt', fn (Sort\SortColumn $sort) => $sort
+            ->ascendingAlias('seen_oldest')
+            ->descendingAlias('seen_recent')),
+
     (new Extend\Policy())
         ->globalPolicy(Access\UserPolicy::class),
 
@@ -35,7 +56,11 @@ return [
         ->namespace('fof.user-directory', __DIR__.'/resources/views'),
 
     (new Extend\Settings())
-        ->default('fof-user-directory.admin.settings.link', false)
+        // Note the key is hyphenated, unlike the dotted keys below. It is the
+        // name the admin panel and PermissionBasedForumSettings both read;
+        // the default was previously registered against the translation key
+        // by mistake, so it never applied.
+        ->default('fof-user-directory-link', false)
         ->default('fof-user-directory.use-small-cards', false)
         ->default('fof-user-directory.disable-global-search-source', false)
         ->default('fof-user-directory.default-sort', '')

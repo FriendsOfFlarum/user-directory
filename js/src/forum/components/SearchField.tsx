@@ -1,22 +1,40 @@
 import app from 'flarum/forum/app';
-import Component from 'flarum/common/Component';
+import Component, { type ComponentAttrs } from 'flarum/common/Component';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import withAttr from 'flarum/common/utils/withAttr';
 import KeyboardNavigatable from 'flarum/common/utils/KeyboardNavigatable';
 import ItemList from 'flarum/common/utils/ItemList';
+import type Mithril from 'mithril';
+import type Model from 'flarum/common/Model';
 import TextFilter from '../searchTypes/TextFilter';
 import GroupFilter from '../searchTypes/GroupFilter';
+import type AbstractType from '../searchTypes/AbstractType';
+import type { FilterParams } from '../searchTypes/AbstractType';
+import type UserDirectoryListState from '../states/UserDirectoryListState';
 
-export default class SearchField extends Component {
-  oninit(vnode) {
+export interface ISearchFieldAttrs extends ComponentAttrs {
+  state: UserDirectoryListState;
+}
+
+/**
+ * The directory's search field, showing applied filters as removable chips and
+ * suggesting new ones as the user types.
+ */
+export default class SearchField<CustomAttrs extends ISearchFieldAttrs = ISearchFieldAttrs> extends Component<CustomAttrs> {
+  protected searchIndex = 0;
+  protected navigator!: KeyboardNavigatable;
+  protected availableFilters!: AbstractType[];
+  protected appliedFilters: Model[] = [];
+  protected filter = '';
+  protected focused = false;
+
+  oninit(vnode: Mithril.Vnode<CustomAttrs, this>) {
     super.oninit(vnode);
 
-    this.searchIndex = 0;
     this.navigator = new KeyboardNavigatable();
     this.navigator
       .when((event) => {
-        // Do not handle keyboard when TAB is pressed and there's nothing in field
-        // Without this it's impossible to TAB out of the field
+        // Without this it is impossible to TAB out of an empty field.
         return event.key !== 'Tab' || !!this.filter;
       })
       .onUp(() => {
@@ -44,12 +62,8 @@ export default class SearchField extends Component {
       });
 
     this.availableFilters = this.filterTypes().toArray();
-    this.appliedFilters = [];
 
-    this.filter = '';
-    this.focused = false;
-
-    // When the page loads, initialize UI with filters from the parameters
+    // Restore any filters already present in the URL.
     this.availableFilters.forEach((filter) => {
       filter
         .initializeFromParams({
@@ -63,25 +77,25 @@ export default class SearchField extends Component {
     });
   }
 
-  view() {
+  view(): Mithril.Children {
     const suggestions = this.allSuggestions();
-
     const loading = this.availableFilters.some((filter) => filter.loading);
 
     return (
       <div className="Form-group Usersearchbox">
         <label className={`UserDirectorySearchInput FormControl ${this.focused ? 'focus' : ''}`}>
           <span className="UserDirectorySearchInput-selected">
-            {this.appliedFilters.map((recipient, index) => (
+            {this.appliedFilters.map((resource, index) => (
               <span
+                key={`${resource.data.type}:${resource.id()}`}
                 className="UserDirectorySearchInput-filter"
                 onclick={() => {
                   this.appliedFilters.splice(index, 1);
                   this.applyFiltering();
                 }}
-                title={this.searchResultKind(recipient)}
+                title={this.searchResultKind(resource)}
               >
-                {this.recipientLabel(recipient)}
+                {this.resourceLabel(resource)}
               </span>
             ))}
           </span>
@@ -90,7 +104,7 @@ export default class SearchField extends Component {
             className="FormControl"
             placeholder={app.translator.trans('fof-user-directory.forum.search.field.placeholder')}
             value={this.filter}
-            oninput={withAttr('value', (value) => {
+            oninput={withAttr('value', (value: string) => {
               this.filter = value;
               this.performNewSearch();
             })}
@@ -102,11 +116,12 @@ export default class SearchField extends Component {
               this.focused = false;
             }}
           />
-          {loading && <LoadingIndicator />}
+          {loading && <LoadingIndicator display="inline" size="small" />}
           {!!suggestions.length && (
             <ul className="Dropdown-menu">
               {suggestions.map((result, index) => (
                 <li
+                  key={`${result.data.type}:${result.id()}`}
                   className={this.searchIndex === index ? 'active' : ''}
                   onclick={() => {
                     this.selectResult(result);
@@ -115,7 +130,7 @@ export default class SearchField extends Component {
                 >
                   <button type="button">
                     <span className="UserDirectorySearchKind">{this.searchResultKind(result)}</span>
-                    {this.recipientLabel(result)}
+                    {this.resourceLabel(result)}
                   </button>
                 </li>
               ))}
@@ -126,8 +141,11 @@ export default class SearchField extends Component {
     );
   }
 
-  filterTypes() {
-    const items = new ItemList();
+  /**
+   * The kinds of value this field can filter by.
+   */
+  filterTypes(): ItemList<AbstractType> {
+    const items = new ItemList<AbstractType>();
 
     items.add('text', new TextFilter(), 10);
     items.add('group', new GroupFilter(), 20);
@@ -135,31 +153,19 @@ export default class SearchField extends Component {
     return items;
   }
 
-  filterForResource(resource) {
-    return this.availableFilters.find((f) => f.resourceType() === resource.data.type);
+  filterForResource(resource: Model): AbstractType | undefined {
+    return this.availableFilters.find((filter) => filter.resourceType() === resource.data.type);
   }
 
-  recipientLabel(resource) {
-    const filter = this.filterForResource(resource);
-
-    if (filter) {
-      return filter.renderLabel(resource);
-    }
-
-    return '[unknown]';
+  resourceLabel(resource: Model): Mithril.Children {
+    return this.filterForResource(resource)?.renderLabel(resource) ?? '[unknown]';
   }
 
-  searchResultKind(resource) {
-    const filter = this.filterForResource(resource);
-
-    if (filter) {
-      return filter.renderKind(resource);
-    }
-
-    return '[unknown]';
+  searchResultKind(resource: Model): Mithril.Children {
+    return this.filterForResource(resource)?.renderKind(resource) ?? '[unknown]';
   }
 
-  selectResult(result) {
+  selectResult(result?: Model): void {
     if (!result) {
       return;
     }
@@ -168,28 +174,28 @@ export default class SearchField extends Component {
     this.clearSuggestions();
   }
 
-  clearSuggestions() {
+  clearSuggestions(): void {
     this.filter = '';
-    this.availableFilters.forEach((filter) => {
-      filter.search('');
-    });
+    this.availableFilters.forEach((filter) => filter.search(''));
   }
 
-  allSuggestions() {
-    return [].concat(...this.availableFilters.map((filter) => filter.suggestions));
+  allSuggestions(): Model[] {
+    return this.availableFilters.flatMap((filter) => filter.suggestions);
   }
 
-  performNewSearch() {
+  performNewSearch(): void {
     this.searchIndex = 0;
 
-    this.availableFilters.forEach((filter) => {
-      filter.search(this.filter);
-    });
+    this.availableFilters.forEach((filter) => filter.search(this.filter));
 
     this.attrs.state.refreshParams({ ...this.attrs.state.getParams(), qBuilder: this.qBuilder() });
   }
 
-  qBuilder(params = {}) {
+  /**
+   * Fold the applied filters into the given params, returning the combined
+   * query for the list state.
+   */
+  qBuilder(params: FilterParams = {}): { filter: string } {
     this.appliedFilters.forEach((resource) => {
       const filter = this.filterForResource(resource);
 
@@ -199,11 +205,12 @@ export default class SearchField extends Component {
         console.warn('Cannot find filter class for resource', resource);
       }
     });
+
     return { filter: `${this.filter} ${params.q || ''}` };
   }
 
-  applyFiltering() {
-    const params = {
+  applyFiltering(): void {
+    const params: FilterParams = {
       sort: m.route.param('sort'),
     };
 
