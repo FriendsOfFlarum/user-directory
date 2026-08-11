@@ -16,7 +16,7 @@ use Flarum\User\User;
 
 class UserPolicy extends AbstractPolicy
 {
-    public function seeUserList(User $actor)
+    public function seeUserList(User $actor): bool
     {
         return $actor->hasPermission('fof.user-directory.view') && $actor->hasPermission('searchUsers');
     }

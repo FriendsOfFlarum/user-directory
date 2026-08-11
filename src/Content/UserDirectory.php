@@ -44,7 +44,7 @@ class UserDirectory
     ) {
     }
 
-    private function getDocument(User $actor, array $params, Request $request)
+    private function getDocument(User $actor, array $params, Request $request): object
     {
         $actor->assertCan('seeUserList');
 
@@ -60,7 +60,10 @@ class UserDirectory
             $params['include'] .= ',groups';
         }
 
-        return json_decode($this->api->withQueryParams($params)->withParentRequest($request)->get('/users')->getBody());
+        return json_decode(
+            json: $this->api->withQueryParams($params)->withParentRequest($request)->get('/users')->getBody(),
+            associative: false
+        );
     }
 
     /**
