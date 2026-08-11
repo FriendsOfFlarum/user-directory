@@ -38,6 +38,9 @@ export default class UserDirectoryListState extends PaginatedListState<User, Use
     };
 
     const sortKey = this.params.sort || app.forum.attribute<string>('userDirectoryDefaultSort');
+    // An unknown key — including a permissioned sort this actor cannot use —
+    // leaves `sort` unset so the API applies its own default ordering, rather
+    // than erroring the whole list out.
     const sortValue = this.sortMap()[sortKey];
     params.sort = typeof sortValue === 'string' ? sortValue : sortValue?.sort;
 
@@ -67,6 +70,10 @@ export default class UserDirectoryListState extends PaginatedListState<User, Use
   /**
    * Get the sort map for the user directory.
    *
+   * Permissioned sorts are only included when the forum reports that the actor
+   * may use them, so a sort the API would reject can never be selected, sent,
+   * or restored from a URL — see issue #66.
+   *
    * **Note for extension developers**: Do NOT extend this method.
    * Instead, extend the `SortMap` class from `common/utils/SortMap`:
    *
@@ -79,9 +86,19 @@ export default class UserDirectoryListState extends PaginatedListState<User, Use
    * });
    */
   sortMap(): SortMapType {
+    const sortMap = new SortMap();
+    const permissioned: Record<string, string> = {};
+
+    for (const [key, { sort, attribute }] of Object.entries(sortMap.permissionedSortMap())) {
+      if (app.forum.attribute<boolean>(attribute)) {
+        permissioned[key] = sort;
+      }
+    }
+
     return {
       default: '',
-      ...new SortMap().sortMap(),
+      ...sortMap.sortMap(),
+      ...permissioned,
     };
   }
 

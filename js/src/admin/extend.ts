@@ -29,6 +29,9 @@ export default [
         '': app.translator.trans('fof-user-directory.lib.sort.not_specified'),
       };
 
+      // Permissioned sorts are deliberately excluded. A forum-wide default that
+      // most users lack the permission to perform is exactly what broke the
+      // directory in issue #66.
       Object.keys(new SortMap().sortMap()).forEach((sort) => {
         sortOptions[sort] = app.translator.trans('fof-user-directory.lib.sort.' + sort);
       });
