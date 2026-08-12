@@ -1,13 +1,13 @@
 import Extend from 'flarum/common/extenders';
 import Text from './models/Text';
-import UserDirectoryPage from './components/UserDirectoryPage';
 
 export default [
   new Extend.Store() //
     .add('fof-user-directory-text', Text),
 
   new Extend.Routes() //
-    // We don't code split this yet because it's fiddly with commonjs to import dynamically
-    // on the forum side, but normally on the admin side.
-    .add('fof_user_directory', '/users', UserDirectoryPage),
+    // Loaded on demand: the directory page and everything it pulls in (the
+    // cards, the search field, the filters) is only needed once someone
+    // actually visits /users.
+    .add('fof_user_directory', '/users', () => import('./components/UserDirectoryPage')),
 ];
