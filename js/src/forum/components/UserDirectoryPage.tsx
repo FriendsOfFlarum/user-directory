@@ -9,6 +9,7 @@ import Button from 'flarum/common/components/Button';
 import Dropdown from 'flarum/common/components/Dropdown';
 import Separator from 'flarum/common/components/Separator';
 import extractText from 'flarum/common/utils/extractText';
+import setRouteWithForcedRefresh from 'flarum/common/utils/setRouteWithForcedRefresh';
 import Group from 'flarum/common/models/Group';
 import type Mithril from 'mithril';
 import UserDirectoryList from './UserDirectoryList';
@@ -42,11 +43,19 @@ export default class UserDirectoryPage<CustomAttrs extends IUserDirectoryPageAtt
   oninit(vnode: Mithril.Vnode<CustomAttrs, this>) {
     super.oninit(vnode);
 
-    this.state = new UserDirectoryListState({}, 1);
-
-    // Prefer the server-rendered payload so the first paint matches what the
-    // page was rendered with, falling back to the URL on client-side nav.
-    const preloaded = app.preloadedApiDocument<any>()?.payload?.fofUserDirectory;
+    // On the initial page load, prefer the server-rendered params so the first
+    // paint matches what the page was rendered with.
+    //
+    // Read straight from `app.data`: calling preloadedApiDocument() here would
+    // consume the preloaded document — it nulls itself after the first call —
+    // leaving the list state to refetch over the network on every page load.
+    //
+    // Unlike that document, this payload is never cleared, so it must only be
+    // trusted while the URL still matches the one the server rendered. After
+    // any navigation the URL is the source of truth, otherwise sorting and
+    // filtering would keep being overridden by the original request's params.
+    const preloaded =
+      window.location.href === app.initialRoute ? (app.data.fofUserDirectory as { q?: string; sort?: string } | undefined) : undefined;
 
     const q: string = (preloaded ? preloaded.q : m.route.param('q')) || '';
 
@@ -57,6 +66,8 @@ export default class UserDirectoryPage<CustomAttrs extends IUserDirectoryPageAtt
         this.enabledSpecialGroupFilters['flarum-suspend'] = 'is:suspended';
       }
     }
+
+    this.state = new UserDirectoryListState({}, 1);
 
     this.state.refreshParams(
       {
@@ -249,9 +260,10 @@ export default class UserDirectoryPage<CustomAttrs extends IUserDirectoryPageAtt
     // Remove qBuilder to avoid confusion.
     delete params.qBuilder;
 
-    this.state.refreshParams(params, 1);
-
-    m.route.set(app.route('fof_user_directory', params));
+    // Only set the route: changing it remounts the page, whose oninit seeds the
+    // state from the new params. Refreshing the state here as well would load
+    // the same page twice. Forced so Mithril re-inits on a same-route change.
+    setRouteWithForcedRefresh(app.route('fof_user_directory', params));
   }
 
   /**

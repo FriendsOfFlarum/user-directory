@@ -3,6 +3,7 @@ import Component, { type ComponentAttrs } from 'flarum/common/Component';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import withAttr from 'flarum/common/utils/withAttr';
 import KeyboardNavigatable from 'flarum/common/utils/KeyboardNavigatable';
+import setRouteWithForcedRefresh from 'flarum/common/utils/setRouteWithForcedRefresh';
 import ItemList from 'flarum/common/utils/ItemList';
 import type Mithril from 'mithril';
 import type Model from 'flarum/common/Model';
@@ -216,6 +217,8 @@ export default class SearchField<CustomAttrs extends ISearchFieldAttrs = ISearch
 
     this.qBuilder(params);
 
-    m.route.set(app.route('fof_user_directory', params));
+    // Forced: Mithril does not re-init a component when the route changes to
+    // the same one, so filtering from the directory would not reload the list.
+    setRouteWithForcedRefresh(app.route('fof_user_directory', params));
   }
 }
