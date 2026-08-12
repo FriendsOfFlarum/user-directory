@@ -194,6 +194,9 @@ export default class UserDirectoryPage<CustomAttrs extends IUserDirectoryPageAtt
       'refresh',
       <Button
         title={app.translator.trans('fof-user-directory.forum.page.refresh_tooltip')}
+        // Icon-only, so it needs an accessible name of its own: a title
+        // attribute alone leaves screen readers announcing just "Button".
+        aria-label={app.translator.trans('fof-user-directory.forum.page.refresh_tooltip')}
         icon="fas fa-sync"
         className="Button Button--icon"
         onclick={() => {
