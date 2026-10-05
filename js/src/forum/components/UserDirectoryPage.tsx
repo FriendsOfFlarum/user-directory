@@ -155,7 +155,7 @@ export default class UserDirectoryPage<CustomAttrs extends IUserDirectoryPageAtt
       .filter((group) => group.id() !== Group.GUEST_ID && group.id() !== Group.MEMBER_ID)
       .forEach((group) => {
         items.add(
-          group.namePlural(),
+          `group${group.id()}`,
           <CheckableButton
             className="GroupFilterButton"
             icon={group.icon()}

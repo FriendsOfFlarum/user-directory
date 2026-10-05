@@ -91,7 +91,7 @@
     },
     "require-dev": {
         "flarum/testing": "^2.0.0",
-        "flarum/phpstan": "^2.0.0",
+        "flarum/phpstan": "2.x-dev",
         "flarum/suspend": "^2.0.0"
     },
     "minimum-stability": "dev",
