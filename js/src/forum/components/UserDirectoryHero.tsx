@@ -1,26 +1,27 @@
 import app from 'flarum/forum/app';
-import Component from 'flarum/common/Component';
+import Hero, { type IHeroAttrs } from 'flarum/forum/components/Hero';
 import Icon from 'flarum/common/components/Icon';
 import textContrastClass from 'flarum/common/helpers/textContrastClass';
 import classList from 'flarum/common/utils/classList';
 import ItemList from 'flarum/common/utils/ItemList';
 import type Mithril from 'mithril';
 
-export default class UserDirectoryHero extends Component {
-  view() {
+export interface IUserDirectoryHeroAttrs extends IHeroAttrs {}
+
+export default class UserDirectoryHero<CustomAttrs extends IUserDirectoryHeroAttrs = IUserDirectoryHeroAttrs> extends Hero<CustomAttrs> {
+  className(): string {
     const color = this.heroColor();
 
-    return (
-      <header
-        className={classList('Hero', 'UserDirectoryHero', { 'UserDirectoryHero--colored': color, [textContrastClass(color)]: color })}
-        style={color ? { '--hero-bg': color } : undefined}
-      >
-        <div className="container">{this.viewItems().toArray()}</div>
-      </header>
-    );
+    return classList('UserDirectoryHero', { 'UserDirectoryHero--colored': color, [textContrastClass(color)]: color });
   }
 
-  viewItems(): ItemList<Mithril.Children> {
+  style(): Record<string, string> | undefined {
+    const color = this.heroColor();
+
+    return color ? { '--hero-bg': color } : undefined;
+  }
+
+  bodyItems(): ItemList<Mithril.Children> {
     const items = new ItemList<Mithril.Children>();
 
     items.add('content', <div className="containerNarrow">{this.contentItems().toArray()}</div>, 80);
@@ -42,9 +43,10 @@ export default class UserDirectoryHero extends Component {
     return items;
   }
 
+  /**
+   * A colour for the hero background, or null for the theme's default.
+   */
   heroColor(): string | null {
-    // Example return a color string to display a colored hero
-    //return app.forum.attribute<string>('themeSecondaryColor');
     return null;
   }
 
