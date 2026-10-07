@@ -11,4 +11,5 @@ export interface SmallUserCardAttrs extends Mithril.Attributes {
 export default class SmallUserCard extends UserCard {
     attrs: SmallUserCardAttrs;
     infoItems(): ItemList<Mithril.Children>;
+    controlsItems(): ItemList<Mithril.Children>;
 }

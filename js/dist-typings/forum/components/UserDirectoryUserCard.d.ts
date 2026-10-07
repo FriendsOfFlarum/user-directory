@@ -18,4 +18,5 @@ export default class UserDirectoryUserCard extends UserCard {
      * Allows other extensions to add items unique to the user directory.
      */
     infoItems(): ItemList<Mithril.Children>;
+    controlsItems(): ItemList<Mithril.Children>;
 }
