@@ -4,6 +4,7 @@ import Icon from 'flarum/common/components/Icon';
 import type ItemList from 'flarum/common/utils/ItemList';
 import type Mithril from 'mithril';
 import type User from 'flarum/common/models/User';
+import keepControlsInCard from '../utils/keepControlsInCard';
 
 /**
  * The full-size user card shown in the directory, adding the discussion and
@@ -55,5 +56,9 @@ export default class UserDirectoryUserCard extends UserCard {
     );
 
     return items;
+  }
+
+  controlsItems(): ItemList<Mithril.Children> {
+    return keepControlsInCard(super.controlsItems());
   }
 }

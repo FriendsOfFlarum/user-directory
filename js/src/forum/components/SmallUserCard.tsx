@@ -4,6 +4,7 @@ import ItemList from 'flarum/common/utils/ItemList';
 import humanTime from 'flarum/common/utils/humanTime';
 import type Mithril from 'mithril';
 import type User from 'flarum/common/models/User';
+import keepControlsInCard from '../utils/keepControlsInCard';
 
 export interface SmallUserCardAttrs extends Mithril.Attributes {
   user: User;
@@ -23,5 +24,9 @@ export default class SmallUserCard extends UserCard {
     items.add('joined', app.translator.trans('core.forum.user.joined_date_text', { ago: humanTime(user.joinTime()) }));
 
     return items;
+  }
+
+  controlsItems(): ItemList<Mithril.Children> {
+    return keepControlsInCard(super.controlsItems());
   }
 }
