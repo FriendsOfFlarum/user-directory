@@ -1,116 +1,99 @@
+// Core's `.Button--icon()` hides the label outright, leaving these buttons
+// without an accessible name, so the label is only visually hidden here.
+.UserDirectory-iconButton() {
+    width: 36px;
+    padding: 8px 0;
+    text-align: center;
+
+    > .Button-label {
+        .visually-hidden();
+    }
+}
+
 .User--directory {
     .IndexPage-toolbar {
-        display: flex;
         row-gap: 10px;
 
         .IndexPage-toolbar-view {
-            display: flex;
-            column-gap: 5px;
-            row-gap: 5px;
             flex-grow: 1;
+        }
 
-            > li {
-                vertical-align: middle;
-                width: fit-content;
-                margin-right: 0;
-            }
+        .item-search {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
 
-            .item-sort,
-            .item-filterGroups {
-                flex: 0 0 auto;
-            }
+        // Icon-only buttons size to their icon, a few pixels short of the
+        // sort and search fields beside them.
+        > ul > li > .Button,
+        > ul > li > .Dropdown > .Dropdown-toggle {
+            min-height: 36px;
+            align-items: center;
+        }
 
-            .item-search {
-                flex: 1 1 auto;
-                min-width: 0;
+        .item-sort .Select {
+            width: 200px;
+
+            .Select-input {
+                width: 100%;
             }
         }
 
-        .item-sort {
-            .Select {
-                width: 200px;
+        // fof/mailing's "email everyone" button sits beside refresh, so it
+        // matches it as an icon button.
+        .item-fof-mailing .Button {
+            .UserDirectory-iconButton();
 
-                .Select-input {
-                    width: 100%;
-                }
+            > .Button-icon {
+                margin: 0;
             }
         }
 
+        // Phones: the search field takes a full row, and sort, the group
+        // filter and the actions share the one below it. Flattening both lists
+        // makes their items siblings, so they can share that row while the
+        // markup keeps the view/action split other extensions extend.
         @media @phone {
-            flex-direction: column;
-
-            .item-search {
-                flex: 0 1 100%;
-            }
+            flex-wrap: wrap;
 
             .IndexPage-toolbar-view,
             .IndexPage-toolbar-action {
-                display: flex;
-                flex-wrap: wrap;
-            }
-            .IndexPage-toolbar-view {
-                flex-wrap: wrap-reverse;
-                justify-content: space-between;
-
-                & > li {
-                    margin-right: 0;
-                }
+                display: contents;
             }
 
-            .IndexPage-toolbar-action {
-                flex-shrink: 1;
-                float: none;
-
-                & > li {
-                    margin-left: 0;
-                }
-                li.item-refresh {
-                    margin-left: auto;
-                }
+            .item-search {
+                order: -1;
+                flex-basis: 100%;
             }
-        }
-        @media screen and (max-width: 370px) {
-            .IndexPage-toolbar-view {
-                & > li {
+
+            .item-sort {
+                flex: 1 1 0;
+                min-width: 0;
+
+                .Select {
                     width: 100%;
                 }
             }
+
+            // The filter icon is the dropdown's caret, so it stays put.
+            .item-filterGroups .Dropdown-toggle {
+                .UserDirectory-iconButton();
+
+                > .Button-caret {
+                    margin: 0;
+                }
+            }
         }
     }
 }
 
-.item-filterGroups {
-    .ButtonGroup {
-        button {
-            @media @phone {
-                padding-top: 4px;
-            }
-        }
+.item-filterGroups .GroupFilterButton {
+    display: flex;
+
+    .Button-label {
+        width: 100%;
     }
-
-    .GroupFilterButton {
-        display: flex;
-
-        .Button-label {
-            width: 100%;
-        }
-        .ButtonCheck {
-            margin-left: 10px;
-        }
-    }
-}
-
-@media @tablet-up {
-    .IndexPage-toolbar-action {
-        .item-clarkwinkelmann-mailing {
-            .Button {
-                & > .Button-icon {
-                    margin-right: 0;
-                }
-                & > .Button-label {
-                    display: none;
-                }
-            }
-        }
+    .ButtonCheck {
+        margin-left: 10px;
     }
 }
