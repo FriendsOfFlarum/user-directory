@@ -36,7 +36,7 @@ export default class UserDirectoryUserCard extends UserCard {
     items.add(
       'discussion-count',
       <div className="userStat">
-        <Icon name="fas fa-comment" />
+        <Icon name="fas fa-comments" />
         {app.translator.trans('fof-user-directory.forum.page.usercard.discussion-count', {
           count: user.discussionCount(),
         })}
@@ -47,7 +47,7 @@ export default class UserDirectoryUserCard extends UserCard {
     items.add(
       'comment-count',
       <div className="userStat">
-        <Icon name="fas fa-comments" />
+        <Icon name="fas fa-comment" />
         {app.translator.trans('fof-user-directory.forum.page.usercard.post-count', {
           count: user.commentCount(),
         })}
