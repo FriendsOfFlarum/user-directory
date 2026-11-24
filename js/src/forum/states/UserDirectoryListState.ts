@@ -58,13 +58,32 @@ export default class UserDirectoryListState extends PaginatedListState<User, Use
     const preloadedUsers = app.preloadedApiDocument<User[]>();
 
     if (preloadedUsers) {
-      this.initialLoading = false;
       this.pageSize = preloadedUsers.payload.meta?.page?.limit || preloadedUsers.payload.meta?.perPage || UserDirectoryListState.DEFAULT_PAGE_SIZE;
 
-      return Promise.resolve(preloadedUsers);
+      if (!this.queryHasGambitsTheServerIgnores()) {
+        this.initialLoading = false;
+
+        return Promise.resolve(preloadedUsers);
+      }
     }
 
     return super.loadPage(page);
+  }
+
+  /**
+   * The server-rendered page translates only the group gambit (see
+   * `GambitTranslator`), and sends the rest of the query as plain text.
+   */
+  protected queryHasGambitsTheServerIgnores(): boolean {
+    let found = false;
+
+    if (this.params.q) {
+      app.search.gambits.match(this.type, this.params.q, (gambit) => {
+        if (gambit.filterKey() !== 'group') found = true;
+      });
+    }
+
+    return found;
   }
 
   /**
