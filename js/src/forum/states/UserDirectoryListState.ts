@@ -59,7 +59,7 @@ export default class UserDirectoryListState extends PaginatedListState<User, Use
 
     if (preloadedUsers) {
       this.initialLoading = false;
-      this.pageSize = preloadedUsers.payload.meta?.perPage || UserDirectoryListState.DEFAULT_PAGE_SIZE;
+      this.pageSize = preloadedUsers.payload.meta?.page?.limit || preloadedUsers.payload.meta?.perPage || UserDirectoryListState.DEFAULT_PAGE_SIZE;
 
       return Promise.resolve(preloadedUsers);
     }
