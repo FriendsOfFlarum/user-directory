@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-use Flarum\Group\Permission;
 use Illuminate\Database\Schema\Builder;
 
 return [
     'up' => function (Builder $schema) {
-        Permission::query()
+        // Not the Permission model: Eloquent has no connection while `flarum install` runs extension migrations.
+        $schema->getConnection()->table('group_permission')
             ->where('permission', 'flagrow.user-directory.view')
             ->update(['permission' => 'fof.user-directory.view']);
     },
