@@ -1,25 +1,19 @@
 import app from 'flarum/forum/app';
-import UserCard from 'flarum/forum/components/UserCard';
+import UserCard, { type IUserCardAttrs } from 'flarum/forum/components/UserCard';
 import Icon from 'flarum/common/components/Icon';
 import type ItemList from 'flarum/common/utils/ItemList';
 import type Mithril from 'mithril';
-import type User from 'flarum/common/models/User';
 import keepControlsInCard from '../utils/keepControlsInCard';
+
+export interface UserDirectoryUserCardAttrs extends IUserCardAttrs {}
 
 /**
  * The full-size user card shown in the directory, adding the discussion and
  * post counts alongside core's own info items.
  */
-export interface UserDirectoryUserCardAttrs extends Mithril.Attributes {
-  user: User;
-  className?: string;
-  editable?: boolean;
-  controlsButtonClassName?: string;
-}
-
-export default class UserDirectoryUserCard extends UserCard {
-  attrs!: UserDirectoryUserCardAttrs;
-
+export default class UserDirectoryUserCard<
+  CustomAttrs extends UserDirectoryUserCardAttrs = UserDirectoryUserCardAttrs,
+> extends UserCard<CustomAttrs> {
   /**
    * Allows other extensions to add items unique to the user directory.
    */
