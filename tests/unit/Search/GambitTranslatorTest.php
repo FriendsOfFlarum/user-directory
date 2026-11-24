@@ -126,17 +126,29 @@ class GambitTranslatorTest extends TestCase
     }
 
     /**
-     * Once translated, the English key is just ordinary text.
+     * Core's GroupGambit accepts the English `group` key in every locale
+     * (`canonicalKey()`), so links built on an English forum must still filter.
      */
     #[Test]
-    public function the_untranslated_key_is_not_matched_when_a_translation_exists()
+    public function the_english_key_is_matched_when_a_translation_exists()
     {
         $translator = new GambitTranslator($this->translatorReturning('groupe'));
 
-        $result = $translator->translate('group:1');
+        $result = $translator->translate('group:1 bob');
 
-        $this->assertSame('group:1', $result['q']);
-        $this->assertSame([], $result['filters']);
+        $this->assertSame('bob', $result['q']);
+        $this->assertSame(['group' => ['1']], $result['filters']);
+    }
+
+    #[Test]
+    public function the_localized_and_english_keys_combine()
+    {
+        $translator = new GambitTranslator($this->translatorReturning('groupe'));
+
+        $result = $translator->translate('groupe:1 -group:4 GROUP:5');
+
+        $this->assertSame('', $result['q']);
+        $this->assertSame(['group' => ['1', '5'], '-group' => ['4']], $result['filters']);
     }
 
     /**

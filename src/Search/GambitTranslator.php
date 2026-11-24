@@ -32,6 +32,8 @@ class GambitTranslator
      */
     private const GROUP_KEY_TRANSLATION = 'core.lib.gambits.users.group.key';
 
+    private const CANONICAL_GROUP_KEY = 'group';
+
     public function __construct(
         protected TranslatorInterface $translator
     ) {
@@ -81,17 +83,22 @@ class GambitTranslator
     /**
      * Matches the group gambit as a whole space-separated term, optionally
      * negated, mirroring how core's GambitManager splits a query.
+     *
+     * Both the localized key and core's canonical English `group` key are
+     * accepted, as `GroupGambit::canonicalKey()` makes the frontend do.
      */
     private function groupPattern(): string
     {
+        $keys = [self::CANONICAL_GROUP_KEY];
         $key = $this->translator->trans(self::GROUP_KEY_TRANSLATION);
 
-        // Fall back to the untranslated key if the translation is missing, so
-        // a partial locale cannot disable group filtering entirely.
-        if ($key === self::GROUP_KEY_TRANSLATION || $key === '') {
-            $key = 'group';
+        // A missing translation comes back as its own key.
+        if ($key !== self::GROUP_KEY_TRANSLATION && $key !== '') {
+            $keys[] = $key;
         }
 
-        return '/(?:^|\s)(-?)'.preg_quote($key, '/').':([^\s]+)/i';
+        $keys = array_map(fn (string $key) => preg_quote($key, '/'), array_unique($keys));
+
+        return '/(?:^|\s)(-?)(?:'.implode('|', $keys).'):([^\s]+)/i';
     }
 }
