@@ -1,6 +1,7 @@
 import bootstrapForum from '@flarum/jest-config/src/bootstrap/forum';
 import app from 'flarum/forum/app';
 import Hero from 'flarum/forum/components/Hero';
+import textContrastClass from 'flarum/common/helpers/textContrastClass';
 import mq from 'mithril-query';
 
 import UserDirectoryHero from '../../../../src/forum/components/UserDirectoryHero';
@@ -40,7 +41,7 @@ describe('UserDirectoryHero', () => {
   it('applies a custom colour, with a contrasting text class', () => {
     const hero = new ColoredHero();
 
-    expect(hero.className()).toBe('UserDirectoryHero UserDirectoryHero--colored text-contrast--light');
+    expect(hero.className()).toBe(`UserDirectoryHero UserDirectoryHero--colored ${textContrastClass('#e74c3c')}`);
     expect(hero.style()).toEqual({ '--hero-bg': '#e74c3c' });
   });
 });

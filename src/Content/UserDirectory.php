@@ -25,11 +25,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class UserDirectory
 {
-    /**
-     * How many users are listed per page.
-     */
-    private const PER_PAGE = 20;
-
     public function __construct(
         protected Client $api,
         protected Factory $view,
@@ -57,7 +52,9 @@ class UserDirectory
         $apiDocument = $this->getApiDocument($request, [
             'sort'    => $this->sorts->resolve($sort, $actor),
             'filter'  => $this->buildFilter($q),
-            'page'    => ['offset' => ($page - 1) * self::PER_PAGE, 'limit' => self::PER_PAGE],
+            // The users endpoint's own limit sets the page size, as the frontend's
+            // "Load more" reads it back from meta.page.limit.
+            'page'    => ['number' => $page],
             'include' => 'groups',
         ]);
 

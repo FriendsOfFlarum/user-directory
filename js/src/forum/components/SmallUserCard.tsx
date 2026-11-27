@@ -1,21 +1,13 @@
 import app from 'flarum/forum/app';
-import UserCard from 'flarum/forum/components/UserCard';
+import UserCard, { type IUserCardAttrs } from 'flarum/forum/components/UserCard';
 import ItemList from 'flarum/common/utils/ItemList';
 import humanTime from 'flarum/common/utils/humanTime';
 import type Mithril from 'mithril';
-import type User from 'flarum/common/models/User';
 import keepControlsInCard from '../utils/keepControlsInCard';
 
-export interface SmallUserCardAttrs extends Mithril.Attributes {
-  user: User;
-  className?: string;
-  editable?: boolean;
-  controlsButtonClassName?: string;
-}
+export interface SmallUserCardAttrs extends IUserCardAttrs {}
 
-export default class SmallUserCard extends UserCard {
-  attrs!: SmallUserCardAttrs;
-
+export default class SmallUserCard<CustomAttrs extends SmallUserCardAttrs = SmallUserCardAttrs> extends UserCard<CustomAttrs> {
   //Overriding infoItems so that other extensions can separately add items to small cards
   infoItems(): ItemList<Mithril.Children> {
     const items = new ItemList<Mithril.Children>();
