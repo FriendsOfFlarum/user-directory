@@ -18,6 +18,11 @@ export default class UserDirectoryListState extends PaginatedListState<User, Use
     requestParams(): PaginatedListRequestParams;
     protected loadPage(page?: number): Promise<ApiResponsePlural<User>>;
     /**
+     * The server-rendered page translates only the group gambit (see
+     * `GambitTranslator`), and sends the rest of the query as plain text.
+     */
+    protected queryHasGambitsTheServerIgnores(): boolean;
+    /**
      * Get the sort map for the user directory.
      *
      * Permissioned sorts are only included when the forum reports that the actor
